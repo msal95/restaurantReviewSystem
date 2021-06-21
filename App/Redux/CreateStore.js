@@ -1,8 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import Config from '../Config/DebugConfig'
 import createSagaMiddleware from 'redux-saga'
-import ScreenTracking from './ScreenTrackingMiddleware'
-import { appNavigatorMiddleware } from '../Navigation/ReduxNavigation'
 import Reactotron from '../Config/ReactotronConfig'
 
 // creates the store
@@ -12,11 +10,6 @@ export default (rootReducer, rootSaga) => {
   const middleware = []
   const enhancers = []
 
-  /* ------------- Navigation Middleware ------------ */
-  middleware.push(appNavigatorMiddleware)
-
-  /* ------------- Analytics Middleware ------------- */
-  middleware.push(ScreenTracking)
 
   /* ------------- Saga Middleware ------------- */
 
