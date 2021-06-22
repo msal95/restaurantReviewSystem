@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, StatusBar } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
 
 // Styles
 import styles from './Styles/RootContainerStyles'
+import RootNavigation from '../Navigation/RootNavigation'
+import { Colors } from '../Themes'
 
 class RootContainer extends Component {
   componentDidMount () {
@@ -14,8 +16,8 @@ class RootContainer extends Component {
   render () {
     return (
       <View style={styles.applicationView}>
-        <StatusBar barStyle='light-content' />
-        <Text style={{color: 'black'}}>Hello World</Text>
+        <StatusBar barStyle='light-content' backgroundColor={Colors.blue} />
+        <RootNavigation />
       </View>
     )
   }

@@ -2,8 +2,10 @@ import '../Config'
 import DebugConfig from '../Config/DebugConfig'
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+
 import RootContainer from './RootContainer'
 import createStore from '../Redux'
+import { NavigationContainer } from '@react-navigation/native'
 
 // create our store
 const store = createStore()
@@ -17,11 +19,14 @@ const store = createStore()
  *
  * We separate like this to play nice with React Native's hot reloading.
  */
+
 class App extends Component {
   render () {
     return (
       <Provider store={store}>
-        <RootContainer />
+        <NavigationContainer>
+          <RootContainer />
+        </NavigationContainer>
       </Provider>
     )
   }
