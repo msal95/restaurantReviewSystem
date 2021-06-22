@@ -20,7 +20,7 @@ export default function LoginScreen (props) {
       <KeyboardAwareScrollView>
         <InputFormField
           label={Strings.email}
-          placeholder="Enter Email"
+          placeholder={Strings.enterEmil}
           selectedOption={email}
           onSelect={value => setEmail(value)}
           keyboardType="email-address"
@@ -28,7 +28,7 @@ export default function LoginScreen (props) {
           returnKeyType={'next'}
         />
         <InputFormField
-          placeholder="Enter Password"
+          placeholder={Strings.enterPassword}
           label={Strings.password}
           inputRef={passwordRef}
           selectedOption={password}

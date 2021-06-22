@@ -11,4 +11,26 @@ export const Strings = {
   role: 'Role',
   gender: 'Gender',
   phoneNum: 'Phone Number',
+  enterFirstName: 'Enter first name',
+  enterLastName: 'Enter last name',
+  enterEmil: 'Enter email',
+  enterPassword: 'Enter password',
+  enterPhoneNum: 'Enter phone number',
+  selectGender: 'Select Gender',
+  selectRole: 'Select Role',
+  camera: 'Camera',
+  gallery: 'Gallery',
+  uploadPicture: 'Upload Picture',
+  uploadPhoto: 'Upload Photo',
+  settings: 'Settings',
+  cancel: 'Cancel',
+  storagePermissionTitle: 'ReviewRestaurants Needs to Access Photos and Videos',
+  storagePermissionMessage:
+    'ReviewRestaurants Needs Storage permission to access Photos and Videos. Please go to settings and turn on Storage permissions.',
+  photosPermission: 'ReviewRestaurants needs Permission to access photos',
+  photosPermissionMessage:
+    'ReviewRestaurants needs your permission to use your Photo library to access photos',
+  cameraPermissionTitle: 'ReviewRestaurants Needs to Access Camera',
+  cameraPermissionMessage:
+    'ReviewRestaurants Needs Storage permission to access Camera. Please go to settings and turn on Camera permissions.',
 }
