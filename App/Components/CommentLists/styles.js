@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
-  readMore: {fontWeight: 'bold'}
+  readMore: {
+    fontWeight: 'bold'
+  }
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles'
 import { Button } from 'react-native-elements'
-import PropTypes from 'prop-types'
+import propTypes from 'prop-types'
 
 export default function FormButton (props) {
   const {
@@ -17,9 +17,9 @@ export default function FormButton (props) {
   )
 }
 
-FormButton.PropTypes = {
-  onPress: PropTypes.func,
-  title: PropTypes.string
+FormButton.propTypes = {
+  onPress: propTypes.func,
+  title: propTypes.string
 }
 FormButton.defaultProps = {
   onPress: () => {},

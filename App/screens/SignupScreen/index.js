@@ -1,22 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
-import { Avatar, CheckBox } from 'react-native-elements'
+import { CheckBox } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import ImagePicker from 'react-native-image-crop-picker'
 
 import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import { Strings } from '../../Themes/Strings'
-import { Colors } from '../../Themes'
 import { Dropdown } from '../../Components/Dropdown'
 import ImageCropPicker from '../../Components/ImageCropPicker'
 import { checkCameraPermission } from '../../Lib/utils'
-import ImagePicker from 'react-native-image-crop-picker'
-const IMAGE_OPTIONS = {
-  width: 250,
-  height: 250,
-  cropping: true,
-};
+import { IMAGE_OPTIONS } from '../../Lib/constants'
 
 export default function SignupScreen (props) {
   const [firstName, setFirstName] = useState('')
@@ -26,7 +21,6 @@ export default function SignupScreen (props) {
   const [genderMale, setGenderMale] = useState(false)
   const [genderFemale, setGenderFemale] = useState(false)
   const [password, setPassword] = useState('')
-  const [imageSrc, setImageSource] = useState({});
 
   const passwordRef = useRef()
   const lastNameRef = useRef()
@@ -136,7 +130,7 @@ export default function SignupScreen (props) {
         </View>
 
       </KeyboardAwareScrollView>
-      <FormButton title={Strings.signUp} onPress={() => props?.navigation?.navigate('Home')}/>
+      <FormButton title={Strings.signUp} onPress={() => props?.navigation?.navigate('CreateRestaurant')}/>
 
       <Text style={styles.msgText}>{Strings.alreadyHaveAccount}
         <Text style={styles.signUpText}
