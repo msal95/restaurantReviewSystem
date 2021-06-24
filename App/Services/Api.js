@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://api.github.com/') => {
+const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   // ------
   // STEP 1
   // ------
@@ -35,6 +35,8 @@ const create = (baseURL = 'https://api.github.com/') => {
   // way at this level.
   //
   const getRoot = () => api.get('')
+  const signup = (data) => api.post('users', data)
+  const login = (data) => api.post('users/login', data)
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', {q: username})
 
@@ -51,10 +53,13 @@ const create = (baseURL = 'https://api.github.com/') => {
   // private scoped goodies in JavaScript.
   //
   return {
+    ...api,
     // a list of the API functions from step 2
     getRoot,
     getRate,
-    getUser
+    getUser,
+    signup,
+    login
   }
 }
 

@@ -18,7 +18,8 @@ export default function InputFormField (props) {
     label,
     placeholder,
     dateTime,
-    inputContainerStyle
+    inputContainerStyle,
+    multiline
   } = props
 
   if (dateTime) {
@@ -50,6 +51,7 @@ export default function InputFormField (props) {
       secureTextEntry={secureTextEntry}
       ref={inputRef}
       inputContainerStyle={inputContainerStyle}
+      multiline={multiline}
     />
   )
 }
@@ -64,6 +66,7 @@ InputFormField.propTypes = {
   keyboardType: propTypes.string,
   secureTextEntry: propTypes.bool,
   dateTime: propTypes.bool,
+  multiline: propTypes.bool,
   inputContainerStyle: ViewPropTypes.style
 }
 InputFormField.defaultProps = {
@@ -76,5 +79,6 @@ InputFormField.defaultProps = {
   keyboardType: 'default',
   secureTextEntry: false,
   dateTime: false,
+  multiline: false,
   inputContainerStyle: {}
 }

@@ -9,24 +9,33 @@ import { Colors } from '../Themes'
 import CreateRestaurantScreen from '../screens/CreateRestaurantScreen'
 import RestaurantDetailsScreen from '../screens/RestaurantDetailsScreen'
 import CommentsReplyScreen from '../screens/CommentsReplyScreen'
+import { connect } from 'react-redux'
 
 const Stack = createStackNavigator()
 
-function RootNavigation () {
-  return (
-    <Stack.Navigator initialRouteName='Login' screenOptions={{
-      headerStyle: {
-        backgroundColor: Colors.blue,
-      },
-      headerTintColor: Colors.white,
-      headerTitleStyle: {
-        fontWeight: 'bold'
-      },
-      headerTitleAlign: 'center'
-    }}>
-      <Stack.Screen name='Home' component={HomeScreen} />
+const ScreenOptions =
+  {
+    headerStyle: {
+      backgroundColor: Colors.blue
+    },
+    headerTintColor: Colors.white,
+    headerTitleStyle: {
+      fontWeight: 'bold'
+    },
+    headerTitleAlign: 'center'
+  }
+
+function RootNavigation (props) {
+  if (!props?.user?.authToken) {
+    return (<Stack.Navigator initialRouteName='Login' screenOptions={ScreenOptions}>
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='SignUp' component={SignupScreen} />
+    </Stack.Navigator>)
+  }
+
+  return (
+    <Stack.Navigator initialRouteName='Home' screenOptions={ScreenOptions}>
+      <Stack.Screen name='Home' component={HomeScreen} />
       <Stack.Screen name='CreateRestaurant' component={CreateRestaurantScreen} />
       <Stack.Screen name='RestaurantDetails' component={RestaurantDetailsScreen} />
       <Stack.Screen name='Reply' component={CommentsReplyScreen} />
@@ -34,4 +43,6 @@ function RootNavigation () {
   )
 }
 
-export default RootNavigation
+const mapStateToProps = ({auth: {user = {}} = {}}) => ({user});
+
+export default connect(mapStateToProps, null)(RootNavigation);

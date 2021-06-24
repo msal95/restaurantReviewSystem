@@ -16,7 +16,7 @@ export default function RestaurantDetailsScreen ({ route, navigation }) {
   const { itemId } = route.params
   const selectedListItem = LIST.find(list => list.id === itemId)
 
-  const owner = true
+  const owner = false
 
   function renderComments () {
     if (owner) {
@@ -30,7 +30,7 @@ export default function RestaurantDetailsScreen ({ route, navigation }) {
     return (
       <View>
         <TextElement h4>{Strings.leaveAComment}</TextElement>
-        <Rating showRating fractions="{1}" startingValue="{1.9}"
+        <Rating showRating startingValue="{2}"
                 onStartRating={(startingValue) => setRating(startingValue)} style={styles.rating}/>
         <InputFormField
           label={Strings.comment}
@@ -39,27 +39,28 @@ export default function RestaurantDetailsScreen ({ route, navigation }) {
           onSelect={value => setComment(value)}
           returnKeyType={'done'}
           inputContainerStyle={styles.containerInputStyle}
+          multiline
         />
         <FormButton title={Strings.submitReview} onPress={() => navigation?.navigate('Home')}/>
       </View>
     )
   }
 
-return (
-  <SafeAreaView style={styles.container}>
-    <ScrollView>
-      <Card containerStyle={styles.cardContainer}>
-        <Card.Title>{selectedListItem.name}</Card.Title>
-        <Card.Divider/>
-        <Image
-          style={styles.restaurantBanner}
-          resizeMode="cover"
-          source={{ uri: selectedListItem.avatar_url }}
-        />
-        <Text style={styles.description}>{selectedListItem.subtitle}</Text>
-        {renderComments()}
-      </Card>
-    </ScrollView>
-  </SafeAreaView>
-)
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Card containerStyle={styles.cardContainer}>
+          <Card.Title>{selectedListItem.name}</Card.Title>
+          <Card.Divider/>
+          <Image
+            style={styles.restaurantBanner}
+            resizeMode="cover"
+            source={{ uri: selectedListItem.avatar_url }}
+          />
+          <Text style={styles.description}>{selectedListItem.subtitle}</Text>
+          {renderComments()}
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  )
 }

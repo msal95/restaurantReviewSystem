@@ -8,12 +8,8 @@ import styles from './styles'
 import { Strings } from '../../Themes/Strings'
 import { Colors } from '../../Themes'
 import { checkCameraPermission, checkStoragePermission } from '../../Lib/utils'
+import { IMAGE_CONFIGS } from '../../Lib/constants'
 
-const IMAGE_CONFIGS = {
-  width: 300,
-  height: 300,
-  cropping: true
-}
 
 function ImageCropPicker (props) {
   const [isVisible, setIsVisible] = useState(false)
@@ -86,10 +82,8 @@ export default ImageCropPicker
 ImageCropPicker.propTypes = {
   onSelectImage: PropTypes.func,
   title: PropTypes.string,
-  defaultIcon: PropTypes.number
 }
 ImageCropPicker.defaultProps = {
   onSelectImage: () => {},
   title: Strings.uploadPhoto,
-  defaultIcon: {}
 }

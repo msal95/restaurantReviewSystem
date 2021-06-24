@@ -26,6 +26,7 @@ export default function CommentsReplyScreen ({ route, navigation }) {
             onSelect={(value) => setReply(value)}
             returnKeyType={'done'}
             inputContainerStyle={styles.containerInputStyle}
+            multiline
           />
           <FormButton title={Strings.reply} onPress={() => navigation?.goBack()}/>
         </View>

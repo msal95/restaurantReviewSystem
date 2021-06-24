@@ -7,12 +7,22 @@ import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import { Strings } from '../../Themes/Strings'
+import LoginActions from '../../Redux/AuthRedux'
+import { connect } from 'react-redux'
 
-export default function LoginScreen (props) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+function LoginScreen (props) {
+  const [email, setEmail] = useState(__DEV__ ? 'aali@gmail.com' : '')
+  const [password, setPassword] = useState('asdfghjkl')
 
   const passwordRef = useRef()
+
+  function renderLoginData(){
+    const data= {
+      email,
+      password
+    }
+    props?.onLogin(data)
+  }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -37,12 +47,18 @@ export default function LoginScreen (props) {
           returnKeyType={'done'}
         />
 
-        <FormButton title={Strings.login} onPress={() => props?.navigation?.navigate('Home')}/>
+        <FormButton title={Strings.login} onPress={renderLoginData}/>
 
-        <Text style={styles.msgText}>{Strings.dontHaveAccount}<Text style={styles.signUpText}
-                                                                    onPress={() => props?.navigation?.navigate('SignUp')}>{Strings.signUp}</Text></Text>
+        <Text style={styles.msgText}>{Strings.dontHaveAccount}
+          <Text style={styles.signUpText}
+                onPress={() => props?.navigation?.navigate('SignUp')}>{Strings.signUp}</Text></Text>
       </KeyboardAwareScrollView>
 
     </SafeAreaView>
   )
 }
+const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapDispatchToProps = dispatch => ({
+  onLogin: data => dispatch(LoginActions.login(data)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

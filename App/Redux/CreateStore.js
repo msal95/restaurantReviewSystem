@@ -1,7 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import Config from '../Config/DebugConfig'
 import createSagaMiddleware from 'redux-saga'
-import Reactotron from '../Config/ReactotronConfig'
+import Reactotron from 'reactotron-react-native'
+import ReduxPersist from '../Config/ReduxPersist'
+import Rehydration from '../Services/Rehydration'
 
 // creates the store
 export default (rootReducer, rootSaga) => {
@@ -28,6 +30,9 @@ export default (rootReducer, rootSaga) => {
   }
   const store = createAppropriateStore(rootReducer, compose(...enhancers))
 
+  if (ReduxPersist.active) {
+    Rehydration?.updateReducers?.(store);
+  }
   // kick off root saga
   let sagasManager = sagaMiddleware.run(rootSaga)
 

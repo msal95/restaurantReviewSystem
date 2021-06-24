@@ -33,6 +33,9 @@ export default StyleSheet.create({
     paddingBottom: Metrics.base
   },
   radioButton: {
-    backgroundColor: Colors.silver,
+    backgroundColor: Colors.silver
+  },
+  selectedOpt: {
+    fontSize: Fonts.size.regular
   }
 })

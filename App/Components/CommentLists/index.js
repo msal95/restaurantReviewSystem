@@ -23,7 +23,7 @@ export default function CommentLists (props) {
         <ListItem.Content>
           <ListItem.Title>{item.name}</ListItem.Title>
           <ListItem.Subtitle>{item.subtitle.slice(0, 30)}...<Text
-            style={styles.readMore}>{Strings.readMore}</Text></ListItem.Subtitle>
+            style={styles.readMore}  onPress={()=>onCLickItem(item)}>{Strings.readMore}</Text></ListItem.Subtitle>
         </ListItem.Content>
         <TouchableOpacity
           activeOpacity={0.6}

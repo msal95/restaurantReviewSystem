@@ -1,31 +1,35 @@
 import React, { useRef, useState } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
-import { CheckBox } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ImagePicker from 'react-native-image-crop-picker'
+import RNPickerSelect from 'react-native-picker-select'
+import { connect } from 'react-redux'
 
 import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import { Strings } from '../../Themes/Strings'
-import { Dropdown } from '../../Components/Dropdown'
 import ImageCropPicker from '../../Components/ImageCropPicker'
 import { checkCameraPermission } from '../../Lib/utils'
-import { IMAGE_OPTIONS } from '../../Lib/constants'
+import { GENDER, IMAGE_OPTIONS } from '../../Lib/constants'
+import LoginActions from '../../Redux/AuthRedux'
+import RadioForm from 'react-native-simple-radio-button'
 
-export default function SignupScreen (props) {
+function SignupScreen (props) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [genderMale, setGenderMale] = useState(false)
-  const [genderFemale, setGenderFemale] = useState(false)
+  const [phoneNo, setPhoneNo] = useState('')
+  const [isGender, setIsGender] = useState(false)
+  const [gender, setGender] = useState('')
   const [password, setPassword] = useState('')
+  const [role, selectedRole] = useState('Regular User')
 
   const passwordRef = useRef()
   const lastNameRef = useRef()
   const emailRef = useRef()
   const phoneRef = useRef()
+
 
   async function uploadImage () {
     await checkCameraPermission(() => {
@@ -35,20 +39,33 @@ export default function SignupScreen (props) {
     });
   }
 
-  function onSelectGenderMale () {
-    setGenderMale((prevState => !prevState))
-    if(genderFemale){
-      setGenderFemale(false)
-    }
+  function onSelectGender (checkedTitle) {
+    setIsGender((prevState => !prevState))
+    setGender((checkedTitle)=> checkedTitle)
+    // if(genderFemale){
+    //   setGenderFemale(false)
+    // }
   }
+  //
+  // function onSelectGenderFemale () {
+  //   setGenderFemale((prevState => !prevState))
+  //   if(genderMale){
+  //     setGenderMale(false)
+  //   }
 
-  function onSelectGenderFemale () {
-    setGenderFemale((prevState => !prevState))
-    if(genderMale){
-      setGenderMale(false)
+
+  function renderSignUpData(){
+    const data= {
+     firstName,
+      lastName,
+      gender: 'MALE',
+      email,
+      password,
+      phoneNo ,
+      role
     }
+    props?.onSignUp(data)
   }
-
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -68,17 +85,17 @@ export default function SignupScreen (props) {
           selectedOption={lastName}
           inputRef={lastNameRef}
           onSelect={value => setLastName(value)}
-          onSubmitEditing={() => emailRef?.current?.focus?.()}
+          onSubmitEditing={() => phoneRef?.current?.focus?.()}
           returnKeyType={'next'}
         />
         <InputFormField
           label={Strings.phoneNum}
           placeholder={Strings.enterPhoneNum}
-          selectedOption={phone}
+          selectedOption={phoneNo}
           inputRef={phoneRef}
-          onSelect={value => setPhone(value)}
+          onSelect={value => setPhoneNo(value)}
           keyboardType="phone-pad"
-          onSubmitEditing={() => passwordRef?.current?.focus?.()}
+          onSubmitEditing={() => emailRef?.current?.focus?.()}
           returnKeyType={'next'}
         />
         <InputFormField
@@ -88,7 +105,7 @@ export default function SignupScreen (props) {
           inputRef={emailRef}
           onSelect={value => setEmail(value)}
           keyboardType="email-address"
-          onSubmitEditing={() => phoneRef?.current?.focus?.()}
+          onSubmitEditing={() => passwordRef?.current?.focus?.()}
           returnKeyType={'next'}
         />
         <InputFormField
@@ -102,35 +119,35 @@ export default function SignupScreen (props) {
         />
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectRole}</Text>
-          <Dropdown/>
+          <RNPickerSelect
+            placeholder={{label: 'Regular User', value: 'REGULAR'}}
+            onValueChange={(value) => selectedRole(value)}
+            items={[
+              { label: 'Owner', value: 'OWNER' },
+              { label: 'Admin', value: 'ADMIN' }
+            ]}
+            value={role}
+          >
+            <Text style={styles.selectedOpt}>{role}</Text>
+          </RNPickerSelect>
         </View>
 
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectGender}</Text>
           <View style={{ flexDirection: 'row', }}>
-            <CheckBox
-              center
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              title="Male"
-              onPress={onSelectGenderMale}
-              checked={genderMale}
-              containerStyle={styles.radioButton}
-            />
-            <CheckBox
-              center
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              title="Female"
-              onPress={onSelectGenderFemale}
-              checked={genderFemale}
-              containerStyle={styles.radioButton}
+            <RadioForm
+              radio_props={GENDER}
+              initial={0}
+              formHorizontal={true}
+              labelHorizontal={true}
+              onPress={(value) => setGender(value)}
+              style={{justifyContent: 'space-between', paddingHorizontal: 20,}}
             />
           </View>
         </View>
 
       </KeyboardAwareScrollView>
-      <FormButton title={Strings.signUp} onPress={() => props?.navigation?.navigate('CreateRestaurant')}/>
+      <FormButton title={Strings.signUp} onPress={renderSignUpData}/>
 
       <Text style={styles.msgText}>{Strings.alreadyHaveAccount}
         <Text style={styles.signUpText}
@@ -139,3 +156,9 @@ export default function SignupScreen (props) {
     </SafeAreaView>
   )
 }
+
+const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapDispatchToProps = dispatch => ({
+  onSignUp: data => dispatch(LoginActions.signup(data)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
