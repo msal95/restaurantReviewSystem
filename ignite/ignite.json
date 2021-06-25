@@ -1,7 +1,8 @@
 {
-  "createdWith": "",
+  "createdWith": "3.5.3",
   "boilerplate": "ignite-andross",
   "examples": "classic",
   "navigation": "react-navigation",
-  "askToOverwrite": true
+  "askToOverwrite": true,
+  "boilerplateVersion": "4.3.0"
 }

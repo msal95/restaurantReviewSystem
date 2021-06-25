@@ -7,10 +7,13 @@ import StartupActions from '../Redux/StartupRedux'
 import styles from './Styles/RootContainerStyles'
 import RootNavigation from '../Navigation/RootNavigation'
 import { Colors } from '../Themes'
+import ReduxPersist from '../Config/ReduxPersist'
 
 class RootContainer extends Component {
   componentDidMount () {
-    this.props.startup()
+    if (!ReduxPersist.active) {
+      this.props.startup();
+    }
   }
 
   render () {

@@ -37,6 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+  	<string>$(PRODUCT_NAME) require camera permissions to upload Profile picture</string>
+  	<key>NSLocationWhenInUseUsageDescription</key>
+  	<string></string>
+  	<key>NSMicrophoneUsageDescription</key>
+  	<string>$(PRODUCT_NAME) require microphone usage permissions to capture audio.</string>
+  	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>$(PRODUCT_NAME) require Photo Library permissions to upload Profile picture</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>UILaunchStoryboardName</key>
