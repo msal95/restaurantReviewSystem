@@ -72,7 +72,7 @@ const mapDispatchToProps = dispatch => ({
   onFetchRestaurantDetails: (data) => dispatch(RestActions.restaurantDetails(data))
 })
 
-const mapStateToProps = ({  restaurants: {restaurantDetails: {restaurantInfo} = {} } = {} }) => ({
+const mapStateToProps = ({  restaurants: {restaurantDetails: {restaurantInfo = {}} = {} } = {} }) => ({
   details: restaurantInfo
 })
 

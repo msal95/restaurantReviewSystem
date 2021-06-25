@@ -2,6 +2,7 @@ import '../Config'
 import DebugConfig from '../Config/DebugConfig'
 import React from 'react'
 import { Provider } from 'react-redux'
+import type {Node} from 'react';
 
 import RootContainer from './RootContainer'
 import createStore from '../Redux'
@@ -20,7 +21,7 @@ const store = createStore()
  * We separate like this to play nice with React Native's hot reloading.
  */
 
-function App () {
+const App = (): Node => {
   return (
     <Provider store={store}>
       <NavigationContainer>
