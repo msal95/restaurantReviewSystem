@@ -37,8 +37,11 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   const getRoot = () => api.get('')
   const signup = (data) => api.post('users', data)
   const login = (data) => api.post('users/login', data)
+  const restaurants = (data) => api.get('restaurants', data)
+  const createRestaurantApi = (data) => api.post('restaurants', data)
+  const restaurantDetails = ({ restaurantId }) => api.get(`restaurants/${restaurantId}`)
   const getRate = () => api.get('rate_limit')
-  const getUser = (username) => api.get('search/users', {q: username})
+  const getUser = (username) => api.get('search/users', { q: username })
 
   // ------
   // STEP 3
@@ -59,7 +62,10 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     getRate,
     getUser,
     signup,
-    login
+    login,
+    restaurants,
+    restaurantDetails,
+    createRestaurantApi
   }
 }
 

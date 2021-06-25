@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import ImagePicker from 'react-native-image-crop-picker'
 import RNPickerSelect from 'react-native-picker-select'
 import { connect } from 'react-redux'
+import RadioForm from 'react-native-simple-radio-button'
 
 import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
@@ -12,16 +13,15 @@ import { Strings } from '../../Themes/Strings'
 import ImageCropPicker from '../../Components/ImageCropPicker'
 import { checkCameraPermission } from '../../Lib/utils'
 import { GENDER, IMAGE_OPTIONS } from '../../Lib/constants'
-import LoginActions from '../../Redux/AuthRedux'
-import RadioForm from 'react-native-simple-radio-button'
+import SignUpActions from '../../Redux/AuthRedux'
+
 
 function SignupScreen (props) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phoneNo, setPhoneNo] = useState('')
-  const [isGender, setIsGender] = useState(false)
-  const [gender, setGender] = useState('')
+  const [gender, setGender] = useState('MALE')
   const [password, setPassword] = useState('')
   const [role, selectedRole] = useState('Regular User')
 
@@ -39,26 +39,11 @@ function SignupScreen (props) {
     });
   }
 
-  function onSelectGender (checkedTitle) {
-    setIsGender((prevState => !prevState))
-    setGender((checkedTitle)=> checkedTitle)
-    // if(genderFemale){
-    //   setGenderFemale(false)
-    // }
-  }
-  //
-  // function onSelectGenderFemale () {
-  //   setGenderFemale((prevState => !prevState))
-  //   if(genderMale){
-  //     setGenderMale(false)
-  //   }
-
-
   function renderSignUpData(){
     const data= {
      firstName,
       lastName,
-      gender: 'MALE',
+      gender,
       email,
       password,
       phoneNo ,
@@ -134,18 +119,15 @@ function SignupScreen (props) {
 
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectGender}</Text>
-          <View style={{ flexDirection: 'row', }}>
             <RadioForm
               radio_props={GENDER}
               initial={0}
               formHorizontal={true}
               labelHorizontal={true}
               onPress={(value) => setGender(value)}
-              style={{justifyContent: 'space-between', paddingHorizontal: 20,}}
+              labelStyle={{fontSize: 18, paddingHorizontal: 20,}}
             />
-          </View>
         </View>
-
       </KeyboardAwareScrollView>
       <FormButton title={Strings.signUp} onPress={renderSignUpData}/>
 
@@ -159,6 +141,6 @@ function SignupScreen (props) {
 
 const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
 const mapDispatchToProps = dispatch => ({
-  onSignUp: data => dispatch(LoginActions.signup(data)),
+  onSignUp: data => dispatch(SignUpActions.signup(data)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);

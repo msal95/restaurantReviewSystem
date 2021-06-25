@@ -51,5 +51,6 @@ export const Strings = {
   reply: 'Reply',
   enterReply: 'Enter Reply',
   leaveAReply: 'Leave A Reply',
-  badCredential: 'Bad Credentials'
+  badCredential: 'Bad Credentials',
+  logout: 'Logout'
 }

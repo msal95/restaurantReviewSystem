@@ -2,13 +2,14 @@ import React, { useRef, useState } from 'react'
 import { Text, SafeAreaView } from 'react-native'
 import { Text as TextElement } from 'react-native-elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
 
 import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import { Strings } from '../../Themes/Strings'
 import LoginActions from '../../Redux/AuthRedux'
-import { connect } from 'react-redux'
+
 
 function LoginScreen (props) {
   const [email, setEmail] = useState(__DEV__ ? 'aali@gmail.com' : '')

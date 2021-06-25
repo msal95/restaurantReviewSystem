@@ -1,17 +1,18 @@
-import {createActions, createReducer} from 'reduxsauce'
+import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
+
 /* ------------- Types and Action Creators ------------- */
-const {Types, Creators} = createActions({
+const { Types, Creators } = createActions({
   signup: ['data'],
   login: ['data'],
-  authSuccess: ['user'],
+  logout: null,
+  authSuccess: ['user']
 })
-export const LoginTypes = Types
+export const AuthTypes = Types
 export default Creators
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
   loading: false,
-  authToken: '',
   user: {},
   error: ''
 })
@@ -19,17 +20,18 @@ export const INITIAL_STATE = Immutable({
 export const _logout = state => ({
   ...state,
   loading: false,
-  authToken: '',
   error: '',
-  status: ''
+  user: {}
 })
-export const _signup = state => ({...state, loading: true})
-export const _login = state => ({...state, loading: true})
-export const _authSuccess = (state, {user}) => ({...state, loading: false, user})
+export const _signup = state => ({ ...state, loading: true })
+export const _login = state => ({ ...state, loading: true })
+
+export const _authSuccess = (state, { user }) => ({ ...state, loading: false, user })
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGNUP]: _signup,
   [Types.LOGIN]: _login,
+  [Types.LOGOUT]: _logout,
   [Types.AUTH_SUCCESS]: _authSuccess
 })

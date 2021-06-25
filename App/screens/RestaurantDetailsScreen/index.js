@@ -1,22 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
-import { Card, Image, Text as TextElement, Rating } from 'react-native-elements'
-
-import { LIST } from '../../Lib/constants'
+import { Card, Image, Rating, Text as TextElement } from 'react-native-elements'
 import styles from './styles'
 import { Strings } from '../../Themes/Strings'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import CommentLists from '../../Components/CommentLists'
+import RestActions from '../../Redux/RestaurantRedux'
+import { connect } from 'react-redux'
 
-export default function RestaurantDetailsScreen ({ route, navigation }) {
+function RestaurantDetailsScreen (props) {
+  const { route, navigation, onFetchRestaurantDetails, details } = props ?? {}
   const [comment, setComment] = useState('')
   const [rating, setRating] = useState('')
-
-  const { itemId } = route.params
-  const selectedListItem = LIST.find(list => list.id === itemId)
+  const { restaurantId = '' } = route.params
 
   const owner = false
+
+  useEffect(() => {
+    onFetchRestaurantDetails({ restaurantId })
+  }, [])
 
   function renderComments () {
     if (owner) {
@@ -30,7 +33,7 @@ export default function RestaurantDetailsScreen ({ route, navigation }) {
     return (
       <View>
         <TextElement h4>{Strings.leaveAComment}</TextElement>
-        <Rating showRating startingValue="{2}"
+        <Rating showRating startingValue="{2}" defaultRating={3}
                 onStartRating={(startingValue) => setRating(startingValue)} style={styles.rating}/>
         <InputFormField
           label={Strings.comment}
@@ -50,17 +53,27 @@ export default function RestaurantDetailsScreen ({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Card containerStyle={styles.cardContainer}>
-          <Card.Title>{selectedListItem.name}</Card.Title>
+          <Card.Title>{details.name}</Card.Title>
           <Card.Divider/>
           <Image
             style={styles.restaurantBanner}
             resizeMode="cover"
-            source={{ uri: selectedListItem.avatar_url }}
+            source={{ uri: details.image }}
           />
-          <Text style={styles.description}>{selectedListItem.subtitle}</Text>
+          <Text style={styles.description}>{details.description}</Text>
           {renderComments()}
         </Card>
       </ScrollView>
     </SafeAreaView>
   )
 }
+
+const mapDispatchToProps = dispatch => ({
+  onFetchRestaurantDetails: (data) => dispatch(RestActions.restaurantDetails(data))
+})
+
+const mapStateToProps = ({  restaurants: {restaurantDetails: {restaurantInfo} = {} } = {} }) => ({
+  details: restaurantInfo
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RestaurantDetailsScreen)

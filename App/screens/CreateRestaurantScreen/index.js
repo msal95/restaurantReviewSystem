@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
 
 import styles from './styles'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import { Strings } from '../../Themes/Strings'
 import ImageCropPicker from '../../Components/ImageCropPicker'
+import RestActions from '../../Redux/RestaurantRedux'
 
-export default function CreateRestaurantScreen (props) {
+ function CreateRestaurantScreen (props) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [location, setLocation] = useState('')
@@ -16,6 +18,16 @@ export default function CreateRestaurantScreen (props) {
 
   const descriptionRef = useRef()
   const locationRef = useRef()
+
+   function createRestaurant(){
+     const data= {
+       name,
+       description,
+       location,
+       establishedAt,
+     }
+     props?.onCreateRestaurant(data)
+   }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -57,7 +69,13 @@ export default function CreateRestaurantScreen (props) {
           />
         </View>
       </KeyboardAwareScrollView>
-      <FormButton title={Strings.addRestaurant} onPress={() => props?.navigation?.navigate('Home')}/>
+      <FormButton title={Strings.addRestaurant} onPress={createRestaurant} />
     </SafeAreaView>
   )
 }
+
+const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapDispatchToProps = dispatch => ({
+  onCreateRestaurant: data => dispatch(RestActions.createRestaurant(data)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(CreateRestaurantScreen);
