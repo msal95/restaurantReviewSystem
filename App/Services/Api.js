@@ -1,8 +1,8 @@
 // a library to wrap and simplify api calls
-import apisauce from 'apisauce'
+import apisauce from 'apisauce';
 
 // our "constructor"
-const create = (baseURL = 'http://192.168.1.13:8083/api/v1/') => {
+const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   // ------
   // STEP 1
   // ------
@@ -14,11 +14,11 @@ const create = (baseURL = 'http://192.168.1.13:8083/api/v1/') => {
     baseURL,
     // here are some default headers
     headers: {
-      'Cache-Control': 'no-cache'
+      'Cache-Control': 'no-cache',
     },
     // 10 second timeout...
-    timeout: 10000
-  })
+    timeout: 10000,
+  });
 
   // ------
   // STEP 2
@@ -34,14 +34,21 @@ const create = (baseURL = 'http://192.168.1.13:8083/api/v1/') => {
   // Since we can't hide from that, we embrace it by getting out of the
   // way at this level.
   //
-  const getRoot = () => api.get('')
-  const signup = (data) => api.post('users', data)
-  const login = (data) => api.post('users/login', data)
-  const restaurants = (data) => api.get('restaurants', data)
-  const createRestaurantApi = (data) => api.post('restaurants', data)
-  const restaurantDetails = ({ restaurantId }) => api.get(`restaurants/${restaurantId}`)
-  const getRate = () => api.get('rate_limit')
-  const getUser = (username) => api.get('search/users', { q: username })
+  const getRoot = () => api.get('');
+  const signup = data => api.post('users', data);
+  const login = data => api.post('users/login', data);
+  const restaurants = data => api.get('restaurants', data);
+  const createRestaurantApi = data => api.post('restaurants', data);
+  const restaurantDetails = ({restaurantId}) =>
+    api.get(`restaurants/${restaurantId}`);
+  const createReview = ({restaurantId, data}) =>
+    api.post(`restaurants/${restaurantId}/reviews`, data);
+  const getAllReviews = ({data: {restaurantId = ''} = {}}) =>
+    api.get(`restaurants/${restaurantId}/reviews`);
+  const replyReviews = ({restaurantId, data, reviewId}) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
+  const getRate = () => api.get('rate_limit');
+  const getUser = username => api.get('search/users', {q: username});
 
   // ------
   // STEP 3
@@ -65,11 +72,14 @@ const create = (baseURL = 'http://192.168.1.13:8083/api/v1/') => {
     login,
     restaurants,
     restaurantDetails,
-    createRestaurantApi
-  }
-}
+    createRestaurantApi,
+    createReview,
+    getAllReviews,
+    replyReviews,
+  };
+};
 
 // let's return back our create method as the default.
 export default {
-  create
-}
+  create,
+};

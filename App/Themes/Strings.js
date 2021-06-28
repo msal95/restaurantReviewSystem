@@ -52,5 +52,10 @@ export const Strings = {
   enterReply: 'Enter Reply',
   leaveAReply: 'Leave A Reply',
   badCredential: 'Bad Credentials',
-  logout: 'Logout'
-}
+  logout: 'Logout',
+  visitDate: 'Visit Date',
+  previousReviews: 'Previous Reviews',
+  totalReviews: 'Total Reviews : ',
+  avgRating: 'Avg. Rating : ',
+  replied: 'Replied Successfully',
+};

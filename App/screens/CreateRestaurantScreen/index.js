@@ -1,38 +1,38 @@
-import React, { useRef, useState } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { connect } from 'react-redux'
+import React, {useRef, useState} from 'react';
+import {SafeAreaView, Text, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {connect} from 'react-redux';
 
-import styles from './styles'
-import InputFormField from '../../Components/InputFormField'
-import FormButton from '../../Components/Button'
-import { Strings } from '../../Themes/Strings'
-import ImageCropPicker from '../../Components/ImageCropPicker'
-import RestActions from '../../Redux/RestaurantRedux'
+import styles from './styles';
+import InputFormField from '../../Components/InputFormField';
+import FormButton from '../../Components/Button';
+import {Strings} from '../../Themes/Strings';
+import ImageCropPicker from '../../Components/ImageCropPicker';
+import RestActions from '../../Redux/RestaurantRedux';
 
- function CreateRestaurantScreen (props) {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [location, setLocation] = useState('')
-  const [establishedAt, setEstablishedAT] = useState('')
+function CreateRestaurantScreen(props) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
+  const [establishedAt, setEstablishedAT] = useState('');
 
-  const descriptionRef = useRef()
-  const locationRef = useRef()
+  const descriptionRef = useRef();
+  const locationRef = useRef();
 
-   function createRestaurant(){
-     const data= {
-       name,
-       description,
-       location,
-       establishedAt,
-     }
-     props?.onCreateRestaurant(data)
-   }
+  function createRestaurant() {
+    const data = {
+      name,
+      description,
+      location,
+      establishedAt,
+    };
+    props?.onCreateRestaurant(data);
+  }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <ImageCropPicker/>
+        <ImageCropPicker />
         <InputFormField
           label={Strings.name}
           placeholder={Strings.enterRestaurantName}
@@ -58,24 +58,27 @@ import RestActions from '../../Redux/RestaurantRedux'
           onSelect={value => setLocation(value)}
           returnKeyType={'done'}
         />
-        <View style={styles.roleSelection}>
-          <Text style={styles.roleText}>{Strings.establishedAt} : </Text>
+        <View style={styles.establishedDate}>
+          <Text style={styles.dateTitle}>{Strings.establishedAt} : </Text>
           <InputFormField
             label={Strings.establishedAt}
             placeholder={Strings.selectDate}
             selectedOption={establishedAt}
-            onSelect={(date) => setEstablishedAT(date)}
+            onSelect={date => setEstablishedAT(date)}
             dateTime
           />
         </View>
       </KeyboardAwareScrollView>
       <FormButton title={Strings.addRestaurant} onPress={createRestaurant} />
     </SafeAreaView>
-  )
+  );
 }
 
 const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
 const mapDispatchToProps = dispatch => ({
   onCreateRestaurant: data => dispatch(RestActions.createRestaurant(data)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRestaurantScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateRestaurantScreen);

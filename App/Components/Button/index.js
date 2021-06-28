@@ -1,27 +1,28 @@
-import React from 'react'
-import styles from './styles'
-import { Button } from 'react-native-elements'
-import propTypes from 'prop-types'
+import React from 'react';
+import styles from './styles';
+import {Button} from 'react-native-elements';
+import propTypes from 'prop-types';
 
-export default function FormButton (props) {
-  const {
-    onPress,
-    title,
-  } = props
+export default function FormButton(props) {
+  const {onPress, title, loading} = props;
   return (
     <Button
+      loading={loading}
       title={title}
+      disabled={loading}
       onPress={onPress}
       buttonStyle={styles.buttonStyle}
     />
-  )
+  );
 }
 
 FormButton.propTypes = {
   onPress: propTypes.func,
-  title: propTypes.string
-}
+  title: propTypes.string,
+  loading: propTypes.bool,
+};
 FormButton.defaultProps = {
   onPress: () => {},
-  title: ''
-}
+  title: '',
+  loading: false,
+};

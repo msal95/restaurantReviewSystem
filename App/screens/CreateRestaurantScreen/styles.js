@@ -23,13 +23,13 @@ export default StyleSheet.create({
     color: Colors.charcoal,
     marginHorizontal: Metrics.base
   },
-  roleSelection: {
+  establishedDate: {
     marginHorizontal: Metrics.base,
     marginBottom: Metrics.doubleBaseMargin,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  roleText: {
+  dateTitle: {
     fontSize: Fonts.size.input,
     fontWeight: 'bold',
     paddingBottom: Metrics.base

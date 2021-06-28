@@ -1,15 +1,15 @@
-import '../Config'
-import DebugConfig from '../Config/DebugConfig'
-import React from 'react'
-import { Provider } from 'react-redux'
+import '../Config';
+import DebugConfig from '../Config/DebugConfig';
+import React from 'react';
+import {Provider} from 'react-redux';
 import type {Node} from 'react';
 
-import RootContainer from './RootContainer'
-import createStore from '../Redux'
-import { NavigationContainer } from '@react-navigation/native'
+import RootContainer from './RootContainer';
+import createStore from '../Redux';
+import {NavigationContainer} from '@react-navigation/native';
 
 // create our store
-const store = createStore()
+const store = createStore();
 
 /**
  * Provides an entry point into our application.  Both index.ios.js and index.android.js
@@ -28,10 +28,8 @@ const App = (): Node => {
         <RootContainer />
       </NavigationContainer>
     </Provider>
-  )
-}
+  );
+};
 
 // allow reactotron overlay for fast design in dev mode
-export default DebugConfig.useReactotron
-  ? console.tron.overlay(App)
-  : App
+export default DebugConfig.useReactotron ? console.tron.overlay(App) : App;

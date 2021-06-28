@@ -6,6 +6,7 @@ const colors = {
   transparent: 'rgba(0,0,0,0)',
   silver: '#F7F7F7',
   white: '#FFFFFF',
+  black: '#000000',
   steel: '#CCCCCC',
   error: 'rgba(200, 0, 0, 0.8)',
   ricePaper: 'rgba(255,255,255, 0.75)',
@@ -23,7 +24,7 @@ const colors = {
   eggplant: '#251a34',
   border: '#483F53',
   banner: '#5F3E63',
-  text: '#E0D7E5'
-}
+  text: '#E0D7E5',
+};
 
-export default colors
+export default colors;
