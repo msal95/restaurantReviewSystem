@@ -1,26 +1,47 @@
-import React from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {ListItem} from 'react-native-elements';
+import React, { useState } from 'react'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { Icon, ListItem } from 'react-native-elements'
 
-import {Strings} from '../../Themes/Strings';
-import styles from './styles';
-import RestActions from '../../Redux/RestaurantRedux';
-import {connect} from 'react-redux';
-import {printLogs} from '../../Lib/utils';
+import { Strings } from '../../Themes/Strings'
+import styles from './styles'
+import RestActions from '../../Redux/RestaurantRedux'
+import { connect } from 'react-redux'
+import { Colors } from '../../Themes'
+import ConfirmationModal from '../ConfirmationModal'
+import LoadingIndicator from '../LoadingIndicator'
 
-function CommentLists(props) {
-  const navigation = useNavigation();
-  const {reviews, renderListHeader} = props;
-  function onClickItem(review) {
-    navigation?.navigate('Reply', {review});
+function CommentLists (props) {
+  const navigation = useNavigation()
+  const { reviews, renderListHeader, onDeleteReview, details,deletingReview } = props
+
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
+  const [reviewId, setReviewId] = useState(false)
+
+  function onClickItem (review) {
+    navigation?.navigate('Reply', { review })
   }
 
-  function renderListItem({item}) {
-    const {comment, user = {}} = item || {};
-    const {firstName = '', lastName = ''} = user ?? {};
+  function onPressDeleteReview (item) {
+    setReviewId(item?._id)
+    setIsDeleteModal(true)
+  }
+
+  function closeModal () {
+    setReviewId('')
+    setIsDeleteModal(false)
+  }
+
+  function onDeleteConfirm () {
+    closeModal()
+    onDeleteReview({ reviewId, restaurantId: details?._id })
+  }
+
+  function renderListItem ({ item }) {
+    const { comment, user = {} } = item || {}
+    const { firstName = '', lastName = '' } = user ?? {}
     return (
-      <ListItem key={item.id} bottomDivider>
+      <ListItem key={item._id} bottomDivider>
         <ListItem.Content>
           <ListItem.Title>
             {firstName} {lastName}
@@ -32,23 +53,40 @@ function CommentLists(props) {
             </Text>
           </ListItem.Subtitle>
         </ListItem.Content>
+        <Icon
+          raised
+          disabled={reviewId === item?._id}
+          name="trash-alt"
+          type="font-awesome-5"
+          color={Colors.fire}
+          onPress={() => onPressDeleteReview(item)}/>
+        <LoadingIndicator loading={reviewId === item?._id && deletingReview}/>
         <TouchableOpacity activeOpacity={0.6} onPress={() => onClickItem(item)}>
           <Text>{Strings.reply}</Text>
         </TouchableOpacity>
       </ListItem>
-    );
+    )
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <FlatList
         keyExtractor={item => item.id}
         data={reviews}
         ListHeaderComponent={renderListHeader}
         renderItem={renderListItem}
       />
+
+      <ConfirmationModal
+        closeModal={closeModal}
+        onPressDone={onDeleteConfirm}
+        onPressCancel={closeModal}
+        isVisible={isDeleteModal}
+        header={Strings.deleteReviewTitle}
+        subHeader={Strings.deleteReviewMessage}
+      />
     </View>
-  );
+  )
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -57,16 +95,19 @@ const mapDispatchToProps = dispatch => ({
   onCreateReview: (data, restaurantId) =>
     dispatch(RestActions.createReview(data, restaurantId)),
   onGetAllReviews: data => dispatch(RestActions.getAllReviews(data)),
-});
+  onDeleteReview: data => dispatch(RestActions.deleteReview(data)),
+})
 
 const mapStateToProps = ({
   restaurants: {
-    restaurantDetails: {restaurantInfo = {}} = {},
+    deletingReview = false,
+    restaurantDetails: { restaurantInfo = {} } = {},
     allReviews = [],
   } = {},
 }) => ({
   reviews: allReviews,
   details: restaurantInfo,
-});
+  deletingReview
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentLists);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentLists)

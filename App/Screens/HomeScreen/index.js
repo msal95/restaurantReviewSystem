@@ -15,7 +15,7 @@ import ConfirmationModal from '../../Components/ConfirmationModal'
 function HomeScreen (props) {
   const { onFetchRestaurantsList, navigation, data, deletingRestaurant, onDeleteRestaurant } = props
   const [restaurantId, setRestaurantId] = useState('')
-  const [isDeleteModal, setIsDeleteMoal] = useState(false)
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
 
   useEffect(() => {
     navigation?.setOptions({
@@ -31,7 +31,7 @@ function HomeScreen (props) {
 
   function onPressDeleteItem (item) {
     setRestaurantId(item?._id)
-    setIsDeleteMoal(true)
+    setIsDeleteModal(true)
   }
 
   function onDeleteConfirm () {
@@ -48,7 +48,7 @@ function HomeScreen (props) {
 
   function closeModal () {
     setRestaurantId('')
-    setIsDeleteMoal(false)
+    setIsDeleteModal(false)
   }
 
   function renderListItem ({ item, index }) {
@@ -56,7 +56,7 @@ function HomeScreen (props) {
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
         <ListItem key={item._id} bottomDivider>
-          <Avatar size="large" rounded source={!!image ? { uri: image } : Images.restaurantPlaceholder}/>
+          <Avatar size="large" source={!!image ? { uri: image } : Images.restaurantPlaceholder}/>
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
             <ListItem.Subtitle>

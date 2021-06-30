@@ -3,7 +3,7 @@ import {call, put} from 'redux-saga/effects';
 import Api from '../Services/ApiCaller';
 import RestaurantActions from '../Redux/RestaurantRedux';
 import {Strings} from '../Themes/Strings';
-import {showMessage} from '../Lib/utils';
+import { printLogs, showMessage } from '../Lib/utils'
 import {MESSAGE_TYPES} from '../Lib/constants';
 import AuthActions from '../Redux/AuthRedux'
 
@@ -70,6 +70,17 @@ export function* onDeleteRestaurant(api, {data = {}}) {
     showMessage(Strings.restaurantsDeleted, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(RestaurantActions.deleteRestaurantFailure(message));
+    showMessage(message, MESSAGE_TYPES.ERROR);
+  }
+}
+
+export function* onDeleteReview(api, {data = {}}) {
+  try {
+    const {response} = yield call(Api.callServer, api.deleteReview, data);
+    yield put(RestaurantActions.deleteReviewSuccess(data?.reviewId));
+    showMessage(Strings.restaurantsDeleted, MESSAGE_TYPES.SUCCESS);
+  } catch ({message}) {
+    yield put(RestaurantActions.deleteReviewFailure(message));
     showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }

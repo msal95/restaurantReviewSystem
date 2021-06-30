@@ -40,6 +40,7 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   const restaurants = data => api.get('restaurants', data)
   const createRestaurantApi = data => api.post('restaurants', data)
   const deleteRestaurant = data => api.delete(`restaurants/${data?._id}`, data)
+  const deleteReview = ({restaurantId, reviewId}) => api.delete(`restaurants/${restaurantId}/reviews/${reviewId}`, {restaurantId, reviewId})
   const restaurantDetails = ({restaurantId}) =>
     api.get(`restaurants/${restaurantId}`)
   const createReview = ({restaurantId, data}) =>
@@ -80,6 +81,7 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     restaurantDetails,
     createRestaurantApi,
     deleteRestaurant,
+    deleteReview,
     createReview,
     getAllReviews,
     replyReviews,

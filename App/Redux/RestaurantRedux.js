@@ -30,6 +30,10 @@ const {Types, Creators} = createActions({
   deleteRestaurant: ['data'],
   deleteRestaurantSuccess: ['id'],
   deleteRestaurantFailure: ['error'],
+
+  deleteReview: ['data'],
+  deleteReviewSuccess: ['id'],
+  deleteReviewFailure: ['error'],
 });
 export const RestTypes = Types;
 export default Creators;
@@ -114,6 +118,20 @@ export const _deleteRestaurantFailure = (state, {error = ''}) => ({
   deletingRestaurant: false
 })
 
+export const _deleteReview = state => ({...state, deletingReview: true})
+
+export const _deleteReviewSuccess = (state, { id }) => ({
+  ...state,
+  allReviews: (state.allReviews || []).filter(item=>(item?._id !== id)),
+  deletingReview: false
+})
+
+export const _deleteReviewFailure = (state, {error = ''}) => ({
+  ...state,
+  error,
+  deletingReview: false
+})
+
 export const _getAllReviews = state => ({...state, loading: true});
 export const _getAllReviewsSuccess = (state, {response}) => ({
   ...state,
@@ -160,5 +178,9 @@ export const reducer = createReducer(INITIAL_STATE, {
 
   [Types.DELETE_RESTAURANT]: _deleteRestaurant,
   [Types.DELETE_RESTAURANT_SUCCESS]: _deleteRestaurantSuccess,
-  [Types.DELETE_RESTAURANT_FAILURE]: _deleteRestaurantFailure
+  [Types.DELETE_RESTAURANT_FAILURE]: _deleteRestaurantFailure,
+
+  [Types.DELETE_REVIEW]: _deleteReview,
+  [Types.DELETE_REVIEW_SUCCESS]: _deleteReviewSuccess,
+  [Types.DELETE_REVIEW_FAILURE]: _deleteReviewFailure,
 });

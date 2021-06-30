@@ -17,7 +17,7 @@ import {
 } from './AuthSagas'
 import {
   onCreateRestaurant,
-  onCreateReview, onDeleteRestaurant,
+  onCreateReview, onDeleteRestaurant, onDeleteReview,
   onFetchRestaurantDetails,
   onFetchRestaurantsList,
   onGetAllReviews,
@@ -46,6 +46,7 @@ export default function * root () {
     takeLatest(RestTypes.CREATE_REVIEW, onCreateReview, api),
     takeLatest(RestTypes.GET_ALL_REVIEWS, onGetAllReviews, api),
     takeLatest(RestTypes.REVIEW_REPLY, onReviewReply, api),
+    takeLatest(RestTypes.DELETE_REVIEW, onDeleteReview, api),
     takeLatest(RestTypes.DELETE_RESTAURANT, onDeleteRestaurant, api),
     takeLatest(AuthTypes.AUTH_SUCCESS, onAuthSuccess, api),
     takeLatest(AuthTypes.USER_PROFILE, onGetUserProfile, api),

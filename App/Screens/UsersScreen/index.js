@@ -12,12 +12,12 @@ import styles from './styles'
 import ConfirmationModal from '../../Components/ConfirmationModal'
 
 function UsersScreen (props) {
-  const { navigation, allUsers, onDeleteUser, deletingUser } = props
+  const { allUsers, onDeleteUser, deletingUser, getAllUsers, navigation } = props
   const [userId, setUserId] = useState('')
-  const [isDeleteModal, setIsDeleteMoal] = useState(false)
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
 
   useEffect(() => {
-    navigation?.setOptions({
+    navigation.setOptions({
       headerRight: () => (
         <FormButton title={Strings.logout} onPress={() => props?.onLogout()}/>
       ),
@@ -25,11 +25,11 @@ function UsersScreen (props) {
   }, [])
 
   useEffect(() => {
-    props.getAllUsers()
+    getAllUsers()
   }, [])
 
   function onCLickItem (item) {
-    return props?.navigation?.navigate({
+    navigation?.navigate({
       name: 'UserProfile',
       params: { user: item, isSelf: false },
     })
@@ -37,12 +37,12 @@ function UsersScreen (props) {
 
   function onPressDeleteUser ({ _id } = {}) {
     setUserId(_id)
-    setIsDeleteMoal(true)
+    setIsDeleteModal(true)
   }
 
   function closeModal () {
     setUserId('')
-    setIsDeleteMoal(false)
+    setIsDeleteModal(false)
   }
 
   function onDeleteConfirm () {

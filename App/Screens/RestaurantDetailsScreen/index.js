@@ -132,7 +132,7 @@ function RestaurantDetailsScreen(props) {
         <Image
           style={styles.restaurantBanner}
           resizeMode="cover"
-          source={!details?.image ? {uri: details?.image}: Images.restaurantPlaceholder}
+          source={!!details?.image ? {uri: details?.image}: Images.restaurantPlaceholder}
         />
         <Text style={styles.descriptionTitle}>{Strings.description}</Text>
         <Text style={styles.description}>{details.description}</Text>
