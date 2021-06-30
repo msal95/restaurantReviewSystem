@@ -35,7 +35,7 @@ function HomeScreen(props) {
     const {image, name, description, averageRating = 0} = item || {};
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
-        <ListItem key={index} bottomDivider>
+        <ListItem key={item._id} bottomDivider>
           <Avatar size="large" rounded source={{uri: image}} />
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
@@ -53,7 +53,8 @@ function HomeScreen(props) {
 
   return (
     <FlatList
-      keyExtractor={item => String(item?.restaurantId)}
+      keyExtractor={item => String(item?._id)}
+      extraData={props}
       data={data}
       renderItem={renderListItem}
     />

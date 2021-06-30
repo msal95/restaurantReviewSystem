@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import ImagePicker from 'react-native-image-crop-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import {connect} from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
@@ -11,8 +10,7 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import ImageCropPicker from '../../Components/ImageCropPicker';
-import {checkCameraPermission} from '../../Lib/utils';
-import {GENDER, IMAGE_OPTIONS} from '../../Lib/constants';
+import {GENDER} from '../../Lib/constants';
 import SignUpActions from '../../Redux/AuthRedux';
 
 function SignupScreen(props) {
@@ -23,19 +21,12 @@ function SignupScreen(props) {
   const [gender, setGender] = useState('MALE');
   const [password, setPassword] = useState('');
   const [role, selectedRole] = useState('Regular User');
+  const [file, setImageSource] = useState({});
 
   const passwordRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
   const phoneRef = useRef();
-
-  async function uploadImage() {
-    await checkCameraPermission(() => {
-      ImagePicker.openCamera(IMAGE_OPTIONS).then(imageData => {
-        console.log(imageData);
-      });
-    });
-  }
 
   function renderSignUpData() {
     const data = {
@@ -46,6 +37,7 @@ function SignupScreen(props) {
       password,
       phoneNo,
       role,
+      file,
     };
     props?.onSignUp(data);
   }
@@ -53,7 +45,10 @@ function SignupScreen(props) {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <ImageCropPicker />
+        <ImageCropPicker
+          onSelectImage={param => setImageSource(param)}
+          imgSrc={file}
+        />
         <InputFormField
           label={Strings.firstName}
           placeholder={Strings.enterFirstName}
@@ -122,7 +117,7 @@ function SignupScreen(props) {
             formHorizontal={true}
             labelHorizontal={true}
             onPress={value => setGender(value)}
-            labelStyle={{fontSize: 18, paddingHorizontal: 20}}
+            labelStyle={styles.radioBtn}
           />
         </View>
       </KeyboardAwareScrollView>

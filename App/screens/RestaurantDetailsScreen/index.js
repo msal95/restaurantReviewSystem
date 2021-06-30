@@ -7,7 +7,7 @@ import {
   Rating,
   Text as TextElement,
 } from 'react-native-elements';
-import {connect} from 'react-redux';
+import {connect, shallowEqual, useSelector} from 'react-redux';
 
 import styles from './styles';
 import {Strings} from '../../Themes/Strings';
@@ -15,7 +15,6 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
-import {Colors} from '../../Themes';
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -33,7 +32,10 @@ function RestaurantDetailsScreen(props) {
   const [rating, setRating] = useState('0');
   const {restaurantId = ''} = route.params;
 
-  const owner = false;
+  const {role = ''} = useSelector(
+    ({auth: {user: {role = ''}} = {}}) => ({role}),
+    shallowEqual,
+  );
 
   useEffect(() => {
     onFetchRestaurantDetails({restaurantId});
@@ -58,9 +60,7 @@ function RestaurantDetailsScreen(props) {
           <ListItem.Title>
             {firstName} {lastName}
           </ListItem.Title>
-          <ListItem.Subtitle style={{textAlign: 'justify'}}>
-            {commentText}
-          </ListItem.Subtitle>
+          <ListItem.Subtitle>{commentText}</ListItem.Subtitle>
         </ListItem.Content>
         <Rating imageSize={15} readonly startingValue={commentRating} />
       </ListItem>
@@ -69,7 +69,7 @@ function RestaurantDetailsScreen(props) {
 
   function renderListFooter() {
     return (
-      <View>
+      <View style={styles.reviewContainer}>
         <TextElement style={styles.commentHeading} h4>
           {Strings.leaveAComment}
         </TextElement>
@@ -105,7 +105,7 @@ function RestaurantDetailsScreen(props) {
   }
 
   function renderComments() {
-    if (owner) {
+    if (role === 'OWNER' || role === 'ADMIN') {
       return (
         <CommentLists renderListHeader={renderListHeader} reviews={reviews} />
       );
@@ -125,7 +125,7 @@ function RestaurantDetailsScreen(props) {
 
   function renderListHeader() {
     return (
-      <View style={{backgroundColor: Colors.white, padding: 10}}>
+      <View style={styles.flatListHeader}>
         <Card.Title>{details.name}</Card.Title>
         <Card.Divider />
         <Image
@@ -145,7 +145,7 @@ function RestaurantDetailsScreen(props) {
             <Rating imageSize={15} readonly startingValue={averageRating} />
           </Text>
         </View>
-        {owner ? (
+        {role === 'OWNER' ? (
           <TextElement h4>{Strings.allComments}</TextElement>
         ) : (
           <TextElement style={styles.commentHeading} h4>
@@ -158,7 +158,7 @@ function RestaurantDetailsScreen(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: 1}}>{renderComments()}</View>
+      <View style={styles.innerContainer}>{renderComments()}</View>
     </SafeAreaView>
   );
 }

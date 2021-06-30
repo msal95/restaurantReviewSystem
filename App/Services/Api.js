@@ -49,6 +49,8 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
   const getRate = () => api.get('rate_limit');
   const getUser = username => api.get('search/users', {q: username});
+  const userProfile = data => api.get('users/me', data);
+  const allUsers = data => api.get('users', data);
 
   // ------
   // STEP 3
@@ -76,6 +78,8 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     createReview,
     getAllReviews,
     replyReviews,
+    userProfile,
+    allUsers,
   };
 };
 

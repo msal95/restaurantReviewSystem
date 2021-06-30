@@ -7,7 +7,14 @@ import {AuthTypes} from '../Redux/AuthRedux';
 
 /* ------------- Sagas ------------- */
 import {startup} from './StartupSagas';
-import {onAuthSuccess, onLogin, onSignup, onLogout} from './AuthSagas';
+import {
+  onAuthSuccess,
+  onGetAllUsers,
+  onGetUserProfile,
+  onLogin,
+  onLogout,
+  onSignup,
+} from './AuthSagas';
 import {
   onCreateRestaurant,
   onCreateReview,
@@ -40,6 +47,8 @@ export default function* root() {
     takeLatest(RestTypes.GET_ALL_REVIEWS, onGetAllReviews, api),
     takeLatest(RestTypes.REVIEW_REPLY, onReviewReply, api),
     takeLatest(AuthTypes.AUTH_SUCCESS, onAuthSuccess, api),
+    takeLatest(AuthTypes.USER_PROFILE, onGetUserProfile, api),
+    takeLatest(AuthTypes.ALL_USERS, onGetAllUsers, api),
 
     // some sagas receive extra parameters in addition to an action
   ]);

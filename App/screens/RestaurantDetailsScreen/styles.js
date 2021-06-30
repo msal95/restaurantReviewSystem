@@ -7,6 +7,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.cloud,
   },
+  innerContainer: {
+    flex: 1,
+  },
   restaurantBanner: {
     width: '100%',
     height: Metrics.twoHundred,
@@ -65,5 +68,13 @@ export default StyleSheet.create({
   },
   commentHeading: {
     marginTop: Metrics.fifteen,
+    marginHorizontal: Metrics.base,
+  },
+  reviewContainer: {
+    backgroundColor: 'white',
+  },
+  flatListHeader: {
+    backgroundColor: Colors.white,
+    padding: 10,
   },
 });

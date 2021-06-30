@@ -15,6 +15,7 @@ function CreateRestaurantScreen(props) {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [establishedAt, setEstablishedAT] = useState('');
+  const [file, setImageSource] = useState({});
 
   const descriptionRef = useRef();
   const locationRef = useRef();
@@ -25,6 +26,7 @@ function CreateRestaurantScreen(props) {
       description,
       location,
       establishedAt,
+      file,
     };
     props?.onCreateRestaurant(data);
   }
@@ -32,7 +34,10 @@ function CreateRestaurantScreen(props) {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <ImageCropPicker />
+        <ImageCropPicker
+          onSelectImage={param => setImageSource(param)}
+          imgSrc={file}
+        />
         <InputFormField
           label={Strings.name}
           placeholder={Strings.enterRestaurantName}

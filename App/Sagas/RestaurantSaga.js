@@ -3,7 +3,7 @@ import {call, put} from 'redux-saga/effects';
 import Api from '../Services/ApiCaller';
 import RestaurantActions from '../Redux/RestaurantRedux';
 import {Strings} from '../Themes/Strings';
-import {printLogs, showMessage} from '../Lib/utils';
+import {showMessage} from '../Lib/utils';
 import {MESSAGE_TYPES} from '../Lib/constants';
 
 export function* onFetchRestaurantsList(api) {
@@ -12,7 +12,6 @@ export function* onFetchRestaurantsList(api) {
     yield put(RestaurantActions.restaurantsListSuccess(response));
   } catch ({message}) {
     yield put(RestaurantActions.restaurantsListFailure(String(message)));
-  } finally {
   }
 }
 
@@ -26,7 +25,6 @@ export function* onFetchRestaurantDetails(api, {data = {}}) {
     yield put(RestaurantActions.restaurantDetailsSuccess(response));
   } catch ({message}) {
     yield put(RestaurantActions.restaurantDetailsFailure(String(message)));
-  } finally {
   }
 }
 
@@ -42,27 +40,25 @@ export function* onCreateRestaurant(api, {data = {}}) {
       api.createRestaurantApi,
       form_data,
     );
-    //TODO SUCCESS
+    yield put(RestaurantActions.createRestaurantSuccess(response));
+    showMessage(Strings.createRestaurantSuccess, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
-    //TODO FAILURE
-  } finally {
+    yield put(RestaurantActions.createRestaurantFailure(message));
+    showMessage(Strings.createRestaurantFail, MESSAGE_TYPES.ERROR);
   }
 }
 
 export function* onCreateReview(api, {data = {}, restaurantId}) {
   try {
-    const form_data = new FormData();
-
-    for (const key in data) {
-      form_data.append(key, data[key]);
-    }
     const {response} = yield call(Api.callServer, api.createReview, {
       data,
       restaurantId,
     });
-    printLogs({response});
+    yield put(RestaurantActions.createReviewSuccess(response));
+    showMessage(Strings.createReviewSuccess, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
-    printLogs({message});
+    yield put(RestaurantActions.createReviewFailure(message));
+    showMessage(Strings.createReviewFail, MESSAGE_TYPES.ERROR);
   }
 }
 
@@ -91,5 +87,6 @@ export function* onReviewReply(
     showMessage(Strings.replied, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(RestaurantActions.reviewReplyFailure(message));
+    showMessage(Strings.replied, MESSAGE_TYPES.ERROR);
   }
 }

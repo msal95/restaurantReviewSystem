@@ -58,4 +58,8 @@ export const Strings = {
   totalReviews: 'Total Reviews : ',
   avgRating: 'Avg. Rating : ',
   replied: 'Replied Successfully',
+  createReviewSuccess: 'Review Created Successful',
+  createReviewFail: 'Review Created Failure',
+  createRestaurantSuccess: 'Restaurant Created Successful',
+  createRestaurantFail: 'Restaurant Created Failure',
 };
