@@ -9,10 +9,13 @@ import AuthActions from '../../Redux/AuthRedux'
 import { Colors, Images } from '../../Themes'
 import LoadingIndicator from '../../Components/LoadingIndicator'
 import styles from './styles'
+import ConfirmationModal from '../../Components/ConfirmationModal'
 
 function UsersScreen (props) {
   const { navigation, allUsers, onDeleteUser, deletingUser } = props
   const [userId, setUserId] = useState('')
+  const [isDeleteModal, setIsDeleteMoal] = useState(false)
+
   useEffect(() => {
     navigation?.setOptions({
       headerRight: () => (
@@ -34,7 +37,17 @@ function UsersScreen (props) {
 
   function onPressDeleteUser ({ _id } = {}) {
     setUserId(_id)
-    onDeleteUser({ _id })
+    setIsDeleteMoal(true)
+  }
+
+  function closeModal () {
+    setUserId('')
+    setIsDeleteMoal(false)
+  }
+
+  function onDeleteConfirm () {
+    closeModal()
+    onDeleteUser({ _id: userId })
   }
 
   function renderListItem ({ item, index }) {
@@ -62,12 +75,21 @@ function UsersScreen (props) {
   }
 
   return (
-    <FlatList
-      keyExtractor={item => String(item?._id)}
-      data={allUsers}
-      renderItem={renderListItem}
-    />
-
+    <>
+      <FlatList
+        keyExtractor={item => String(item?._id)}
+        data={allUsers}
+        renderItem={renderListItem}
+      />
+      <ConfirmationModal
+        closeModal={closeModal}
+        onPressDone={onDeleteConfirm}
+        onPressCancel={closeModal}
+        isVisible={isDeleteModal}
+        header={Strings.deleteRestaurantTitle}
+        subHeader={Strings.deleteRestaurantMessage}
+      />
+    </>
   )
 }
 

@@ -19,6 +19,8 @@ export const Strings = {
   selectGender: 'Select Gender',
   selectRole: 'Select Role',
   editProfile: 'Edit Profile',
+  deleteRestaurantMessage: 'Are you sure you want to delete this restaurant?',
+  deleteRestaurantTitle: 'Delete Restaurant',
   camera: 'Camera',
   save: 'Save',
   gallery: 'Gallery',
