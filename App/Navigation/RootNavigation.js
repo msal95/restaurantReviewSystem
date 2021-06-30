@@ -23,6 +23,7 @@ const ScreenOptions = {
     fontWeight: 'bold',
   },
   headerTitleAlign: 'center',
+  headerBackTitleVisible: false,
 };
 
 function RootNavigation(props) {
@@ -63,6 +64,7 @@ function RootNavigation(props) {
       />
       <Stack.Screen name="Reply" component={CommentsReplyScreen} />
       <Stack.Screen name="UserProfile" component={ProfileScreen} />
+      <Stack.Screen name="SignUp" component={SignupScreen} />
     </Stack.Navigator>
   );
 }

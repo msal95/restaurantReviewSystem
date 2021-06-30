@@ -5,6 +5,7 @@ import RestaurantActions from '../Redux/RestaurantRedux';
 import {Strings} from '../Themes/Strings';
 import {showMessage} from '../Lib/utils';
 import {MESSAGE_TYPES} from '../Lib/constants';
+import AuthActions from '../Redux/AuthRedux'
 
 export function* onFetchRestaurantsList(api) {
   try {
@@ -59,6 +60,17 @@ export function* onCreateReview(api, {data = {}, restaurantId}) {
   } catch ({message}) {
     yield put(RestaurantActions.createReviewFailure(message));
     showMessage(Strings.createReviewFail, MESSAGE_TYPES.ERROR);
+  }
+}
+
+export function* onDeleteRestaurant(api, {data = {}}) {
+  try {
+    const {response} = yield call(Api.callServer, api.deleteRestaurant, { _id: data?._id });
+    yield put(RestaurantActions.deleteRestaurantSuccess(data?._id));
+    showMessage(Strings.restaurantsDeleted, MESSAGE_TYPES.SUCCESS);
+  } catch ({message}) {
+    yield put(RestaurantActions.deleteRestaurantFailure(message));
+    showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }
 

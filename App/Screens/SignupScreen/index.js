@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import {SafeAreaView, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
@@ -10,25 +10,57 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import ImageCropPicker from '../../Components/ImageCropPicker';
-import {GENDER} from '../../Lib/constants';
+import { GENDER, ROLE } from '../../Lib/constants'
 import SignUpActions from '../../Redux/AuthRedux';
+import { printLogs } from '../../Lib/utils'
 
 function SignupScreen(props) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNo, setPhoneNo] = useState('');
-  const [gender, setGender] = useState('MALE');
-  const [password, setPassword] = useState('');
-  const [role, selectedRole] = useState('Regular User');
-  const [file, setImageSource] = useState({});
+
+  const {
+    onSignUp,
+    onEditProfile,
+    navigation,
+    onEditOtherUser,
+    route,
+    loading,
+    user={}
+  } = props || {}
+
+  const {isEditing =false, isSelf, otherUser={}} =  route?.params || {}
+
+  const {
+    firstName: firstNameDB='',
+    lastName: lastNameDB='',
+    email: emailDB='',
+    phoneNo: phoneNoDB='',
+    gender: genderDB='MALE',
+    password: passwordDB='',
+    role: roleDB='Regular User',
+    picture,
+    _id
+  } = isEditing ? isSelf ? user : otherUser : {}
+
+  const [firstName, setFirstName] = useState(firstNameDB);
+  const [lastName, setLastName] = useState(lastNameDB);
+  const [email, setEmail] = useState(emailDB);
+  const [phoneNo, setPhoneNo] = useState(phoneNoDB);
+  const [gender, setGender] = useState(genderDB);
+  const [password, setPassword] = useState(passwordDB);
+  const [role, selectedRole] = useState(roleDB);
+  const [file, setImageSource] = useState({ path: picture });
+
+  useEffect(()=>{
+    navigation.setOptions({
+      title : isEditing ? Strings.editProfile : Strings.signUp
+    })
+  }, [])
 
   const passwordRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
   const phoneRef = useRef();
 
-  function renderSignUpData() {
+  function onPressSignUp() {
     const data = {
       firstName,
       lastName,
@@ -37,9 +69,21 @@ function SignupScreen(props) {
       password,
       phoneNo,
       role,
-      file,
+      _id
     };
-    props?.onSignUp(data);
+
+    if(file?.mime){
+      data.file = {uri: file?.path, type: file?.mime, name: file?.filename || 'profile image'}
+    }
+
+    if(isEditing && !isSelf) {
+      onEditOtherUser({ _id, ...data })
+    }else if(isEditing) {
+      onEditProfile(data)
+    }  else{
+      onSignUp(data)
+    }
+
   }
 
   return (
@@ -86,23 +130,25 @@ function SignupScreen(props) {
           onSubmitEditing={() => passwordRef?.current?.focus?.()}
           returnKeyType={'next'}
         />
-        <InputFormField
-          placeholder={Strings.enterPassword}
-          label={Strings.password}
-          inputRef={passwordRef}
-          selectedOption={password}
-          onSelect={value => setPassword(value)}
-          secureTextEntry
-          returnKeyType={'done'}
-        />
+        {!isEditing && (
+          <InputFormField
+            placeholder={Strings.enterPassword}
+            label={Strings.password}
+            inputRef={passwordRef}
+            selectedOption={password}
+            onSelect={value => setPassword(value)}
+            secureTextEntry
+            returnKeyType={'done'}
+          />
+        )}
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectRole}</Text>
           <RNPickerSelect
-            placeholder={{label: 'Regular User', value: 'REGULAR'}}
+            placeholder={{label: 'Regular User', value: ROLE.REGULAR}}
             onValueChange={value => selectedRole(value)}
             items={[
-              {label: 'Owner', value: 'OWNER'},
-              {label: 'Admin', value: 'ADMIN'},
+              {label: 'Owner', value: ROLE.OWNER},
+              {label: 'Admin', value: ROLE.ADMIN},
             ]}
             value={role}>
             <Text style={styles.selectedOpt}>{role}</Text>
@@ -121,9 +167,10 @@ function SignupScreen(props) {
           />
         </View>
       </KeyboardAwareScrollView>
-      <FormButton title={Strings.signUp} onPress={renderSignUpData} />
+      <FormButton title={isEditing ? Strings.save : Strings.signUp} onPress={onPressSignUp} loading={loading}/>
 
-      <Text style={styles.msgText}>
+      {!isEditing && (
+        <Text style={styles.msgText}>
         {Strings.alreadyHaveAccount}
         <Text
           style={styles.signUpText}
@@ -131,12 +178,15 @@ function SignupScreen(props) {
           {Strings.login}
         </Text>
       </Text>
+      )}
     </SafeAreaView>
   );
 }
 
-const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapStateToProps = ({auth: {loading = false, user={}} = {}}) => ({loading, user});
 const mapDispatchToProps = dispatch => ({
   onSignUp: data => dispatch(SignUpActions.signup(data)),
+  onEditProfile: data => dispatch(SignUpActions.editProfile(data)),
+  onEditOtherUser: data => dispatch(SignUpActions.editOtherUser(data)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);

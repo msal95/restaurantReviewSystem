@@ -7,10 +7,13 @@ import AuthActions from '../../Redux/AuthRedux';
 import {Avatar, Text as TextElement} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {Colors} from '../../Themes';
+import { Colors, Images } from '../../Themes'
+import FormButton from '../../Components/Button'
+import { Strings } from '../../Themes/Strings'
+import { ROLE } from '../../Lib/constants'
 
 function ProfileScreen(props) {
-  const {onGetUserProfile, user, route} = props || {};
+  const {onGetUserProfile, user, route, navigation} = props || {};
   const {user: otherUser, isSelf = true} = route?.params || {};
 
   const {
@@ -23,7 +26,11 @@ function ProfileScreen(props) {
   } = (!isSelf ? otherUser : user) || {};
 
   useEffect(() => {
-    isSelf && onGetUserProfile();
+    (isSelf || user?.role === ROLE.ADMIN) && navigation?.setOptions({
+      headerRight: () => (
+        <FormButton title={Strings.edit} onPress={() => navigation.navigate('SignUp', {isEditing: true, isSelf,  otherUser})} />
+      ),
+    });
   }, []);
 
   return (
@@ -49,9 +56,9 @@ function ProfileScreen(props) {
         <Avatar
           rounded
           size="xlarge"
-          source={{
+          source={!!picture ? {
             uri: picture,
-          }}
+          } : Images.userPlaceholder}
           containerStyle={styles.profileImage}
         />
       </View>

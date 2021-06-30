@@ -13,6 +13,7 @@ export default StyleSheet.create({
   restaurantBanner: {
     width: '100%',
     height: Metrics.twoHundred,
+    resizeMode:'cover'
   },
   headingText: {
     textAlign: 'center',

@@ -15,6 +15,8 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
+import { ROLE } from '../../Lib/constants'
+import { Images } from '../../Themes'
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -26,7 +28,6 @@ function RestaurantDetailsScreen(props) {
     totalReviewsCount,
     averageRating,
   } = props ?? {};
-
   const [comment, setComment] = useState('');
   const [dateOfVisit, setDateOfVisit] = useState('');
   const [rating, setRating] = useState('0');
@@ -105,7 +106,7 @@ function RestaurantDetailsScreen(props) {
   }
 
   function renderComments() {
-    if (role === 'OWNER' || role === 'ADMIN') {
+    if (role === ROLE.OWNER || role === ROLE.ADMIN) {
       return (
         <CommentLists renderListHeader={renderListHeader} reviews={reviews} />
       );
@@ -131,7 +132,7 @@ function RestaurantDetailsScreen(props) {
         <Image
           style={styles.restaurantBanner}
           resizeMode="cover"
-          source={{uri: details.image}}
+          source={!details?.image ? {uri: details?.image}: Images.restaurantPlaceholder}
         />
         <Text style={styles.descriptionTitle}>{Strings.description}</Text>
         <Text style={styles.description}>{details.description}</Text>
@@ -145,7 +146,7 @@ function RestaurantDetailsScreen(props) {
             <Rating imageSize={15} readonly startingValue={averageRating} />
           </Text>
         </View>
-        {role === 'OWNER' ? (
+        {role === ROLE.OWNER ? (
           <TextElement h4>{Strings.allComments}</TextElement>
         ) : (
           <TextElement style={styles.commentHeading} h4>
