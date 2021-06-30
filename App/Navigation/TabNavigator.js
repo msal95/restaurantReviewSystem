@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import UsersScreen from '../screens/UsersScreen';
+import HomeScreen from '../Screens/HomeScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
+import UsersScreen from '../Screens/UsersScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../Themes';
 import {shallowEqual, useSelector} from 'react-redux';

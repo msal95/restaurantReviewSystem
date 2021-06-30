@@ -3,14 +3,14 @@ import {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {connect} from 'react-redux';
 import {SafeAreaView} from 'react-native';
-import LoginScreen from '../screens/LoginScreen';
-import SignupScreen from '../screens/SignupScreen';
+import LoginScreen from '../Screens/LoginScreen';
+import SignupScreen from '../Screens/SignupScreen';
 import {Colors} from '../Themes';
-import CreateRestaurantScreen from '../screens/CreateRestaurantScreen';
-import RestaurantDetailsScreen from '../screens/RestaurantDetailsScreen';
-import CommentsReplyScreen from '../screens/CommentsReplyScreen';
+import CreateRestaurantScreen from '../Screens/CreateRestaurantScreen';
+import RestaurantDetailsScreen from '../Screens/RestaurantDetailsScreen';
+import CommentsReplyScreen from '../Screens/CommentsReplyScreen';
 import TabNavigator from './TabNavigator';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 

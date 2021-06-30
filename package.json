@@ -47,7 +47,6 @@
     "react-native-device-info": "^5.3.0",
     "react-native-elements": "^3.4.2",
     "react-native-flash-message": "^0.1.23",
-    "react-native-flipper": "^0.95.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-crop-picker": "^0.36.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
