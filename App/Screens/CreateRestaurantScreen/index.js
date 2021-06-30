@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
@@ -11,11 +11,29 @@ import ImageCropPicker from '../../Components/ImageCropPicker';
 import RestActions from '../../Redux/RestaurantRedux';
 
 function CreateRestaurantScreen(props) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState('');
-  const [establishedAt, setEstablishedAT] = useState('');
-  const [file, setImageSource] = useState({});
+  const {restDetails = {}, isEdit = false} = props?.route?.params || {};
+
+  useEffect(() => {
+    if (isEdit) {
+      props?.navigation?.setOptions({
+        headerTitle: Strings.updateRestaurant,
+      });
+    }
+  }, []);
+
+  const {
+    name: nameDB = '',
+    description: descriptionDB = '',
+    location: locationDB = '',
+    establishedAt: establishedAtDB = '',
+    image: fileDB = '',
+  } = isEdit ? restDetails : {};
+
+  const [name, setName] = useState(nameDB);
+  const [description, setDescription] = useState(descriptionDB);
+  const [location, setLocation] = useState(locationDB);
+  const [establishedAt, setEstablishedAT] = useState(establishedAtDB);
+  const [file, setImageSource] = useState({path: fileDB});
 
   const descriptionRef = useRef();
   const locationRef = useRef();
@@ -26,9 +44,19 @@ function CreateRestaurantScreen(props) {
       description,
       location,
       establishedAt,
-      file,
     };
-    props?.onCreateRestaurant(data);
+    if (file?.mime) {
+      data.file = {
+        uri: file?.path,
+        type: file?.mime,
+        name: file?.filename || 'profile image',
+      };
+    }
+    if (isEdit) {
+      props?.onUpdateRestaurant(data, restDetails?._id);
+    } else {
+      props?.onCreateRestaurant(data);
+    }
   }
 
   return (
@@ -54,6 +82,7 @@ function CreateRestaurantScreen(props) {
           onSelect={value => setDescription(value)}
           onSubmitEditing={() => locationRef?.current?.focus?.()}
           returnKeyType={'next'}
+          multiline
         />
         <InputFormField
           label={Strings.location}
@@ -74,7 +103,11 @@ function CreateRestaurantScreen(props) {
           />
         </View>
       </KeyboardAwareScrollView>
-      <FormButton title={Strings.addRestaurant} onPress={createRestaurant} />
+      <FormButton
+        title={isEdit ? Strings.updateRestaurant : Strings.addRestaurant}
+        onPress={createRestaurant}
+        loading={props?.loading}
+      />
     </SafeAreaView>
   );
 }
@@ -82,6 +115,8 @@ function CreateRestaurantScreen(props) {
 const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
 const mapDispatchToProps = dispatch => ({
   onCreateRestaurant: data => dispatch(RestActions.createRestaurant(data)),
+  onUpdateRestaurant: (data, restaurantId) =>
+    dispatch(RestActions.updateRestaurant(data, restaurantId)),
 });
 export default connect(
   mapStateToProps,

@@ -20,7 +20,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.white
   },
   buttonStyle: {
-   minWidth:MetricsMod.oneHundredFifty
+    minWidth: MetricsMod.hundred
   },
   smallImage: {
     width: MetricsMod.seventyFive,

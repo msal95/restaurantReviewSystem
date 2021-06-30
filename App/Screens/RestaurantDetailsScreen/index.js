@@ -15,7 +15,7 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
-import { ROLE } from '../../Lib/constants'
+import {ROLE} from '../../Lib/constants';
 import { Images } from '../../Themes'
 
 function RestaurantDetailsScreen(props) {
@@ -27,6 +27,7 @@ function RestaurantDetailsScreen(props) {
     onGetAllReviews,
     totalReviewsCount,
     averageRating,
+    navigation,
   } = props ?? {};
   const [comment, setComment] = useState('');
   const [dateOfVisit, setDateOfVisit] = useState('');
@@ -39,6 +40,21 @@ function RestaurantDetailsScreen(props) {
   );
 
   useEffect(() => {
+    if (role === ROLE.ADMIN || role === ROLE.OWNER) {
+      navigation?.setOptions({
+        headerRight: () => (
+          <FormButton
+            title={Strings.edit}
+            onPress={() =>
+              props?.navigation?.navigate({
+                name: 'CreateRestaurant',
+                params: {restDetails: details, isEdit: true},
+              })
+            }
+          />
+        ),
+      });
+    }
     onFetchRestaurantDetails({restaurantId});
     onGetAllReviews({restaurantId});
   }, []);
@@ -106,7 +122,7 @@ function RestaurantDetailsScreen(props) {
   }
 
   function renderComments() {
-    if (role === ROLE.OWNER || role === ROLE.ADMIN) {
+    if (role === ROLE.ADMIN || role === ROLE.OWNER) {
       return (
         <CommentLists renderListHeader={renderListHeader} reviews={reviews} />
       );

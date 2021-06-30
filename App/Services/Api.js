@@ -48,13 +48,16 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   const getAllReviews = ({data: {restaurantId = ''} = {}}) =>
     api.get(`restaurants/${restaurantId}/reviews`)
   const replyReviews = ({restaurantId, data, reviewId}) =>
-    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data)
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
+  const updateRestaurant = ({id, data}) => api.put(`restaurants/${id}`, data);
+  const updateReview = ({restaurantId, data, reviewId}) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}`, data);
   const getRate = () => api.get('rate_limit')
   const getUser = username => api.get('search/users', {q: username})
   const userProfile = data => api.get('users/me', data)
   const editProfile = data => api.put('users/me', data)
   const allUsers = data => api.get('users', data)
-  const editOtherUser = ({ data, id }) => api.put(`users/${id}`, data)
+  const editOtherUser = ({ data, _id }) => api.put(`users/${_id}`, data)
   const deleteUser = (data) => api.delete(`users/${data?._id}`, data)
 
   // ------
@@ -86,12 +89,15 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     getAllReviews,
     replyReviews,
     userProfile,
+    updateRestaurant,
+    updateReview,
     editProfile,
     editOtherUser,
     deleteUser,
     allUsers
-  }
-}
+  };
+};
+
 
 // let's return back our create method as the default.
 export default {

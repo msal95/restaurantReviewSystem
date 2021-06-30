@@ -131,15 +131,15 @@ function SignupScreen(props) {
           returnKeyType={'next'}
         />
         {!isEditing && (
-          <InputFormField
-            placeholder={Strings.enterPassword}
-            label={Strings.password}
-            inputRef={passwordRef}
-            selectedOption={password}
-            onSelect={value => setPassword(value)}
-            secureTextEntry
-            returnKeyType={'done'}
-          />
+        <InputFormField
+          placeholder={Strings.enterPassword}
+          label={Strings.password}
+          inputRef={passwordRef}
+          selectedOption={password}
+          onSelect={value => setPassword(value)}
+          secureTextEntry
+          returnKeyType={'done'}
+        />
         )}
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectRole}</Text>
@@ -170,7 +170,7 @@ function SignupScreen(props) {
       <FormButton title={isEditing ? Strings.save : Strings.signUp} onPress={onPressSignUp} loading={loading}/>
 
       {!isEditing && (
-        <Text style={styles.msgText}>
+      <Text style={styles.msgText}>
         {Strings.alreadyHaveAccount}
         <Text
           style={styles.signUpText}

@@ -1,38 +1,38 @@
-import React, {useMemo} from 'react'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import React, {useMemo} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../Screens/HomeScreen'
-import ProfileScreen from '../Screens/ProfileScreen'
-import UsersScreen from '../Screens/UsersScreen'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import {Colors} from '../Themes'
-import {shallowEqual, useSelector} from 'react-redux'
+import HomeScreen from '../Screens/HomeScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
+import UsersScreen from '../Screens/UsersScreen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Colors} from '../Themes';
+import {shallowEqual, useSelector} from 'react-redux';
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
-function TabNavigator (props) {
+function TabNavigator(props) {
   const {role = ''} = useSelector(
     ({auth: {user: {role = ''}} = {}}) => ({role}),
-    shallowEqual
-  )
+    shallowEqual,
+  );
   const renderAdminScreen = useMemo(() => {
     if (role === 'ADMIN') {
-      return <Tab.Screen name='Users' component={UsersScreen} />
+      return <Tab.Screen name="Users" component={UsersScreen} />;
     }
-    return null
-  }, [role])
+    return null;
+  }, [role]);
 
   const renderTabIcon = ({focused, color, size, route}) => {
-    let iconName
+    let iconName;
     if (route.name === 'Home') {
-      iconName = focused ? 'home' : 'home'
+      iconName = focused ? 'home' : 'home';
     } else if (route.name === 'Profile') {
-      iconName = focused ? 'user' : 'user'
+      iconName = focused ? 'user' : 'user';
     } else if (route.name === 'Users') {
-      iconName = focused ? 'users' : 'users'
+      iconName = focused ? 'users' : 'users';
     }
-    return <FontAwesome name={iconName} size={size} color={color} />
-  }
+    return <FontAwesome name={iconName} size={size} color={color} />;
+  };
 
   return (
     <Tab.Navigator
@@ -41,15 +41,15 @@ function TabNavigator (props) {
         tabBarActiveTintColor: Colors.blue,
         tabBarInactiveTintColor: Colors.black,
         headerStyle: {
-          backgroundColor: Colors.blue
+          backgroundColor: Colors.blue,
         },
-        headerTintColor: Colors.white
+        headerTintColor: Colors.white,
       })}>
-      <Tab.Screen name='Home' component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
       {renderAdminScreen}
-      <Tab.Screen name='Profile' component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
-  )
+  );
 }
 
-export default TabNavigator
+export default TabNavigator;

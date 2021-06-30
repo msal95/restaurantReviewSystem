@@ -19,7 +19,7 @@ function UsersScreen (props) {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <FormButton title={Strings.logout} onPress={() => props?.onLogout()}/>
+        <FormButton title={Strings.logout} onPress={() => props?.onLogout()} />
       ),
     })
   }, [])
@@ -50,7 +50,7 @@ function UsersScreen (props) {
     onDeleteUser({ _id: userId })
   }
 
-  function renderListItem ({ item, index }) {
+  function renderListItem({item, index}) {
     const { fullName, role, picture } = item || {}
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
@@ -67,7 +67,7 @@ function UsersScreen (props) {
             type="font-awesome-5"
             color={Colors.fire}
             onPress={() => onPressDeleteUser(item)}/>
-          <ListItem.Chevron/>
+          <ListItem.Chevron />
         </ListItem>
         <LoadingIndicator loading={deletingUser && userId === item?._id}/>
       </TouchableOpacity>
@@ -76,11 +76,11 @@ function UsersScreen (props) {
 
   return (
     <>
-      <FlatList
-        keyExtractor={item => String(item?._id)}
-        data={allUsers}
-        renderItem={renderListItem}
-      />
+    <FlatList
+      keyExtractor={item => String(item?._id)}
+      data={allUsers}
+      renderItem={renderListItem}
+    />
       <ConfirmationModal
         closeModal={closeModal}
         onPressDone={onDeleteConfirm}

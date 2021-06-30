@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Text, TouchableOpacity } from 'react-native'
+import {FlatList, Text, TouchableOpacity} from 'react-native';
 import { Avatar, Icon, ListItem, Rating } from 'react-native-elements'
-import { connect } from 'react-redux'
+import {connect, shallowEqual, useSelector} from 'react-redux';
+
 
 import { Strings } from '../../Themes/Strings'
 import FormButton from '../../Components/Button'
@@ -17,17 +18,25 @@ function HomeScreen (props) {
   const [restaurantId, setRestaurantId] = useState('')
   const [isDeleteModal, setIsDeleteModal] = useState(false)
 
-  useEffect(() => {
-    navigation?.setOptions({
-      headerRight: () => (
-        <FormButton title={Strings.logout} onPress={() => props?.onLogout()}/>
-      ),
-    })
-  }, [navigation])
+  const {role = ''} = useSelector(
+    ({auth: {user: {role = ''}} = {}}) => ({role}),
+    shallowEqual,
+  );
 
   useEffect(() => {
-    onFetchRestaurantsList()
-  }, [])
+    onFetchRestaurantsList();
+
+    if (role === 'OWNER') {
+      navigation?.setOptions({
+        headerRight: () => (
+          <FormButton
+            title={Strings.createRestaurant}
+            onPress={() => props?.navigation?.navigate('CreateRestaurant')}
+          />
+        ),
+      });
+    }
+  }, []);
 
   function onPressDeleteItem (item) {
     setRestaurantId(item?._id)

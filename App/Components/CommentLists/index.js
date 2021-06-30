@@ -6,20 +6,27 @@ import { Icon, ListItem } from 'react-native-elements'
 import { Strings } from '../../Themes/Strings'
 import styles from './styles'
 import RestActions from '../../Redux/RestaurantRedux'
-import { connect } from 'react-redux'
+import { connect, shallowEqual, useSelector } from 'react-redux'
 import { Colors } from '../../Themes'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { ROLE } from '../../Lib/constants'
 import ConfirmationModal from '../ConfirmationModal'
 import LoadingIndicator from '../LoadingIndicator'
 
 function CommentLists (props) {
   const navigation = useNavigation()
-  const { reviews, renderListHeader, onDeleteReview, details,deletingReview } = props
+  const { reviews, renderListHeader, onDeleteReview, details, deletingReview } = props
 
   const [isDeleteModal, setIsDeleteModal] = useState(false)
   const [reviewId, setReviewId] = useState(false)
 
+  const { role = '' } = useSelector(
+    ({ auth: { user: { role = '' } } = {} }) => ({ role }),
+    shallowEqual,
+  )
+
   function onClickItem (review) {
-    navigation?.navigate('Reply', { review })
+    navigation?.navigate('Reply', { review, isAdmin: true })
   }
 
   function onPressDeleteReview (item) {
@@ -53,6 +60,13 @@ function CommentLists (props) {
             </Text>
           </ListItem.Subtitle>
         </ListItem.Content>
+        {role === ROLE.ADMIN && (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => onClickItem(item)}>
+            <AntDesign name="edit" size={20} color={Colors.blue}/>
+          </TouchableOpacity>
+        )}
         <Icon
           raised
           disabled={reviewId === item?._id}

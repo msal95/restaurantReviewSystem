@@ -27,6 +27,14 @@ const {Types, Creators} = createActions({
   reviewReplySuccess: null,
   reviewReplyFailure: ['error'],
 
+  updateRestaurant: ['data', 'restaurantId'],
+  updateRestaurantSuccess: ['restaurant', 'restaurantId'],
+  updateRestaurantFailure: ['error'],
+
+  updateReview: ['data', 'restaurantId', 'reviewId'],
+  updateReviewSuccess: ['response'],
+  updateReviewFailure: ['error'],
+
   deleteRestaurant: ['data'],
   deleteRestaurantSuccess: ['id'],
   deleteRestaurantFailure: ['error'],
@@ -45,6 +53,8 @@ export const INITIAL_STATE = Immutable({
   restaurantDetails: {},
   replying: false,
   reviewing: false,
+  updatingRestaurant: false,
+  updatingReview: false,
 });
 
 /* ------------- Reducers ------------- */
@@ -155,6 +165,47 @@ export const _reviewReplyFailure = (state, {error = ''}) => ({
   error,
 });
 
+export const _updateRestaurant = state => ({
+  ...state,
+  loading: true,
+  updatingRestaurant: true,
+});
+export const _updateRestaurantSuccess = (
+  state,
+  {restaurant = {}, restaurantId},
+) => ({
+  ...state,
+  updatingRestaurant: false,
+  restaurantsList: (state.restaurantsList || []).map(item =>
+    item?._id === restaurantId ? restaurant : item,
+  ),
+  loading: false,
+});
+
+export const _updateReview = state => ({
+  ...state,
+  updatingReview: true,
+  loading: true,
+});
+export const _updateReviewSuccess = state => ({
+  ...state,
+  loading: false,
+  updatingReview: false,
+});
+export const _updateReviewFailure = (state, {error = ''}) => ({
+  ...state,
+  updatingReview: false,
+  loading: false,
+  error,
+});
+
+export const _updateRestaurantFailure = (state, {error = ''}) => ({
+  ...state,
+  loading: false,
+  updatingRestaurant: false,
+  error,
+});
+
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.RESTAURANTS_LIST]: _restaurantsList,
@@ -175,6 +226,13 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.REVIEW_REPLY]: _reviewReply,
   [Types.REVIEW_REPLY_SUCCESS]: _reviewReplySuccess,
   [Types.REVIEW_REPLY_FAILURE]: _reviewReplyFailure,
+
+  [Types.UPDATE_RESTAURANT]: _updateRestaurant,
+  [Types.UPDATE_RESTAURANT_SUCCESS]: _updateRestaurantSuccess,
+  [Types.UPDATE_RESTAURANT_FAILURE]: _updateRestaurantFailure,
+  [Types.UPDATE_RESTAURANT]: _updateReview,
+  [Types.UPDATE_RESTAURANT_SUCCESS]: _updateReviewSuccess,
+  [Types.UPDATE_RESTAURANT_FAILURE]: _updateReviewFailure,
 
   [Types.DELETE_RESTAURANT]: _deleteRestaurant,
   [Types.DELETE_RESTAURANT_SUCCESS]: _deleteRestaurantSuccess,

@@ -1,5 +1,5 @@
-import {createActions, createReducer} from 'reduxsauce'
-import Immutable from 'seamless-immutable'
+import {createActions, createReducer} from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
 /* ------------- Types and Action Creators ------------- */
 const {Types, Creators} = createActions({
@@ -20,6 +20,9 @@ const {Types, Creators} = createActions({
   editOtherUserFailure: ['error'],
 
   login: ['data'],
+  loginSuccess: ['response'],
+  loginFailure: ['error'],
+
   logout: null,
   authSuccess: ['user'],
 
@@ -29,10 +32,10 @@ const {Types, Creators} = createActions({
 
   allUsers: ['data'],
   allUsersSuccess: ['response'],
-  allUsersFailure: ['error']
-})
-export const AuthTypes = Types
-export default Creators
+  allUsersFailure: ['error'],
+});
+export const AuthTypes = Types;
+export default Creators;
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
   loading: false,
@@ -45,77 +48,99 @@ export const _logout = state => ({
   ...state,
   loading: false,
   error: '',
-  user: {}
-})
-export const _signup = state => ({...state, loading: true})
-export const _signupSuccess = state => ({...state})
-export const _signupFailure = (state, {error = ''}) => ({...state, error})
+  user: {},
+});
 
-export const _login = state => ({...state, loading: true})
+export const _signup = state => ({
+  ...state,
+  loading: true,
+});
+export const _signupSuccess = state => ({
+  ...state,
+  loading: false,
+});
+export const _signupFailure = (state, {error = ''}) => ({
+  ...state,
+  error,
+  loading: false,
+});
+
+export const _login = state => ({...state, loading: true});
+export const _loginSuccess = state => ({
+  ...state,
+  loading: false,
+});
+export const _loginFailure = state => ({
+  ...state,
+  loading: false,
+  user: {},
+});
 
 export const _authSuccess = (state, {user}) => ({
   ...state,
   loading: false,
-  user
-})
+  user,
+});
 
-export const _userProfile = state => ({...state})
-export const _userProfileSuccess = state => ({...state})
-export const _userProfileFailure = (state, {error = ''}) => ({...state, error})
+export const _userProfile = state => ({...state});
+export const _userProfileSuccess = state => ({...state});
+export const _userProfileFailure = (state, {error = ''}) => ({...state, error});
 
-export const _allUsers = state => ({...state, isFetchingUsers: true})
+export const _allUsers = state => ({...state, isFetchingUsers: true});
 export const _allUsersSuccess = (state, {response = []}) => ({
   ...state,
   allUsers: response,
-  isFetchingUsers: false
-})
+  isFetchingUsers: false,
+});
 export const _allUsersFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  isFetchingUsers: false
-})
+  isFetchingUsers: false,
+});
 
-export const _editProfile = state => ({...state, loading: true})
+export const _editProfile = state => ({...state, loading: true});
 
 export const _editProfileSuccess = (state, {user = {}}) => ({
   ...state,
-  user: { ...(state?.user || {}), ...user },
-  loading: false
-})
+  user: {...(state?.user || {}), ...user},
+  loading: false,
+});
 
 export const _editProfileFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  loading: false
-})
+  loading: false,
+});
 
-export const _editOtherUser = state => ({...state, loading: true})
+export const _editOtherUser = state => ({...state, loading: true});
 
-export const _editOtherUserSuccess = (state, {user = {}, id }) => ({
+export const _editOtherUserSuccess = (state, {user = {}, id}) => ({
   ...state,
-  allUsers: (state.allUsers || []).map(item=>(item?._id === id ?user : item)),
-  loading: false
-})
+  allUsers: (state.allUsers || []).map(item =>
+    item?._id === id ? user : item,
+  ),
+  loading: false,
+});
 
 export const _editOtherUserFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  loading: false
-})
+  loading: false,
+});
 
-export const _deleteUser = state => ({...state, deletingUser: true})
+export const _deleteUser = state => ({...state, deletingUser: true});
 
-export const _deleteUserSuccess = (state, { id }) => ({
+export const _deleteUserSuccess = (state, {id}) => ({
   ...state,
-  allUsers: (state.allUsers || []).filter(item=>(item?._id !== id)),
-  deletingUser: false
-})
+  allUsers: (state.allUsers || []).filter(item => item?._id !== id),
+  deletingUser: false,
+});
 
 export const _deleteUserFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  deletingUser: false
-})
+  deletingUser: false,
+});
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
@@ -124,6 +149,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SIGNUP_FAILURE]: _signupFailure,
 
   [Types.LOGIN]: _login,
+  [Types.LOGIN_SUCCESS]: _loginSuccess,
+  [Types.LOGIN_FAILURE]: _loginFailure,
   [Types.LOGOUT]: _logout,
   [Types.AUTH_SUCCESS]: _authSuccess,
 
@@ -145,5 +172,5 @@ export const reducer = createReducer(INITIAL_STATE, {
 
   [Types.DELETE_USER]: _deleteUser,
   [Types.DELETE_USER_SUCCESS]: _deleteUserSuccess,
-  [Types.DELETE_USER_FAILURE]: _deleteUserFailure
-})
+  [Types.DELETE_USER_FAILURE]: _deleteUserFailure,
+});

@@ -21,7 +21,9 @@ import {
   onFetchRestaurantDetails,
   onFetchRestaurantsList,
   onGetAllReviews,
-  onReviewReply
+  onReviewReply,
+  onUpdateRestaurant,
+  onUpdateReview
 } from './RestaurantSaga'
 import {RestTypes} from '../Redux/RestaurantRedux'
 
@@ -51,10 +53,12 @@ export default function * root () {
     takeLatest(AuthTypes.AUTH_SUCCESS, onAuthSuccess, api),
     takeLatest(AuthTypes.USER_PROFILE, onGetUserProfile, api),
     takeLatest(AuthTypes.ALL_USERS, onGetAllUsers, api),
+    takeLatest(RestTypes.UPDATE_RESTAURANT, onUpdateRestaurant, api),
+    takeLatest(RestTypes.UPDATE_REVIEW, onUpdateReview, api),
     takeLatest(AuthTypes.EDIT_PROFILE, onEditProfile, api),
     takeLatest(AuthTypes.EDIT_OTHER_USER, onEditOtherUser, api),
     takeLatest(AuthTypes.DELETE_USER, onDeleteUser, api),
-    takeLatest(RestTypes.DELETE_RESTAURANT, onDeleteRestaurant, api),
+    takeLatest(RestTypes.DELETE_RESTAURANT, onDeleteRestaurant, api)
 
     // some sagas receive extra parameters in addition to an action
   ])
