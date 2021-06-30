@@ -11,6 +11,7 @@ import RestaurantDetailsScreen from '../Screens/RestaurantDetailsScreen';
 import CommentsReplyScreen from '../Screens/CommentsReplyScreen';
 import TabNavigator from './TabNavigator';
 import ProfileScreen from '../Screens/ProfileScreen';
+import { Strings } from '../Themes/Strings'
 
 const Stack = createStackNavigator();
 
@@ -56,14 +57,16 @@ function RootNavigation(props) {
       />
       <Stack.Screen
         name="RestaurantDetails"
+        options={{title: Strings.restaurantDetails}}
         component={RestaurantDetailsScreen}
       />
       <Stack.Screen
         name="CreateRestaurant"
+        options={{title: Strings.createRestaurant}}
         component={CreateRestaurantScreen}
       />
       <Stack.Screen name="Reply" component={CommentsReplyScreen} />
-      <Stack.Screen name="UserProfile" component={ProfileScreen} />
+      <Stack.Screen name="UserProfile" component={ProfileScreen}  options={{title: Strings.profile}} />
       <Stack.Screen name="SignUp" component={SignupScreen} />
     </Stack.Navigator>
   );
