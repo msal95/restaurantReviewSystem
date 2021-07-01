@@ -86,4 +86,5 @@ export const Strings = {
   userDeleted: 'User Deleted Successfully',
   restaurantsDeleted: 'Restaurants Deleted Successfully',
   confirmPassword: 'Confirm Password',
+  noRecordFound: 'No List Items are Found belong to this category',
 };

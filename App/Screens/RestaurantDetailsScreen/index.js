@@ -20,6 +20,8 @@ import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
 import {Images} from '../../Themes';
 import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
 import {errorMessage, printLogs} from '../../Lib/utils';
+import ListFooterComponent from '../../Components/ListFooterComponent'
+import ListEmptyComponent from '../../Components/ListEmptyComponent'
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -184,6 +186,8 @@ function RestaurantDetailsScreen(props) {
         <CommentLists
           renderListHeader={renderListHeader}
           reviews={reviews}
+          loading={props?.loading}
+          pageNo={pageNo}
           onEndReached={onEndReached}
           refreshing={refreshing}
           onRefresh={onRefresh}
@@ -203,6 +207,12 @@ function RestaurantDetailsScreen(props) {
         refreshing={refreshing}
         onRefresh={onRefresh}
         onEndReachedThreshold={0.1}
+        ListEmptyComponent={
+          <ListEmptyComponent
+            loading={props?.loading}
+            message={Strings.noRecordFound}
+          />
+        }
       />
     );
   }
