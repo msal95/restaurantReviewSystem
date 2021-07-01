@@ -34,6 +34,7 @@ export default function InputFormField(props) {
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
         onDateChange={onSelect}
+        onBlur={onBlur}
       />
     );
   }

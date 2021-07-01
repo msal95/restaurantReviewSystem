@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
+import {Formik} from 'formik';
 
 import styles from './styles';
 import InputFormField from '../../Components/InputFormField';
@@ -9,6 +10,8 @@ import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import ImageCropPicker from '../../Components/ImageCropPicker';
 import RestActions from '../../Redux/RestaurantRedux';
+import {errorMessage} from '../../Lib/utils';
+import {createRestaurantValidationSchema} from '../../Services/ValidationSchema/CreateRestaurantValidationSchema';
 
 function CreateRestaurantScreen(props) {
   const {restDetails = {}, isEdit = false} = props?.route?.params || {};
@@ -21,29 +24,16 @@ function CreateRestaurantScreen(props) {
     }
   }, []);
 
-  const {
-    name: nameDB = '',
-    description: descriptionDB = '',
-    location: locationDB = '',
-    establishedAt: establishedAtDB = '',
-    image: fileDB = '',
-  } = isEdit ? restDetails : {};
+  const restaurantInfo = isEdit ? restDetails : {};
 
-  const [name, setName] = useState(nameDB);
-  const [description, setDescription] = useState(descriptionDB);
-  const [location, setLocation] = useState(locationDB);
-  const [establishedAt, setEstablishedAT] = useState(establishedAtDB);
-  const [file, setImageSource] = useState({path: fileDB});
+  const [file, setImageSource] = useState({path: restaurantInfo?.image});
 
   const descriptionRef = useRef();
   const locationRef = useRef();
 
-  function createRestaurant() {
+  function createRestaurant(values) {
     const data = {
-      name,
-      description,
-      location,
-      establishedAt,
+      ...values,
     };
     if (file?.mime) {
       data.file = {
@@ -61,53 +51,85 @@ function CreateRestaurantScreen(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <ImageCropPicker
-          onSelectImage={param => setImageSource(param)}
-          imgSrc={file}
-        />
-        <InputFormField
-          label={Strings.name}
-          placeholder={Strings.enterRestaurantName}
-          selectedOption={name}
-          onSelect={value => setName(value)}
-          onSubmitEditing={() => descriptionRef?.current?.focus?.()}
-          returnKeyType={'next'}
-        />
-        <InputFormField
-          label={Strings.description}
-          placeholder={Strings.enterDescription}
-          selectedOption={description}
-          inputRef={descriptionRef}
-          onSelect={value => setDescription(value)}
-          onSubmitEditing={() => locationRef?.current?.focus?.()}
-          returnKeyType={'next'}
-          multiline
-        />
-        <InputFormField
-          label={Strings.location}
-          placeholder={Strings.enterLocation}
-          selectedOption={location}
-          inputRef={locationRef}
-          onSelect={value => setLocation(value)}
-          returnKeyType={'done'}
-        />
-        <View style={styles.establishedDate}>
-          <Text style={styles.dateTitle}>{Strings.establishedAt} : </Text>
-          <InputFormField
-            label={Strings.establishedAt}
-            placeholder={Strings.selectDate}
-            selectedOption={establishedAt}
-            onSelect={date => setEstablishedAT(date)}
-            dateTime
-          />
-        </View>
-      </KeyboardAwareScrollView>
-      <FormButton
-        title={isEdit ? Strings.updateRestaurant : Strings.addRestaurant}
-        onPress={createRestaurant}
-        loading={props?.loading}
-      />
+      <Formik
+        validationSchema={createRestaurantValidationSchema}
+        initialValues={{
+          name: restaurantInfo?.name ?? '',
+          description: restaurantInfo?.description ?? '',
+          location: restaurantInfo?.location ?? '',
+          establishedDate: restaurantInfo?.establishedDate ?? '',
+        }}
+        onSubmit={createRestaurant}>
+        {({
+          handleSubmit,
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+        }) => (
+          <View>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <ImageCropPicker
+                onSelectImage={param => setImageSource(param)}
+                imgSrc={file}
+              />
+              <InputFormField
+                label={Strings.name}
+                placeholder={Strings.enterRestaurantName}
+                selectedOption={values?.name ?? ''}
+                onSelect={handleChange('name')}
+                onBlur={handleBlur('name')}
+                onSubmitEditing={() => descriptionRef?.current?.focus?.()}
+                returnKeyType={'next'}
+              />
+              {errorMessage(errors?.name, touched.name)}
+
+              <InputFormField
+                label={Strings.description}
+                placeholder={Strings.enterDescription}
+                selectedOption={values?.description ?? ''}
+                onSelect={handleChange('description')}
+                onBlur={handleBlur('description')}
+                inputRef={descriptionRef}
+                onSubmitEditing={() => locationRef?.current?.focus?.()}
+                returnKeyType={'next'}
+                multiline
+              />
+              {errorMessage(errors?.description, touched.description)}
+
+              <InputFormField
+                label={Strings.location}
+                placeholder={Strings.enterLocation}
+                selectedOption={values?.location ?? ''}
+                onSelect={handleChange('location')}
+                onBlur={handleBlur('location')}
+                inputRef={locationRef}
+                returnKeyType={'done'}
+              />
+              {errorMessage(errors?.location, touched.location)}
+
+              <View style={styles.establishedDate}>
+                <Text style={styles.dateTitle}>{Strings.establishedAt} : </Text>
+                <InputFormField
+                  label={Strings.establishedAt}
+                  placeholder={Strings.selectDate}
+                  selectedOption={values?.establishedDate ?? ''}
+                  onSelect={handleChange('establishedDate')}
+                  onBlur={handleBlur('establishedDate')}
+                  dateTime
+                />
+                {errorMessage(errors?.establishedDate, touched.establishedDate)}
+              </View>
+            </KeyboardAwareScrollView>
+            <FormButton
+              title={isEdit ? Strings.updateRestaurant : Strings.addRestaurant}
+              onPress={handleSubmit}
+              loading={props?.loading}
+            />
+          </View>
+        )}
+      </Formik>
     </SafeAreaView>
   );
 }

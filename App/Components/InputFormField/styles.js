@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native'
+import {StyleSheet} from 'react-native';
 
-import { Colors, Fonts, Metrics } from '../../Themes'
+import {Colors, Fonts, Metrics} from '../../Themes';
 
 export default StyleSheet.create({
   inputLabel: {
     color: Colors.panther,
-    fontSize: Fonts.size.input
+    fontSize: Fonts.size.input,
   },
   datePicker: {
-    width: Metrics.oneHundredFifty
-  }
-})
+    width: Metrics.oneHundredFifty,
+  },
+});

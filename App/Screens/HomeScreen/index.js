@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
-import { Avatar, Icon, ListItem, Rating } from 'react-native-elements'
-import { connect, shallowEqual, useSelector } from 'react-redux'
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, TouchableOpacity} from 'react-native';
+import {Avatar, Icon, ListItem, Rating} from 'react-native-elements';
+import {connect, shallowEqual, useSelector} from 'react-redux';
 
-import { Strings } from '../../Themes/Strings'
-import FormButton from '../../Components/Button'
-import AuthActions from '../../Redux/AuthRedux'
-import RestActions from '../../Redux/RestaurantRedux'
-import { Colors, Images, Metrics } from '../../Themes'
-import LoadingIndicator from '../../Components/LoadingIndicator'
-import ConfirmationModal from '../../Components/ConfirmationModal'
-import { PAGINATION_DEFAULTS, ROLE } from '../../Lib/constants'
+import {Strings} from '../../Themes/Strings';
+import FormButton from '../../Components/Button';
+import AuthActions from '../../Redux/AuthRedux';
+import RestActions from '../../Redux/RestaurantRedux';
+import {Colors, Images, Metrics} from '../../Themes';
+import LoadingIndicator from '../../Components/LoadingIndicator';
+import ConfirmationModal from '../../Components/ConfirmationModal';
+import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
 
 function HomeScreen(props) {
   const {
@@ -110,11 +110,9 @@ function HomeScreen(props) {
           />
           <ListItem.Content>
             <ListItem.Title>{name}</ListItem.Title>
-            <ListItem.Subtitle>
-              {description.slice(0, 50)}...
-            </ListItem.Subtitle>
+            <ListItem.Subtitle>{description.slice(0, 50)}...</ListItem.Subtitle>
           </ListItem.Content>
-          <Rating imageSize={15} readonly startingValue={averageRating}/>
+          <Rating imageSize={15} readonly startingValue={averageRating} />
           <Icon
             disabled={restaurantId === item?._id}
             name="trash-alt"
@@ -176,4 +174,4 @@ const mapStateToProps = ({
   loading,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

@@ -4,14 +4,13 @@ import {useNavigation} from '@react-navigation/native';
 import {Icon, ListItem} from 'react-native-elements';
 
 import {Strings} from '../../Themes/Strings';
-import styles from './styles';
-import RestActions from '../../Redux/RestaurantRedux';
-import {connect, shallowEqual, useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {Colors} from '../../Themes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {ROLE} from '../../Lib/constants';
 import ConfirmationModal from '../ConfirmationModal';
 import LoadingIndicator from '../LoadingIndicator';
+import styles from './styles';
 
 function CommentLists(props) {
   const navigation = useNavigation();
@@ -54,12 +53,7 @@ function CommentLists(props) {
           <ListItem.Title>
             {firstName} {lastName}
           </ListItem.Title>
-          <ListItem.Subtitle>
-            {comment.slice(0, 30)}...
-            <Text style={styles.readMore} onPress={() => onClickItem(item)}>
-              {Strings.readMore}
-            </Text>
-          </ListItem.Subtitle>
+          <ListItem.Subtitle>{comment.slice(0, 30)}...</ListItem.Subtitle>
         </ListItem.Content>
         {role === ROLE.ADMIN && (
           <TouchableOpacity
@@ -85,7 +79,7 @@ function CommentLists(props) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.listContainer}>
       <FlatList
         keyExtractor={item => item.id}
         data={reviews}

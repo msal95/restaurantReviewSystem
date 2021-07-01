@@ -6,6 +6,7 @@ import {
   Rating,
   Text as TextElement,
 } from 'react-native-elements';
+import {Formik} from 'formik';
 
 import styles from './styles';
 import {Strings} from '../../Themes/Strings';
@@ -13,98 +14,129 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import RestActions from '../../Redux/RestaurantRedux';
 import {connect} from 'react-redux';
-import {printLogs} from '../../Lib/utils';
+import {errorMessage, printLogs} from '../../Lib/utils';
+import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
+import {replyReviewValidationSchema} from '../../Services/ValidationSchema/ReplyReviewValidationSchema';
 
 function CommentsReplyScreen(props) {
-  const [reply, setReply] = useState('');
   const {review = {}, isAdmin = false} = props?.route?.params ?? {};
 
-  const {
-    rating: rateDb = '',
-    comment: commentDb = '',
-    dateOfVisit: dateOfVisitDb = '',
-  } = review || {};
+  const reviewInfo = review || {};
 
-  const [comment, setComment] = useState(commentDb);
-  const [dateOfVisit, setDateOfVisit] = useState(dateOfVisitDb);
-  const [rating, setRating] = useState(rateDb);
-
-  function commentReply() {
+  const [rating, setRating] = useState(reviewInfo?.rating);
+  function onUpdateReview(values) {
     const data = {
-      reply,
-    };
-    props?.onReviewReply(data, review?.restaurant?._id, review?._id);
-  }
-
-  function renderCreateReview() {
-    const data = {
+      ...values,
       rating,
-      comment,
-      dateOfVisit,
     };
     props?.onUpdateReview(data, review?.restaurant?._id, review?._id);
   }
 
   function renderReviewUpdate() {
     return (
-      <View style={styles.reviewContainer}>
-        <TextElement style={styles.commentHeading} h4>
-          {Strings.updateReview}
-        </TextElement>
-        <Rating
-          showRating
-          startingValue={rating}
-          size={20}
-          onStartRating={startingValue => setRating(startingValue)}
-          style={styles.rating}
-        />
-        <InputFormField
-          label={Strings.comment}
-          placeholder={Strings.enterYourComment}
-          selectedOption={comment}
-          onSelect={value => setComment(value)}
-          returnKeyType={'done'}
-          inputContainerStyle={styles.containerInputStyle}
-          multiline
-        />
-        <View style={styles.visitDateContainer}>
-          <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
-          <InputFormField
-            label={Strings.visitDate}
-            placeholder={Strings.selectDate}
-            selectedOption={dateOfVisit}
-            onSelect={date => setDateOfVisit(date)}
-            dateTime
-          />
-        </View>
-        <FormButton title={Strings.updateReview} onPress={renderCreateReview} />
-      </View>
+      <Formik
+        validationSchema={reviewRestaurantValidationSchema}
+        initialValues={{
+          comment: reviewInfo?.comment ?? '',
+          dateOfVisit: reviewInfo?.dateOfVisit ?? '',
+        }}
+        onSubmit={onUpdateReview}>
+        {({
+          handleSubmit,
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+        }) => (
+          <View style={styles.reviewContainer}>
+            <TextElement style={styles.commentHeading} h4>
+              {Strings.updateReview}
+            </TextElement>
+            <Rating
+              showRating
+              startingValue={rating}
+              size={20}
+              onStartRating={startingValue => setRating(startingValue)}
+              style={styles.rating}
+            />
+            <InputFormField
+              label={Strings.comment}
+              placeholder={Strings.enterYourComment}
+              selectedOption={values?.comment ?? ''}
+              onSelect={handleChange('comment')}
+              onBlur={handleBlur('comment')}
+              returnKeyType={'done'}
+              inputContainerStyle={styles.containerInputStyle}
+              multiline
+            />
+            {errorMessage(errors?.comment, touched.comment)}
+
+            <View style={styles.visitDateContainer}>
+              <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
+              <InputFormField
+                label={Strings.visitDate}
+                placeholder={Strings.selectDate}
+                selectedOption={values?.dateOfVisit ?? ''}
+                onSelect={handleChange('dateOfVisit')}
+                onBlur={handleBlur('dateOfVisit')}
+                dateTime
+              />
+              {errorMessage(errors?.dateOfVisit, touched.dateOfVisit)}
+            </View>
+            <FormButton
+              title={Strings.updateReview}
+              loading={props?.loading}
+              onPress={handleSubmit}
+            />
+          </View>
+        )}
+      </Formik>
     );
   }
 
   function renderCommentReply() {
     return (
-      <View>
-        <TextElement h4 style={styles.h4Style}>
-          {Strings.leaveAReply}
-        </TextElement>
-        <View>
-          <InputFormField
-            label={Strings.reply}
-            placeholder={Strings.enterReply}
-            selectedOption={reply}
-            onSelect={value => setReply(value)}
-            returnKeyType={'done'}
-            inputContainerStyle={styles.containerInputStyle}
-            multiline
-          />
-          <FormButton
-            loading={props?.replying}
-            title={Strings.reply}
-            onPress={commentReply}
-          />
-        </View>
-      </View>
+      <Formik
+        validationSchema={replyReviewValidationSchema}
+        initialValues={{
+          reply: '',
+        }}
+        onSubmit={props?.onReviewReply}>
+        {({
+          handleSubmit,
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+        }) => (
+          <View>
+            <TextElement h4 style={styles.h4Style}>
+              {Strings.leaveAReply}
+            </TextElement>
+            <View>
+              <InputFormField
+                label={Strings.reply}
+                placeholder={Strings.enterReply}
+                selectedOption={values?.reply ?? ''}
+                onSelect={handleChange('reply')}
+                onBlur={handleBlur('reply')}
+                returnKeyType={'done'}
+                inputContainerStyle={styles.containerInputStyle}
+                multiline
+              />
+              {errorMessage(errors?.reply, touched.reply)}
+
+              <FormButton
+                loading={props?.replying}
+                title={Strings.reply}
+                onPress={handleSubmit}
+              />
+            </View>
+          </View>
+        )}
+      </Formik>
     );
   }
 
@@ -119,7 +151,7 @@ function CommentsReplyScreen(props) {
             </ListItem.Content>
           )}
           <Card.Divider />
-          {isAdmin ? renderReviewUpdate() : renderCommentReply()}
+          {!isAdmin ? renderReviewUpdate() : renderCommentReply()}
         </Card>
       </ScrollView>
     </SafeAreaView>

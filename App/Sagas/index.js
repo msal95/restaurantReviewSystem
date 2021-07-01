@@ -1,41 +1,46 @@
-import {all, takeLatest} from 'redux-saga/effects'
-import API from '../Services/Api'
+import {all, takeLatest} from 'redux-saga/effects';
+import API from '../Services/Api';
 
 /* ------------- Types ------------- */
-import {StartupTypes} from '../Redux/StartupRedux'
-import {AuthTypes} from '../Redux/AuthRedux'
+import {StartupTypes} from '../Redux/StartupRedux';
+import {AuthTypes} from '../Redux/AuthRedux';
 
 /* ------------- Sagas ------------- */
-import {startup} from './StartupSagas'
+import {startup} from './StartupSagas';
 import {
-  onAuthSuccess, onDeleteUser, onEditOtherUser, onEditProfile,
+  onAuthSuccess,
+  onDeleteUser,
+  onEditOtherUser,
+  onEditProfile,
   onGetAllUsers,
   onGetUserProfile,
   onLogin,
   onLogout,
-  onSignup
-} from './AuthSagas'
+  onSignup,
+} from './AuthSagas';
 import {
   onCreateRestaurant,
-  onCreateReview, onDeleteRestaurant, onDeleteReview,
+  onCreateReview,
+  onDeleteRestaurant,
+  onDeleteReview,
   onFetchRestaurantDetails,
   onFetchRestaurantsList,
   onGetAllReviews,
   onReviewReply,
   onUpdateRestaurant,
-  onUpdateReview
-} from './RestaurantSaga'
-import {RestTypes} from '../Redux/RestaurantRedux'
+  onUpdateReview,
+} from './RestaurantSaga';
+import {RestTypes} from '../Redux/RestaurantRedux';
 
 /* ------------- API ------------- */
 
 // The API we use is only used from Sagas, so we create it here and pass along
 // to the sagas which need it.
-const api = API.create()
+const api = API.create();
 
 /* ------------- Connect Types To Sagas ------------- */
 
-export default function * root () {
+export default function* root() {
   yield all([
     // some sagas only receive an action
     takeLatest(StartupTypes.STARTUP, startup, api),
@@ -58,8 +63,8 @@ export default function * root () {
     takeLatest(AuthTypes.EDIT_PROFILE, onEditProfile, api),
     takeLatest(AuthTypes.EDIT_OTHER_USER, onEditOtherUser, api),
     takeLatest(AuthTypes.DELETE_USER, onDeleteUser, api),
-    takeLatest(RestTypes.DELETE_RESTAURANT, onDeleteRestaurant, api)
+    takeLatest(RestTypes.DELETE_RESTAURANT, onDeleteRestaurant, api),
 
     // some sagas receive extra parameters in addition to an action
-  ])
+  ]);
 }

@@ -54,7 +54,6 @@ export const INITIAL_STATE = Immutable({
   restaurantsList: [],
   restaurantDetails: {},
   replying: false,
-  reviewing: false,
   updatingRestaurant: false,
   updatingReview: false,
   isResRemaining: false,
@@ -126,19 +125,16 @@ export const _createRestaurantFailure = (state, {error = ''}) => ({
 export const _createReview = state => ({
   ...state,
   loading: true,
-  reviewing: true,
 });
 export const _createReviewSuccess = (state, {response}) => ({
   ...state,
   createReview: response || {},
   loading: false,
-  reviewing: false,
 });
 export const _createReviewFailure = (state, {error = ''}) => ({
   ...state,
   loading: false,
   error,
-  reviewing: false,
 });
 
 export const _deleteRestaurant = state => ({

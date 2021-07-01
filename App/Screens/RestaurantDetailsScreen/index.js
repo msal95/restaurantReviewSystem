@@ -8,6 +8,7 @@ import {
   Text as TextElement,
 } from 'react-native-elements';
 import {connect, shallowEqual, useSelector} from 'react-redux';
+import {Formik} from 'formik';
 
 import styles from './styles';
 import {Strings} from '../../Themes/Strings';
@@ -17,6 +18,8 @@ import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
 import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
 import {Images} from '../../Themes';
+import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
+import {errorMessage, printLogs} from '../../Lib/utils';
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -29,8 +32,7 @@ function RestaurantDetailsScreen(props) {
     averageRating,
     navigation,
   } = props ?? {};
-  const [comment, setComment] = useState('');
-  const [dateOfVisit, setDateOfVisit] = useState('');
+
   const [rating, setRating] = useState('0');
   const [refreshing, setRefreshing] = useState(false);
   const flatListRefreshingRef = useRef();
@@ -86,11 +88,10 @@ function RestaurantDetailsScreen(props) {
     setPageNo(PAGINATION_DEFAULTS.PAGE);
   }
 
-  function renderCreateReview() {
+  function onCreateReview(values) {
     const data = {
+      ...values,
       rating,
-      comment,
-      dateOfVisit,
     };
     props?.onCreateReview(data, restaurantId);
   }
@@ -119,38 +120,61 @@ function RestaurantDetailsScreen(props) {
 
   function renderListFooter() {
     return (
-      <View style={styles.reviewContainer}>
-        <TextElement style={styles.commentHeading} h4>
-          {Strings.leaveAComment}
-        </TextElement>
-        <Rating
-          showRating
-          startingValue={3}
-          size={20}
-          onStartRating={startingValue => setRating(startingValue)}
-          style={styles.rating}
-        />
-        <InputFormField
-          label={Strings.comment}
-          placeholder={Strings.enterYourComment}
-          selectedOption={comment}
-          onSelect={value => setComment(value)}
-          returnKeyType={'done'}
-          inputContainerStyle={styles.containerInputStyle}
-          multiline
-        />
-        <View style={styles.visitDateContainer}>
-          <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
-          <InputFormField
-            label={Strings.visitDate}
-            placeholder={Strings.selectDate}
-            selectedOption={dateOfVisit}
-            onSelect={date => setDateOfVisit(date)}
-            dateTime
-          />
-        </View>
-        <FormButton title={Strings.submitReview} onPress={renderCreateReview} />
-      </View>
+      <Formik
+        validationSchema={reviewRestaurantValidationSchema}
+        initialValues={{
+          comment: '',
+          dateOfVisit: '',
+        }}
+        onSubmit={onCreateReview}>
+        {({
+          handleSubmit,
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+        }) => (
+          <View style={styles.reviewContainer}>
+            <TextElement style={styles.commentHeading} h4>
+              {Strings.leaveAComment}
+            </TextElement>
+            <Rating
+              showRating
+              startingValue={3}
+              size={20}
+              onStartRating={startingValue => setRating(startingValue)}
+              style={styles.rating}
+            />
+
+            <InputFormField
+              label={Strings.comment}
+              placeholder={Strings.enterYourComment}
+              selectedOption={values?.comment ?? ''}
+              onSelect={handleChange('comment')}
+              onBlur={handleBlur('comment')}
+              returnKeyType={'done'}
+              inputContainerStyle={styles.containerInputStyle}
+              multiline
+            />
+            {errorMessage(errors?.comment, touched.comment)}
+
+            <View style={styles.visitDateContainer}>
+              <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
+              <InputFormField
+                label={Strings.visitDate}
+                placeholder={Strings.selectDate}
+                selectedOption={values?.dateOfVisit ?? ''}
+                onSelect={handleChange('dateOfVisit')}
+                onBlur={handleBlur('dateOfVisit')}
+                dateTime
+              />
+              {errorMessage(errors?.dateOfVisit, touched.dateOfVisit)}
+            </View>
+            <FormButton title={Strings.submitReview} onPress={handleSubmit} />
+          </View>
+        )}
+      </Formik>
     );
   }
 
@@ -206,7 +230,12 @@ function RestaurantDetailsScreen(props) {
           </Text>
           <Text style={styles.reviewsTitle}>
             {Strings.avgRating}
-            <Rating imageSize={15}  fractions  startingValue={averageRating} style={{ paddingRight: 20 }} />
+            <Rating
+              imageSize={15}
+              fractions
+              startingValue={averageRating}
+              style={{paddingRight: 20}}
+            />
           </Text>
         </View>
         {role === ROLE.OWNER ? (
