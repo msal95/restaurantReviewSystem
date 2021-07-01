@@ -40,7 +40,7 @@ function HomeScreen(props) {
   }, [pageNo]);
 
   useEffect(() => {
-    if (props?.loading === false && flatListRefreshingRef.current) {
+    if (!props?.loading && flatListRefreshingRef.current) {
       setRefreshing(false);
     }
   }, [props?.loading]);
@@ -101,9 +101,10 @@ function HomeScreen(props) {
 
   function renderListItem({item, index}) {
     const {image, name, description, averageRating = 3} = item || {};
+
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
-        <ListItem key={item?._id} bottomDivider>
+        <ListItem key={String(item?._id ?? index)} bottomDivider>
           <Avatar
             size="large"
             source={image ? {uri: image} : Images.restaurantPlaceholder}
@@ -167,7 +168,7 @@ const mapStateToProps = ({
   restaurants: {
     restaurantsList = [],
     deletingRestaurant = false,
-    isRemaining = false,
+    isResRemaining: isRemaining = false,
     loading = false,
   } = {},
 }) => ({

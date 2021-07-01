@@ -1,6 +1,8 @@
 import {createActions, createReducer} from 'reduxsauce';
 import Immutable from 'seamless-immutable';
 
+import {PAGINATION_DEFAULTS} from '../Lib/constants';
+
 /* ------------- Types and Action Creators ------------- */
 const {Types, Creators} = createActions({
   signup: ['data'],
@@ -41,8 +43,10 @@ export const INITIAL_STATE = Immutable({
   loading: false,
   user: {},
   error: '',
-  isFetchingUsers: false
-})
+  pageNo: PAGINATION_DEFAULTS.PAGE,
+  pageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
+});
+
 /* ------------- Reducers ------------- */
 export const _logout = state => ({
   ...state,
@@ -86,16 +90,34 @@ export const _userProfile = state => ({...state});
 export const _userProfileSuccess = state => ({...state});
 export const _userProfileFailure = (state, {error = ''}) => ({...state, error});
 
-export const _allUsers = state => ({...state, isFetchingUsers: true});
-export const _allUsersSuccess = (state, {response = []}) => ({
+export const _allUsers = (state, {data}) => ({
   ...state,
-  allUsers: response,
-  isFetchingUsers: false,
+  pageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
+  pageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
+  loading: true,
 });
+
+export const _allUsersSuccess = (state, {response = []}) => {
+  let {allUsers} = state;
+  if (state?.resPageNo === PAGINATION_DEFAULTS.PAGE) {
+    allUsers = response ?? [];
+  } else {
+    allUsers = [...(allUsers ?? []), ...(response ?? [])];
+  }
+
+  return {
+    ...state,
+    allUsers,
+    loading: false,
+    isRemaining: Boolean(response?.length),
+  };
+};
+
 export const _allUsersFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  isFetchingUsers: false,
+  loading: false,
+  isRemaining: false,
 });
 
 export const _editProfile = state => ({...state, loading: true});

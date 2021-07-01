@@ -1,6 +1,8 @@
 import {createActions, createReducer} from 'reduxsauce';
 import Immutable from 'seamless-immutable';
 
+import {PAGINATION_DEFAULTS} from '../Lib/constants';
+
 /* ------------- Types and Action Creators ------------- */
 const {Types, Creators} = createActions({
   restaurantsList: ['data'],
@@ -55,19 +57,43 @@ export const INITIAL_STATE = Immutable({
   reviewing: false,
   updatingRestaurant: false,
   updatingReview: false,
+  isResRemaining: false,
+  isRevRemaining: false,
+  resPageNo: PAGINATION_DEFAULTS.PAGE,
+  resPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
+  revPageNo: PAGINATION_DEFAULTS.PAGE,
+  revPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
 });
 
 /* ------------- Reducers ------------- */
 
-export const _restaurantsList = state => ({...state, loading: true});
-export const _restaurantsListSuccess = (state, {response}) => ({
+export const _restaurantsList = (state, {data}) => ({
   ...state,
-  restaurantsList: response || [],
-  loading: false,
+  resPageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
+  resPageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
+  loading: true,
 });
+
+export const _restaurantsListSuccess = (state, {response}) => {
+  let {restaurantsList} = state;
+  if (state?.resPageNo === PAGINATION_DEFAULTS.PAGE) {
+    restaurantsList = response ?? [];
+  } else {
+    restaurantsList = [...(restaurantsList ?? []), ...(response ?? [])];
+  }
+
+  return {
+    ...state,
+    restaurantsList,
+    isResRemaining: Boolean(response?.length),
+    loading: false,
+  };
+};
+
 export const _restaurantsListFailure = (state, {error = ''}) => ({
   ...state,
   loading: false,
+  isResRemaining: false,
   error,
 });
 
@@ -113,45 +139,67 @@ export const _createReviewFailure = (state, {error = ''}) => ({
   reviewing: false,
 });
 
-
-export const _deleteRestaurant = state => ({...state, deletingRestaurant: true})
-
-export const _deleteRestaurantSuccess = (state, { id }) => ({
+export const _deleteRestaurant = state => ({
   ...state,
-  restaurantsList: (state.restaurantsList || []).filter(item=>(item?._id !== id)),
-  deletingRestaurant: false
-})
+  deletingRestaurant: true,
+});
+
+export const _deleteRestaurantSuccess = (state, {id}) => ({
+  ...state,
+  restaurantsList: (state.restaurantsList || []).filter(
+    item => item?._id !== id,
+  ),
+  deletingRestaurant: false,
+});
 
 export const _deleteRestaurantFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  deletingRestaurant: false
-})
+  deletingRestaurant: false,
+});
 
-export const _deleteReview = state => ({...state, deletingReview: true})
+export const _deleteReview = state => ({...state, deletingReview: true});
 
-export const _deleteReviewSuccess = (state, { id }) => ({
+export const _deleteReviewSuccess = (state, {id}) => ({
   ...state,
-  allReviews: (state.allReviews || []).filter(item=>(item?._id !== id)),
-  deletingReview: false
-})
+  allReviews: (state.allReviews || []).filter(item => item?._id !== id),
+  deletingReview: false,
+});
 
 export const _deleteReviewFailure = (state, {error = ''}) => ({
   ...state,
   error,
-  deletingReview: false
-})
-
-export const _getAllReviews = state => ({...state, loading: true});
-export const _getAllReviewsSuccess = (state, {response}) => ({
-  ...state,
-  allReviews: response || [],
-  loading: false,
+  deletingReview: false,
 });
+
+export const _getAllReviews = (state, {data}) => ({
+  ...state,
+  revPageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
+  revPageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
+  loading: true,
+});
+
+export const _getAllReviewsSuccess = (state, {response}) => {
+  let {allReviews} = state;
+  if (state?.revPageNo === PAGINATION_DEFAULTS.PAGE) {
+    allReviews = response ?? [];
+  } else {
+    allReviews = [...(allReviews ?? []), ...(response ?? [])];
+  }
+
+  return {
+    ...state,
+    allReviews,
+    isRevRemaining: Boolean(response?.length),
+    loading: false,
+  };
+};
+
 export const _getAllReviewsFailure = (state, {error = ''}) => ({
   ...state,
   loading: false,
   error,
+  isRevRemaining: false,
 });
 
 export const _reviewReply = state => ({...state, replying: true});

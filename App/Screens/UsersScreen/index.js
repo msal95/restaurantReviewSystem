@@ -1,61 +1,101 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
-import { Avatar, Icon, ListItem } from 'react-native-elements'
-import { connect } from 'react-redux'
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, TouchableOpacity} from 'react-native';
+import {Avatar, Icon, ListItem} from 'react-native-elements';
+import {connect} from 'react-redux';
 
-import { Strings } from '../../Themes/Strings'
-import FormButton from '../../Components/Button'
-import AuthActions from '../../Redux/AuthRedux'
-import { Colors, Images } from '../../Themes'
-import LoadingIndicator from '../../Components/LoadingIndicator'
-import styles from './styles'
-import ConfirmationModal from '../../Components/ConfirmationModal'
+import {Strings} from '../../Themes/Strings';
+import FormButton from '../../Components/Button';
+import AuthActions from '../../Redux/AuthRedux';
+import {Colors, Images} from '../../Themes';
+import LoadingIndicator from '../../Components/LoadingIndicator';
+import styles from './styles';
+import ConfirmationModal from '../../Components/ConfirmationModal';
+import {PAGINATION_DEFAULTS} from '../../Lib/constants';
 
-function UsersScreen (props) {
-  const { allUsers, onDeleteUser, deletingUser, getAllUsers, navigation } = props
-  const [userId, setUserId] = useState('')
-  const [isDeleteModal, setIsDeleteModal] = useState(false)
+function UsersScreen(props) {
+  const {allUsers, onDeleteUser, deletingUser, getAllUsers, navigation} = props;
+  const [userId, setUserId] = useState('');
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE);
+  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE);
+  const [refreshing, setRefreshing] = useState(false);
+  const flatListRefreshingRef = useRef();
+
+  useEffect(() => (flatListRefreshingRef.current = refreshing));
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <FormButton title={Strings.logout} onPress={() => props?.onLogout()} />
       ),
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
-    getAllUsers()
-  }, [])
+    getAllUsers({pageNo, pageSize});
+  }, [pageNo]);
 
-  function onCLickItem (item) {
+  useEffect(() => {
+    getAllUsers({pageNo, pageSize});
+  }, []);
+
+  useEffect(() => {
+    if (!props?.loading && flatListRefreshingRef.current) {
+      setRefreshing(false);
+    }
+  }, [props?.loading]);
+
+  function onCLickItem(item) {
     navigation?.navigate({
       name: 'UserProfile',
-      params: { user: item, isSelf: false },
-    })
+      params: {user: item, isSelf: false},
+    });
   }
 
-  function onPressDeleteUser ({ _id } = {}) {
-    setUserId(_id)
-    setIsDeleteModal(true)
+  function onRefresh() {
+    setRefreshing(true);
+    if (PAGINATION_DEFAULTS.PAGE === pageNo) {
+      getAllUsers({pageNo, pageSize});
+
+      return;
+    }
+
+    setPageNo(PAGINATION_DEFAULTS.PAGE);
   }
 
-  function closeModal () {
-    setUserId('')
-    setIsDeleteModal(false)
+  function onPressDeleteUser({_id} = {}) {
+    setUserId(_id);
+    setIsDeleteModal(true);
   }
 
-  function onDeleteConfirm () {
-    closeModal()
-    onDeleteUser({ _id: userId })
+  function closeModal() {
+    setUserId('');
+    setIsDeleteModal(false);
+  }
+
+  function onEndReached() {
+    if (props?.isRemaining && !props.loading) {
+      setPageNo(prevState => prevState + 1);
+    }
+  }
+
+  function onDeleteConfirm() {
+    closeModal();
+    onDeleteUser({_id: userId});
   }
 
   function renderListItem({item, index}) {
-    const { fullName, role, picture } = item || {}
+    const {fullName, role, picture} = item || {};
+
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
-        <ListItem key={String(item._id ?? index)} bottomDivider>
-          <Avatar size="large" rounded source={!!picture ? { uri: picture } : Images.userPlaceholder} avatarStyle={styles.avatarStyle}/>
+        <ListItem key={String(item?._id ?? index)} bottomDivider>
+          <Avatar
+            size="large"
+            rounded
+            source={picture ? {uri: picture} : Images.userPlaceholder}
+            avatarStyle={styles.avatarStyle}
+          />
           <ListItem.Content>
             <ListItem.Title>{fullName}</ListItem.Title>
             <ListItem.Subtitle>{role}</ListItem.Subtitle>
@@ -66,21 +106,26 @@ function UsersScreen (props) {
             name="trash-alt"
             type="font-awesome-5"
             color={Colors.fire}
-            onPress={() => onPressDeleteUser(item)}/>
+            onPress={() => onPressDeleteUser(item)}
+          />
           <ListItem.Chevron />
         </ListItem>
-        <LoadingIndicator loading={deletingUser && userId === item?._id}/>
+        <LoadingIndicator loading={deletingUser && userId === item?._id} />
       </TouchableOpacity>
-    )
+    );
   }
 
   return (
     <>
-    <FlatList
-      keyExtractor={item => String(item?._id)}
-      data={allUsers}
-      renderItem={renderListItem}
-    />
+      <FlatList
+        keyExtractor={item => String(item?._id)}
+        data={allUsers}
+        renderItem={renderListItem}
+        onEndReached={onEndReached}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        onEndReachedThreshold={0.1}
+      />
       <ConfirmationModal
         closeModal={closeModal}
         onPressDone={onDeleteConfirm}
@@ -90,17 +135,26 @@ function UsersScreen (props) {
         subHeader={Strings.deleteRestaurantMessage}
       />
     </>
-  )
+  );
 }
 
 const mapDispatchToProps = dispatch => ({
   getAllUsers: () => dispatch(AuthActions.allUsers()),
-  onDeleteUser: (data) => dispatch(AuthActions.deleteUser(data)),
-})
+  onDeleteUser: data => dispatch(AuthActions.deleteUser(data)),
+});
 
-const mapStateToProps = ({ auth: { allUsers = [], deletingUser = false } = {} }) => ({
+const mapStateToProps = ({
+  auth: {
+    allUsers = [],
+    deletingUser = false,
+    isRemaining = false,
+    loading = false,
+  } = {},
+}) => ({
   allUsers,
-  deletingUser
-})
+  deletingUser,
+  isRemaining,
+  loading,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(UsersScreen);

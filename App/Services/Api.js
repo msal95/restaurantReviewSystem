@@ -49,8 +49,8 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     api.get(`restaurants/${restaurantId}`);
   const createReview = ({restaurantId, data}) =>
     api.post(`restaurants/${restaurantId}/reviews`, data);
-  const getAllReviews = ({data: {restaurantId = ''} = {}}) =>
-    api.get(`restaurants/${restaurantId}/reviews`);
+  const getAllReviews = ({data: {restaurantId = '', ...others} = {}}) =>
+    api.get(`restaurants/${restaurantId}/reviews`, others);
   const replyReviews = ({restaurantId, data, reviewId}) =>
     api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
   const updateRestaurant = ({id, data}) => api.put(`restaurants/${id}`, data);

@@ -103,9 +103,7 @@ export function* onGetUserProfile(api, {data = {}}) {
 
 export function* onGetAllUsers(api, {data = {}}) {
   try {
-    const {response = []} = yield call(Api.callServer, api.allUsers, {
-      data,
-    });
+    const {response = []} = yield call(Api.callServer, api.allUsers, data);
     yield put(AuthActions.allUsersSuccess(response));
   } catch ({message}) {
     yield put(AuthActions.allUsersFailure(String(message)));
