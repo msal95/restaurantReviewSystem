@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, SafeAreaView, Text, View} from 'react-native';
 import {
   Card,
@@ -15,8 +15,8 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
-import {ROLE} from '../../Lib/constants';
-import { Images } from '../../Themes'
+import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
+import {Images} from '../../Themes';
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -32,12 +32,28 @@ function RestaurantDetailsScreen(props) {
   const [comment, setComment] = useState('');
   const [dateOfVisit, setDateOfVisit] = useState('');
   const [rating, setRating] = useState('0');
+  const [refreshing, setRefreshing] = useState(false);
+  const flatListRefreshingRef = useRef();
+  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE);
+  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE);
   const {restaurantId = ''} = route.params;
+
+  useEffect(() => (flatListRefreshingRef.current = refreshing));
 
   const {role = ''} = useSelector(
     ({auth: {user: {role = ''}} = {}}) => ({role}),
     shallowEqual,
   );
+
+  useEffect(() => {
+    onGetAllReviews({pageNo, pageSize, restaurantId});
+  }, [pageNo]);
+
+  useEffect(() => {
+    if (!props?.loading && flatListRefreshingRef.current) {
+      setRefreshing(false);
+    }
+  }, [props?.loading]);
 
   useEffect(() => {
     if (role === ROLE.ADMIN || role === ROLE.OWNER) {
@@ -56,8 +72,19 @@ function RestaurantDetailsScreen(props) {
       });
     }
     onFetchRestaurantDetails({restaurantId});
-    onGetAllReviews({restaurantId});
+    onGetAllReviews({restaurantId, pageNo, pageSize});
   }, []);
+
+  function onRefresh() {
+    setRefreshing(true);
+    if (PAGINATION_DEFAULTS.PAGE === pageNo) {
+      onGetAllReviews({restaurantId, pageNo, pageSize});
+
+      return;
+    }
+
+    setPageNo(PAGINATION_DEFAULTS.PAGE);
+  }
 
   function renderCreateReview() {
     const data = {
@@ -66,6 +93,12 @@ function RestaurantDetailsScreen(props) {
       dateOfVisit,
     };
     props?.onCreateReview(data, restaurantId);
+  }
+
+  function onEndReached() {
+    if (props?.isRemaining && !props.loading) {
+      setPageNo(prevState => prevState + 1);
+    }
   }
 
   function renderCommentsList({item, index}) {
@@ -136,6 +169,10 @@ function RestaurantDetailsScreen(props) {
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderListFooter}
         renderItem={renderCommentsList}
+        onEndReached={onEndReached}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        onEndReachedThreshold={0.1}
       />
     );
   }
@@ -148,7 +185,11 @@ function RestaurantDetailsScreen(props) {
         <Image
           style={styles.restaurantBanner}
           resizeMode="cover"
-          source={!!details?.image ? {uri: details?.image}: Images.restaurantPlaceholder}
+          source={
+            details?.image
+              ? {uri: details?.image}
+              : Images.restaurantPlaceholder
+          }
         />
         <Text style={styles.descriptionTitle}>{Strings.description}</Text>
         <Text style={styles.description}>{details.description}</Text>
@@ -196,12 +237,16 @@ const mapStateToProps = ({
       averageRating,
     } = {},
     allReviews = [],
+    isRevRemaining: isRemaining = false,
+    revLoading: loading = false,
   } = {},
 }) => ({
   totalReviewsCount,
   averageRating,
   reviews: allReviews,
   details: restaurantInfo,
+  isRemaining,
+  loading,
 });
 
 export default connect(

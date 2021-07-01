@@ -59,6 +59,8 @@ export const INITIAL_STATE = Immutable({
   updatingReview: false,
   isResRemaining: false,
   isRevRemaining: false,
+  loading: false,
+  revLoading: false,
   resPageNo: PAGINATION_DEFAULTS.PAGE,
   resPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
   revPageNo: PAGINATION_DEFAULTS.PAGE,
@@ -176,7 +178,7 @@ export const _getAllReviews = (state, {data}) => ({
   ...state,
   revPageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
   revPageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
-  loading: true,
+  revLoading: true,
 });
 
 export const _getAllReviewsSuccess = (state, {response}) => {
@@ -190,14 +192,14 @@ export const _getAllReviewsSuccess = (state, {response}) => {
   return {
     ...state,
     allReviews,
-    isRevRemaining: Boolean(response?.length),
+    revLoading: Boolean(response?.length),
     loading: false,
   };
 };
 
 export const _getAllReviewsFailure = (state, {error = ''}) => ({
   ...state,
-  loading: false,
+  revLoading: false,
   error,
   isRevRemaining: false,
 });
