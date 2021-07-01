@@ -27,7 +27,7 @@ function SwipeableButton (props) {
     return (
       <Animated.View style={[styles.rectButtonContainer, { transform: [{ translateX: trans }] }]}>
         <TouchableOpacity
-          activeOpacity={0.5}
+          activeOpacity={0.9}
           style={[styles.rightAction, { backgroundColor: color }, buttonStyle]}
           onPress={pressHandler}>
           <Icon
