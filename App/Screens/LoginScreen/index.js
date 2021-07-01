@@ -46,7 +46,7 @@ function LoginScreen(props) {
                 onSubmitEditing={() => passwordRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors.email, touched)}
+              {errorMessage(errors.email, touched.email)}
               <InputFormField
                 placeholder={Strings.enterPassword}
                 label={Strings.password}
@@ -57,7 +57,7 @@ function LoginScreen(props) {
                 secureTextEntry
                 returnKeyType={'done'}
               />
-              {errorMessage(errors.password, touched)}
+              {errorMessage(errors.password, touched.password)}
               <FormButton
                 title={Strings.login}
                 onPress={handleSubmit}

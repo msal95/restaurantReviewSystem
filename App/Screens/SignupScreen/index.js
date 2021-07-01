@@ -29,9 +29,9 @@ function SignupScreen(props) {
 
   const {isEditing = false, isSelf, otherUser = {}} = route?.params || {};
 
-  const {picture, _id} = isEditing ? (isSelf ? user : otherUser) : {};
+  const userInfo = isEditing ? (isSelf ? user : otherUser) : {};
 
-  const [file, setImageSource] = useState({path: picture});
+  const [file, setImageSource] = useState({path: userInfo?.picture});
 
   useEffect(() => {
     navigation.setOptions({
@@ -45,9 +45,10 @@ function SignupScreen(props) {
   const emailRef = useRef();
   const phoneRef = useRef();
 
-  function onPressSignUp() {
+  function onPressSignUp(values) {
     const data = {
-      _id,
+      ...values,
+      _id: userInfo?._id,
     };
 
     if (file?.mime) {
@@ -59,7 +60,7 @@ function SignupScreen(props) {
     }
 
     if (isEditing && !isSelf) {
-      onEditOtherUser({_id, ...data});
+      onEditOtherUser({_id: userInfo?._id, ...data});
     } else if (isEditing) {
       onEditProfile(data);
     } else {
@@ -72,17 +73,24 @@ function SignupScreen(props) {
       <Formik
         validationSchema={signUpValidationSchema}
         initialValues={{
-          firstName: '',
-          lastName: '',
-          email: '',
-          phoneNo: '',
+          firstName: userInfo?.firstName ?? '',
+          lastName: userInfo?.lastName ?? '',
+          email: userInfo?.email ?? '',
+          phoneNo: userInfo?.phoneNo ?? '',
           password: '',
           confirmPassword: '',
-          gender: '',
-          role: ROLE.REGULAR,
+          gender: user?.gender ?? '',
+          role: user?.role ?? ROLE.REGULAR,
         }}
-        onSubmit={props?.onSignUp}>
-        {({handleSubmit, values, errors, handleChange, handleBlur}) => (
+        onSubmit={onPressSignUp}>
+        {({
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+        }) => (
           <>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
               <ImageCropPicker
@@ -98,7 +106,7 @@ function SignupScreen(props) {
                 onSubmitEditing={() => lastNameRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors?.firstName)}
+              {errorMessage(errors?.firstName, touched?.firstName)}
 
               <InputFormField
                 label={Strings.lastName}
@@ -110,7 +118,7 @@ function SignupScreen(props) {
                 onSubmitEditing={() => phoneRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors?.lastName)}
+              {errorMessage(errors?.lastName, touched?.lastName)}
 
               <InputFormField
                 label={Strings.phoneNum}
@@ -123,7 +131,7 @@ function SignupScreen(props) {
                 onSubmitEditing={() => emailRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors?.phoneNo)}
+              {errorMessage(errors?.phoneNo, touched?.phoneNo)}
 
               <InputFormField
                 label={Strings.email}
@@ -136,7 +144,7 @@ function SignupScreen(props) {
                 onSubmitEditing={() => passwordRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors?.email)}
+              {errorMessage(errors?.email, touched?.email)}
 
               {!isEditing && (
                 <>
@@ -150,7 +158,7 @@ function SignupScreen(props) {
                     secureTextEntry
                     returnKeyType={'done'}
                   />
-                  {errorMessage(errors?.password)}
+                  {errorMessage(errors?.password, touched?.password)}
                   <InputFormField
                     placeholder={Strings.confirmPassword}
                     label={Strings.confirmPassword}
@@ -161,7 +169,10 @@ function SignupScreen(props) {
                     secureTextEntry
                     returnKeyType={'done'}
                   />
-                  {errorMessage(errors?.password)}
+                  {errorMessage(
+                    errors?.confirmPassword,
+                    errors?.confirmPassword,
+                  )}
                 </>
               )}
 
@@ -180,7 +191,7 @@ function SignupScreen(props) {
                   value={values.role}>
                   <Text style={styles.selectedOpt}>{values.role}</Text>
                 </RNPickerSelect>
-                {errorMessage(errors?.role)}
+                {errorMessage(errors?.role, errors?.role)}
               </View>
 
               <View style={styles.roleSelection}>
@@ -195,7 +206,7 @@ function SignupScreen(props) {
                     labelStyle={styles.radioBtn}
                   />
                 </View>
-                {errorMessage(errors?.gender)}
+                {errorMessage(errors?.gender, touched?.gender)}
               </View>
             </KeyboardAwareScrollView>
 
