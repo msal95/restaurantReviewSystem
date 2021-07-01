@@ -1,5 +1,6 @@
 import {createActions, createReducer} from 'reduxsauce';
 import Immutable from 'seamless-immutable';
+import {uniqBy} from 'lodash';
 
 import {PAGINATION_DEFAULTS} from '../Lib/constants';
 
@@ -85,7 +86,7 @@ export const _restaurantsListSuccess = (state, {response}) => {
 
   return {
     ...state,
-    restaurantsList,
+    restaurantsList: uniqBy(restaurantsList, '_id'),
     isResRemaining: Boolean(response?.length),
     loading: false,
   };
@@ -187,7 +188,7 @@ export const _getAllReviewsSuccess = (state, {response}) => {
 
   return {
     ...state,
-    allReviews,
+    allReviews: uniqBy(allReviews, '_id'),
     revLoading: Boolean(response?.length),
     loading: false,
   };

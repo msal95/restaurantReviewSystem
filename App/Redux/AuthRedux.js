@@ -1,5 +1,6 @@
 import {createActions, createReducer} from 'reduxsauce';
 import Immutable from 'seamless-immutable';
+import {uniqBy} from 'lodash';
 
 import {PAGINATION_DEFAULTS} from '../Lib/constants';
 
@@ -99,7 +100,7 @@ export const _allUsers = (state, {data}) => ({
 
 export const _allUsersSuccess = (state, {response = []}) => {
   let {allUsers} = state;
-  if (state?.resPageNo === PAGINATION_DEFAULTS.PAGE) {
+  if (state?.pageNo === PAGINATION_DEFAULTS.PAGE) {
     allUsers = response ?? [];
   } else {
     allUsers = [...(allUsers ?? []), ...(response ?? [])];
@@ -107,7 +108,7 @@ export const _allUsersSuccess = (state, {response = []}) => {
 
   return {
     ...state,
-    allUsers,
+    allUsers: uniqBy(allUsers, '_id'),
     loading: false,
     isRemaining: Boolean(response?.length),
   };
