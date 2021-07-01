@@ -1,12 +1,12 @@
-import React from 'react'
-import { Input } from 'react-native-elements'
-import DatePicker from 'react-native-datepicker'
-import propTypes from 'prop-types'
+import React from 'react';
+import {Input} from 'react-native-elements';
+import DatePicker from 'react-native-datepicker';
+import propTypes from 'prop-types';
 
-import styles from './styles'
-import { ViewPropTypes } from 'react-native'
+import styles from './styles';
+import {ViewPropTypes} from 'react-native';
 
-export default function InputFormField (props) {
+export default function InputFormField(props) {
   const {
     onSelect,
     selectedOption,
@@ -19,23 +19,23 @@ export default function InputFormField (props) {
     placeholder,
     dateTime,
     inputContainerStyle,
-    multiline
-  } = props
+    multiline,
+    onBlur = () => {},
+  } = props;
 
   if (dateTime) {
     return (
       <DatePicker
         style={styles.datePicker}
         date={selectedOption}
-        mode='date'
+        mode="date"
         placeholder={placeholder}
-        format='YYYY-MM-DD'
-        confirmBtnText='Confirm'
-        cancelBtnText='Cancel'
+        format="YYYY-MM-DD"
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
         onDateChange={onSelect}
-
       />
-    )
+    );
   }
 
   return (
@@ -45,6 +45,7 @@ export default function InputFormField (props) {
       labelStyle={styles.inputLabel}
       value={selectedOption}
       onChangeText={onSelect}
+      onBlur={onBlur}
       keyboardType={keyboardType}
       onSubmitEditing={onSubmitEditing}
       returnKeyType={returnKeyType}
@@ -53,7 +54,7 @@ export default function InputFormField (props) {
       inputContainerStyle={inputContainerStyle}
       multiline={multiline}
     />
-  )
+  );
 }
 
 InputFormField.propTypes = {
@@ -67,8 +68,8 @@ InputFormField.propTypes = {
   secureTextEntry: propTypes.bool,
   dateTime: propTypes.bool,
   multiline: propTypes.bool,
-  inputContainerStyle: ViewPropTypes.style
-}
+  inputContainerStyle: ViewPropTypes.style,
+};
 InputFormField.defaultProps = {
   onSelect: () => {},
   selectedOption: '',
@@ -80,5 +81,5 @@ InputFormField.defaultProps = {
   secureTextEntry: false,
   dateTime: false,
   multiline: false,
-  inputContainerStyle: {}
-}
+  inputContainerStyle: {},
+};

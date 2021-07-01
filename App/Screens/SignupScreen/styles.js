@@ -42,4 +42,7 @@ export default StyleSheet.create({
     fontSize: Fonts.size.regular,
     paddingHorizontal: Metrics.doubleBaseMargin,
   },
+  errorMessage: {
+    marginBottom: 20,
+  },
 });

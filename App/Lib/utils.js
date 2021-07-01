@@ -1,22 +1,28 @@
-import {Strings} from '../Themes/Strings'
-import {Alert, Platform} from 'react-native'
-import {showMessage as showFlashMessage} from 'react-native-flash-message'
-import {openSettings, PERMISSIONS, request} from 'react-native-permissions'
-import {MESSAGE_TYPES} from './constants'
+import {Strings} from '../Themes/Strings';
+import {Alert, Platform, Text, View} from 'react-native';
+import {showMessage as showFlashMessage} from 'react-native-flash-message';
+import {openSettings, PERMISSIONS, request} from 'react-native-permissions';
+import {MESSAGE_TYPES} from './constants';
+import React from 'react';
+
+const styles = {
+  errorContainer: {marginHorizontal: 10, top: -20},
+  errorMessage: {fontSize: 10, color: 'red', top: 0, marginTop: 0},
+};
 
 export const checkStoragePermission = async (
   callback = () => {},
-  errorCallback = () => {}
+  errorCallback = () => {},
 ) => {
   await request(
     Platform.select({
       ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
-      android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
-    })
+      android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+    }),
   )
     .then(response => {
       if (response === 'granted') {
-        callback()
+        callback();
       } else {
         Alert.alert(
           Platform.OS === 'android'
@@ -29,29 +35,29 @@ export const checkStoragePermission = async (
             {text: Strings.cancel, style: 'cancel'},
             {
               text: Strings.settings,
-              onPress: () => openSettings()
-            }
-          ]
-        )
+              onPress: () => openSettings(),
+            },
+          ],
+        );
       }
     })
     .catch(() => {
-      errorCallback()
-    })
-}
+      errorCallback();
+    });
+};
 export const checkCameraPermission = async (
   callback = () => {},
-  errorCallback = () => {}
+  errorCallback = () => {},
 ) => {
   await request(
     Platform.select({
       ios: PERMISSIONS.IOS.CAMERA,
-      android: PERMISSIONS.ANDROID.CAMERA
-    })
+      android: PERMISSIONS.ANDROID.CAMERA,
+    }),
   )
     .then(response => {
       if (response === 'granted') {
-        callback()
+        callback();
       } else {
         Alert.alert(
           Strings.cameraPermissionTitle,
@@ -60,24 +66,36 @@ export const checkCameraPermission = async (
             {text: Strings.cancel, style: 'cancel'},
             {
               text: Strings.settings,
-              onPress: () => openSettings()
-            }
-          ]
-        )
+              onPress: () => openSettings(),
+            },
+          ],
+        );
       }
     })
     .catch(() => {
-      errorCallback()
-    })
-}
+      errorCallback();
+    });
+};
 
-export function printLogs (logs) {
+export function printLogs(logs) {
   if (__DEV__) {
-    console.log(logs)
-    console.tron.warn(logs)
+    console.log(logs);
+    console.tron.warn(logs);
   }
 }
 
-export function showMessage (message, type = MESSAGE_TYPES.DEFAULT) {
-  showFlashMessage({message, type})
+export function showMessage(message, type = MESSAGE_TYPES.DEFAULT) {
+  showFlashMessage({message, type});
+}
+
+export function errorMessage(message) {
+  if (!message?.trim()) {
+    return null;
+  }
+
+  return (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorMessage}>{message}</Text>
+    </View>
+  );
 }

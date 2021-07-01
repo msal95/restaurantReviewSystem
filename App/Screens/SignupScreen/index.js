@@ -4,14 +4,17 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import {connect} from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
+import {Formik} from 'formik';
 
 import styles from './styles';
 import InputFormField from '../../Components/InputFormField';
-import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import ImageCropPicker from '../../Components/ImageCropPicker';
 import {capitalize, GENDER, ROLE} from '../../Lib/constants';
 import SignUpActions from '../../Redux/AuthRedux';
+import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpValidationSchema';
+import FormButton from '../../Components/Button';
+import {errorMessage} from '../../Lib/utils';
 
 function SignupScreen(props) {
   const {
@@ -26,25 +29,8 @@ function SignupScreen(props) {
 
   const {isEditing = false, isSelf, otherUser = {}} = route?.params || {};
 
-  const {
-    firstName: firstNameDB = '',
-    lastName: lastNameDB = '',
-    email: emailDB = '',
-    phoneNo: phoneNoDB = '',
-    gender: genderDB = GENDER[0]?.value,
-    password: passwordDB = '',
-    role: roleDB = ROLE.REGULAR,
-    picture,
-    _id,
-  } = isEditing ? (isSelf ? user : otherUser) : {};
+  const {picture, _id} = isEditing ? (isSelf ? user : otherUser) : {};
 
-  const [firstName, setFirstName] = useState(firstNameDB);
-  const [lastName, setLastName] = useState(lastNameDB);
-  const [email, setEmail] = useState(emailDB);
-  const [phoneNo, setPhoneNo] = useState(phoneNoDB);
-  const [gender, setGender] = useState(genderDB);
-  const [password, setPassword] = useState(passwordDB);
-  const [role, selectedRole] = useState(roleDB);
   const [file, setImageSource] = useState({path: picture});
 
   useEffect(() => {
@@ -54,19 +40,13 @@ function SignupScreen(props) {
   }, []);
 
   const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
   const phoneRef = useRef();
 
   function onPressSignUp() {
     const data = {
-      firstName,
-      lastName,
-      gender,
-      email,
-      password,
-      phoneNo,
-      role,
       _id,
     };
 
@@ -89,91 +69,144 @@ function SignupScreen(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <ImageCropPicker
-          onSelectImage={param => setImageSource(param)}
-          imgSrc={file}
-        />
-        <InputFormField
-          label={Strings.firstName}
-          placeholder={Strings.enterFirstName}
-          selectedOption={firstName}
-          onSelect={value => setFirstName(value)}
-          onSubmitEditing={() => lastNameRef?.current?.focus?.()}
-          returnKeyType={'next'}
-        />
-        <InputFormField
-          label={Strings.lastName}
-          placeholder={Strings.enterLastName}
-          selectedOption={lastName}
-          inputRef={lastNameRef}
-          onSelect={value => setLastName(value)}
-          onSubmitEditing={() => phoneRef?.current?.focus?.()}
-          returnKeyType={'next'}
-        />
-        <InputFormField
-          label={Strings.phoneNum}
-          placeholder={Strings.enterPhoneNum}
-          selectedOption={phoneNo}
-          inputRef={phoneRef}
-          onSelect={value => setPhoneNo(value)}
-          keyboardType="phone-pad"
-          onSubmitEditing={() => emailRef?.current?.focus?.()}
-          returnKeyType={'next'}
-        />
-        <InputFormField
-          label={Strings.email}
-          placeholder={Strings.enterEmil}
-          selectedOption={email}
-          inputRef={emailRef}
-          onSelect={value => setEmail(value)}
-          keyboardType="email-address"
-          onSubmitEditing={() => passwordRef?.current?.focus?.()}
-          returnKeyType={'next'}
-        />
-        {!isEditing && (
-          <InputFormField
-            placeholder={Strings.enterPassword}
-            label={Strings.password}
-            inputRef={passwordRef}
-            selectedOption={password}
-            onSelect={value => setPassword(value)}
-            secureTextEntry
-            returnKeyType={'done'}
-          />
+      <Formik
+        validationSchema={signUpValidationSchema}
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNo: '',
+          password: '',
+          confirmPassword: '',
+          gender: '',
+          role: ROLE.REGULAR,
+        }}
+        onSubmit={props?.onSignUp}>
+        {({handleSubmit, values, errors, handleChange, handleBlur}) => (
+          <>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+              <ImageCropPicker
+                onSelectImage={param => setImageSource(param)}
+                imgSrc={file}
+              />
+              <InputFormField
+                label={Strings.firstName}
+                placeholder={Strings.enterFirstName}
+                selectedOption={values?.firstName ?? ''}
+                onSelect={handleChange('firstName')}
+                onBlur={handleBlur('firstName')}
+                onSubmitEditing={() => lastNameRef?.current?.focus?.()}
+                returnKeyType={'next'}
+              />
+              {errorMessage(errors?.firstName)}
+
+              <InputFormField
+                label={Strings.lastName}
+                placeholder={Strings.enterLastName}
+                selectedOption={values?.lastName ?? ''}
+                onSelect={handleChange('lastName')}
+                onBlur={handleBlur('lastName')}
+                inputRef={lastNameRef}
+                onSubmitEditing={() => phoneRef?.current?.focus?.()}
+                returnKeyType={'next'}
+              />
+              {errorMessage(errors?.lastName)}
+
+              <InputFormField
+                label={Strings.phoneNum}
+                placeholder={Strings.enterPhoneNum}
+                selectedOption={values?.phoneNo ?? ''}
+                onSelect={handleChange('phoneNo')}
+                onBlur={handleBlur('phoneNo')}
+                inputRef={phoneRef}
+                keyboardType="phone-pad"
+                onSubmitEditing={() => emailRef?.current?.focus?.()}
+                returnKeyType={'next'}
+              />
+              {errorMessage(errors?.phoneNo)}
+
+              <InputFormField
+                label={Strings.email}
+                placeholder={Strings.enterEmil}
+                selectedOption={values?.email ?? ''}
+                onSelect={handleChange('email')}
+                onBlur={handleBlur('email')}
+                inputRef={emailRef}
+                keyboardType="email-address"
+                onSubmitEditing={() => passwordRef?.current?.focus?.()}
+                returnKeyType={'next'}
+              />
+              {errorMessage(errors?.email)}
+
+              {!isEditing && (
+                <>
+                  <InputFormField
+                    placeholder={Strings.enterPassword}
+                    label={Strings.password}
+                    selectedOption={values?.password ?? ''}
+                    onSelect={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    inputRef={passwordRef}
+                    secureTextEntry
+                    returnKeyType={'done'}
+                  />
+                  {errorMessage(errors?.password)}
+                  <InputFormField
+                    placeholder={Strings.confirmPassword}
+                    label={Strings.confirmPassword}
+                    selectedOption={values?.confirmPassword ?? ''}
+                    onSelect={handleChange('confirmPassword')}
+                    onBlur={handleBlur('confirmPassword')}
+                    inputRef={confirmPasswordRef}
+                    secureTextEntry
+                    returnKeyType={'done'}
+                  />
+                  {errorMessage(errors?.password)}
+                </>
+              )}
+
+              <View style={styles.roleSelection}>
+                <Text style={styles.roleText}>{Strings.selectRole}</Text>
+                <RNPickerSelect
+                  placeholder={{
+                    label: capitalize(ROLE.REGULAR),
+                    value: ROLE.REGULAR,
+                  }}
+                  onValueChange={handleChange('role')}
+                  items={[
+                    {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
+                    {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
+                  ]}
+                  value={values.role}>
+                  <Text style={styles.selectedOpt}>{values.role}</Text>
+                </RNPickerSelect>
+                {errorMessage(errors?.role)}
+              </View>
+
+              <View style={styles.roleSelection}>
+                <Text style={styles.roleText}>{Strings.selectGender}</Text>
+                <View style={styles.errorMessage}>
+                  <RadioForm
+                    radio_props={GENDER}
+                    initial={-1}
+                    formHorizontal={true}
+                    labelHorizontal={true}
+                    onPress={handleChange('gender')}
+                    labelStyle={styles.radioBtn}
+                  />
+                </View>
+                {errorMessage(errors?.gender)}
+              </View>
+            </KeyboardAwareScrollView>
+
+            <FormButton
+              title={isEditing ? Strings.save : Strings.signUp}
+              onPress={handleSubmit}
+              loading={loading}
+            />
+          </>
         )}
-        <View style={styles.roleSelection}>
-          <Text style={styles.roleText}>{Strings.selectRole}</Text>
-          <RNPickerSelect
-            placeholder={{label: capitalize(ROLE.REGULAR), value: ROLE.REGULAR}}
-            onValueChange={value => selectedRole(value)}
-            items={[
-              {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
-              {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
-            ]}
-            value={role}>
-            <Text style={styles.selectedOpt}>{capitalize(role)}</Text>
-          </RNPickerSelect>
-        </View>
-
-        <View style={styles.roleSelection}>
-          <Text style={styles.roleText}>{Strings.selectGender}</Text>
-          <RadioForm
-            radio_props={GENDER}
-            initial={0}
-            formHorizontal={true}
-            labelHorizontal={true}
-            onPress={value => setGender(value)}
-            labelStyle={styles.radioBtn}
-          />
-        </View>
-      </KeyboardAwareScrollView>
-      <FormButton
-        title={isEditing ? Strings.save : Strings.signUp}
-        onPress={onPressSignUp}
-        loading={loading}
-      />
-
+      </Formik>
       {!isEditing && (
         <Text style={styles.msgText}>
           {Strings.alreadyHaveAccount}

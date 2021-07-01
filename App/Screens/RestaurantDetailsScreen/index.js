@@ -200,7 +200,7 @@ function RestaurantDetailsScreen(props) {
           </Text>
           <Text style={styles.reviewsTitle}>
             {Strings.avgRating}
-            <Rating imageSize={15} readonly startingValue={averageRating} />
+            <Rating imageSize={15}  fractions  startingValue={averageRating} style={{ paddingRight: 20 }} />
           </Text>
         </View>
         {role === ROLE.OWNER ? (

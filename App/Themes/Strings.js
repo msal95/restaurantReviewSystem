@@ -84,5 +84,6 @@ export const Strings = {
   restaurantDetails: 'Restaurant Details',
   profileUpdated: 'Profile Updated Successfully',
   userDeleted: 'User Deleted Successfully',
-  restaurantsDeleted: 'Restaurants Deleted Successfully'
-}
+  restaurantsDeleted: 'Restaurants Deleted Successfully',
+  confirmPassword: 'Confirm Password',
+};
