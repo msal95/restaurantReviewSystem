@@ -150,7 +150,7 @@ function UsersScreen(props) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getAllUsers: () => dispatch(AuthActions.allUsers()),
+  getAllUsers: (data) => dispatch(AuthActions.allUsers(data)),
   onDeleteUser: data => dispatch(AuthActions.deleteUser(data)),
 });
 
