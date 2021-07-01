@@ -11,6 +11,8 @@ import {ROLE} from '../../Lib/constants';
 import ConfirmationModal from '../ConfirmationModal';
 import LoadingIndicator from '../LoadingIndicator';
 import styles from './styles';
+import ListFooterComponent from '../ListFooterComponent'
+import ListEmptyComponent from '../ListEmptyComponent'
 
 function CommentLists(props) {
   const navigation = useNavigation();
@@ -89,6 +91,15 @@ function CommentLists(props) {
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}
         onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+        }
+        ListEmptyComponent={
+          <ListEmptyComponent
+            loading={props?.loading}
+            message={Strings.noRecordFound}
+          />
+        }
       />
 
       <ConfirmationModal

@@ -11,6 +11,8 @@ import LoadingIndicator from '../../Components/LoadingIndicator';
 import styles from './styles';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import {PAGINATION_DEFAULTS} from '../../Lib/constants';
+import ListFooterComponent from '../../Components/ListFooterComponent'
+import ListEmptyComponent from '../../Components/ListEmptyComponent'
 
 function UsersScreen(props) {
   const {allUsers, onDeleteUser, deletingUser, getAllUsers, navigation} = props;
@@ -125,6 +127,15 @@ function UsersScreen(props) {
         refreshing={refreshing}
         onRefresh={onRefresh}
         onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+        }
+        ListEmptyComponent={
+          <ListEmptyComponent
+            loading={props?.loading}
+            message={Strings.noRecordFound}
+          />
+        }
       />
       <ConfirmationModal
         closeModal={closeModal}

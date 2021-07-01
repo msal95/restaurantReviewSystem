@@ -11,6 +11,8 @@ import {Colors, Images, Metrics} from '../../Themes';
 import LoadingIndicator from '../../Components/LoadingIndicator';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
+import ListFooterComponent from '../../Components/ListFooterComponent';
+import ListEmptyComponent from '../../Components/ListEmptyComponent';
 
 function HomeScreen(props) {
   const {
@@ -141,6 +143,15 @@ function HomeScreen(props) {
         renderItem={renderListItem}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+        }
+        ListEmptyComponent={
+          <ListEmptyComponent
+            loading={props?.loading}
+            message={Strings.noRecordFound}
+          />
+        }
       />
       <ConfirmationModal
         closeModal={closeModal}
