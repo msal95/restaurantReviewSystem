@@ -36,3 +36,11 @@ export const MESSAGE_TYPES = {
   ERROR: 'danger',
   DEFAULT: 'gray',
 };
+
+export const capitalize = text => {
+  if (!text?.trim?.()) {
+    return text;
+  }
+
+  return text?.[0].toUpperCase() + text?.slice(1)?.toLowerCase?.();
+};

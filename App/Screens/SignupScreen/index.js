@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
@@ -10,12 +10,10 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import ImageCropPicker from '../../Components/ImageCropPicker';
-import { GENDER, ROLE } from '../../Lib/constants'
+import {capitalize, GENDER, ROLE} from '../../Lib/constants';
 import SignUpActions from '../../Redux/AuthRedux';
-import { printLogs } from '../../Lib/utils'
 
 function SignupScreen(props) {
-
   const {
     onSignUp,
     onEditProfile,
@@ -23,22 +21,22 @@ function SignupScreen(props) {
     onEditOtherUser,
     route,
     loading,
-    user={}
-  } = props || {}
+    user = {},
+  } = props || {};
 
-  const {isEditing =false, isSelf, otherUser={}} =  route?.params || {}
+  const {isEditing = false, isSelf, otherUser = {}} = route?.params || {};
 
   const {
-    firstName: firstNameDB='',
-    lastName: lastNameDB='',
-    email: emailDB='',
-    phoneNo: phoneNoDB='',
-    gender: genderDB='MALE',
-    password: passwordDB='',
-    role: roleDB='Regular User',
+    firstName: firstNameDB = '',
+    lastName: lastNameDB = '',
+    email: emailDB = '',
+    phoneNo: phoneNoDB = '',
+    gender: genderDB = GENDER[0]?.value,
+    password: passwordDB = '',
+    role: roleDB = ROLE.REGULAR,
     picture,
-    _id
-  } = isEditing ? isSelf ? user : otherUser : {}
+    _id,
+  } = isEditing ? (isSelf ? user : otherUser) : {};
 
   const [firstName, setFirstName] = useState(firstNameDB);
   const [lastName, setLastName] = useState(lastNameDB);
@@ -47,13 +45,13 @@ function SignupScreen(props) {
   const [gender, setGender] = useState(genderDB);
   const [password, setPassword] = useState(passwordDB);
   const [role, selectedRole] = useState(roleDB);
-  const [file, setImageSource] = useState({ path: picture });
+  const [file, setImageSource] = useState({path: picture});
 
-  useEffect(()=>{
+  useEffect(() => {
     navigation.setOptions({
-      title : isEditing ? Strings.editProfile : Strings.signUp
-    })
-  }, [])
+      title: isEditing ? Strings.editProfile : Strings.signUp,
+    });
+  }, []);
 
   const passwordRef = useRef();
   const lastNameRef = useRef();
@@ -69,21 +67,24 @@ function SignupScreen(props) {
       password,
       phoneNo,
       role,
-      _id
+      _id,
     };
 
-    if(file?.mime){
-      data.file = {uri: file?.path, type: file?.mime, name: file?.filename || 'profile image'}
+    if (file?.mime) {
+      data.file = {
+        uri: file?.path,
+        type: file?.mime,
+        name: file?.filename || 'profile image',
+      };
     }
 
-    if(isEditing && !isSelf) {
-      onEditOtherUser({ _id, ...data })
-    }else if(isEditing) {
-      onEditProfile(data)
-    }  else{
-      onSignUp(data)
+    if (isEditing && !isSelf) {
+      onEditOtherUser({_id, ...data});
+    } else if (isEditing) {
+      onEditProfile(data);
+    } else {
+      onSignUp(data);
     }
-
   }
 
   return (
@@ -131,27 +132,27 @@ function SignupScreen(props) {
           returnKeyType={'next'}
         />
         {!isEditing && (
-        <InputFormField
-          placeholder={Strings.enterPassword}
-          label={Strings.password}
-          inputRef={passwordRef}
-          selectedOption={password}
-          onSelect={value => setPassword(value)}
-          secureTextEntry
-          returnKeyType={'done'}
-        />
+          <InputFormField
+            placeholder={Strings.enterPassword}
+            label={Strings.password}
+            inputRef={passwordRef}
+            selectedOption={password}
+            onSelect={value => setPassword(value)}
+            secureTextEntry
+            returnKeyType={'done'}
+          />
         )}
         <View style={styles.roleSelection}>
           <Text style={styles.roleText}>{Strings.selectRole}</Text>
           <RNPickerSelect
-            placeholder={{label: 'Regular User', value: ROLE.REGULAR}}
+            placeholder={{label: capitalize(ROLE.REGULAR), value: ROLE.REGULAR}}
             onValueChange={value => selectedRole(value)}
             items={[
-              {label: 'Owner', value: ROLE.OWNER},
-              {label: 'Admin', value: ROLE.ADMIN},
+              {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
+              {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
             ]}
             value={role}>
-            <Text style={styles.selectedOpt}>{role}</Text>
+            <Text style={styles.selectedOpt}>{capitalize(role)}</Text>
           </RNPickerSelect>
         </View>
 
@@ -167,23 +168,30 @@ function SignupScreen(props) {
           />
         </View>
       </KeyboardAwareScrollView>
-      <FormButton title={isEditing ? Strings.save : Strings.signUp} onPress={onPressSignUp} loading={loading}/>
+      <FormButton
+        title={isEditing ? Strings.save : Strings.signUp}
+        onPress={onPressSignUp}
+        loading={loading}
+      />
 
       {!isEditing && (
-      <Text style={styles.msgText}>
-        {Strings.alreadyHaveAccount}
-        <Text
-          style={styles.signUpText}
-          onPress={() => props?.navigation?.navigate('Login')}>
-          {Strings.login}
+        <Text style={styles.msgText}>
+          {Strings.alreadyHaveAccount}
+          <Text
+            style={styles.signUpText}
+            onPress={() => props?.navigation?.navigate('Login')}>
+            {Strings.login}
+          </Text>
         </Text>
-      </Text>
       )}
     </SafeAreaView>
   );
 }
 
-const mapStateToProps = ({auth: {loading = false, user={}} = {}}) => ({loading, user});
+const mapStateToProps = ({auth: {loading = false, user = {}} = {}}) => ({
+  loading,
+  user,
+});
 const mapDispatchToProps = dispatch => ({
   onSignUp: data => dispatch(SignUpActions.signup(data)),
   onEditProfile: data => dispatch(SignUpActions.editProfile(data)),
