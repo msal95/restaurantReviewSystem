@@ -171,7 +171,7 @@ function SignupScreen(props) {
                   />
                   {errorMessage(
                     errors?.confirmPassword,
-                    errors?.confirmPassword,
+                    touched?.confirmPassword,
                   )}
                 </>
               )}
@@ -191,7 +191,7 @@ function SignupScreen(props) {
                   value={values.role}>
                   <Text style={styles.selectedOpt}>{values.role}</Text>
                 </RNPickerSelect>
-                {errorMessage(errors?.role, errors?.role)}
+                {errorMessage(errors?.role, touched?.role)}
               </View>
 
               <View style={styles.roleSelection}>
