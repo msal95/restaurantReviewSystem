@@ -3,13 +3,13 @@ import {call, put} from 'redux-saga/effects';
 import Api from '../Services/ApiCaller';
 import RestaurantActions from '../Redux/RestaurantRedux';
 import {Strings} from '../Themes/Strings';
-import { printLogs, showMessage } from '../Lib/utils'
+import {showMessage} from '../Lib/utils';
 import {MESSAGE_TYPES} from '../Lib/constants';
 import {NavigationService} from '../Utils/NavigationService';
 
-export function* onFetchRestaurantsList(api) {
+export function* onFetchRestaurantsList(api, {data = {}}) {
   try {
-    const {response = []} = yield call(Api.callServer, api.restaurants, {});
+    const {response = []} = yield call(Api.callServer, api.restaurants, data);
     yield put(RestaurantActions.restaurantsListSuccess(response));
   } catch ({message}) {
     yield put(RestaurantActions.restaurantsListFailure(String(message)));
@@ -65,7 +65,9 @@ export function* onCreateReview(api, {data = {}, restaurantId}) {
 
 export function* onDeleteRestaurant(api, {data = {}}) {
   try {
-    const {response} = yield call(Api.callServer, api.deleteRestaurant, { _id: data?._id });
+    const {response} = yield call(Api.callServer, api.deleteRestaurant, {
+      _id: data?._id,
+    });
     yield put(RestaurantActions.deleteRestaurantSuccess(data?._id));
     showMessage(Strings.restaurantsDeleted, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {

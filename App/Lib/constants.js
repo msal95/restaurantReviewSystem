@@ -44,3 +44,8 @@ export const capitalize = text => {
 
   return text?.[0].toUpperCase() + text?.slice(1)?.toLowerCase?.();
 };
+
+export const PAGINATION_DEFAULTS = {
+  PAGE: 0,
+  PAGE_SIZE: 10,
+};
