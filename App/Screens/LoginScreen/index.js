@@ -27,7 +27,14 @@ function LoginScreen(props) {
           validationSchema={loginValidationSchema}
           initialValues={{email: '', password: ''}}
           onSubmit={props?.onLogin}>
-          {({handleSubmit, values, errors, handleChange, handleBlur}) => (
+          {({
+            handleSubmit,
+            values,
+            errors,
+            handleChange,
+            touched,
+            handleBlur,
+          }) => (
             <View>
               <InputFormField
                 label={Strings.email}
@@ -39,7 +46,7 @@ function LoginScreen(props) {
                 onSubmitEditing={() => passwordRef?.current?.focus?.()}
                 returnKeyType={'next'}
               />
-              {errorMessage(errors.email)}
+              {errorMessage(errors.email, touched)}
               <InputFormField
                 placeholder={Strings.enterPassword}
                 label={Strings.password}
@@ -50,7 +57,7 @@ function LoginScreen(props) {
                 secureTextEntry
                 returnKeyType={'done'}
               />
-              {errorMessage(errors.password)}
+              {errorMessage(errors.password, touched)}
               <FormButton
                 title={Strings.login}
                 onPress={handleSubmit}

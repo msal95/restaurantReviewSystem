@@ -88,8 +88,8 @@ export function showMessage(message, type = MESSAGE_TYPES.DEFAULT) {
   showFlashMessage({message, type});
 }
 
-export function errorMessage(message) {
-  if (!message?.trim()) {
+export function errorMessage(message, touched = false) {
+  if (!message?.trim() || !touched) {
     return null;
   }
 

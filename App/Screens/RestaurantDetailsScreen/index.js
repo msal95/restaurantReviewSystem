@@ -157,7 +157,13 @@ function RestaurantDetailsScreen(props) {
   function renderComments() {
     if (role === ROLE.ADMIN || role === ROLE.OWNER) {
       return (
-        <CommentLists renderListHeader={renderListHeader} reviews={reviews} />
+        <CommentLists
+          renderListHeader={renderListHeader}
+          reviews={reviews}
+          onEndReached={onEndReached}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       );
     }
 
