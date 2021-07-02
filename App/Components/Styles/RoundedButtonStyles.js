@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+
 import {Fonts, Colors, Metrics} from '../../Themes/';
 
 export default StyleSheet.create({
@@ -6,7 +7,7 @@ export default StyleSheet.create({
     height: 45,
     borderRadius: 5,
     marginHorizontal: Metrics.section,
-    marginVertical: Metrics.baseMargin,
+    marginVertical: Metrics.base,
     backgroundColor: Colors.fire,
     justifyContent: 'center',
   },
@@ -15,6 +16,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: Fonts.size.medium,
-    marginVertical: Metrics.baseMargin,
+    marginVertical: Metrics.base,
   },
 });

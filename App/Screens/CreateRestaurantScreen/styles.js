@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+
 import {Colors, Metrics} from '../../Themes';
 import Fonts from '../../Themes/Fonts';
 
@@ -25,7 +26,7 @@ export default StyleSheet.create({
   },
   establishedDate: {
     marginHorizontal: Metrics.base,
-    marginBottom: Metrics.doubleBaseMargin,
+    marginBottom: Metrics.doubleBase,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

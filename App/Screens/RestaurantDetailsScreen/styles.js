@@ -20,14 +20,14 @@ export default StyleSheet.create({
     marginVertical: Metrics.doubleSection,
   },
   descriptionTitle: {
-    marginTop: Metrics.doubleBaseMargin,
+    marginTop: Metrics.doubleBase,
     fontWeight: 'bold',
     fontSize: Fonts.size.medium1,
     borderBottomWidth: 0.5,
     borderBottomColor: Colors.cloud,
   },
   reviewsTitle: {
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
     fontWeight: 'bold',
     fontSize: Fonts.size.medium1,
   },
@@ -42,7 +42,7 @@ export default StyleSheet.create({
   },
   description: {
     lineHeight: Metrics.twentyTwo,
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
     fontSize: Fonts.size.medium,
     justifyContent: 'center',
   },
@@ -50,7 +50,7 @@ export default StyleSheet.create({
     height: Metrics.hundred,
   },
   rating: {
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
   },
   cardContainer: {
     margin: 0,
@@ -58,7 +58,7 @@ export default StyleSheet.create({
   },
   visitDateContainer: {
     marginHorizontal: Metrics.base,
-    marginBottom: Metrics.doubleBaseMargin,
+    marginBottom: Metrics.doubleBase,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -76,6 +76,6 @@ export default StyleSheet.create({
   },
   flatListHeader: {
     backgroundColor: Colors.white,
-    padding: 10,
+    padding: Metrics.base,
   },
 });

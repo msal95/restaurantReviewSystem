@@ -1,19 +1,20 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {ImageBackground, SafeAreaView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
-
-import styles from './styles';
-import AuthActions from '../../Redux/AuthRedux';
 import {Avatar, Text as TextElement} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Foundation from 'react-native-vector-icons/Foundation';
+
+import styles from './styles';
+import AuthActions from '../../Redux/AuthRedux';
 import {Colors, Images} from '../../Themes';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
-import {ROLE} from '../../Lib/constants';
+import {capitalize, ROLE} from '../../Lib/constants';
 
 function ProfileScreen(props) {
-  const {onGetUserProfile, user, route, navigation} = props || {};
+  const {user, route, navigation} = props || {};
   const {user: otherUser, isSelf = true} = route?.params || {};
 
   const {
@@ -45,42 +46,49 @@ function ProfileScreen(props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ImageBackground source={Images.cover} style={styles.image} />
+
+      <Avatar
+        rounded
+        size="xlarge"
+        source={picture ? {uri: picture} : Images.userPlaceholder}
+        containerStyle={styles.profileImage}
+      />
+
       <View style={styles.profileInfoContainer}>
         <TextElement h3 style={styles.userTitle}>
-          {fullName}
+          {capitalize(fullName)}
         </TextElement>
-        <Text style={styles.userTitle}>{role}</Text>
-        <View style={styles.userDetails}>
-          <Text style={styles.userInfo}>
-            <Entypo name="email" size={20} color={Colors.blue} /> {email}
-          </Text>
-          <Text style={styles.userInfo}>
-            <Entypo name="phone" size={20} color={Colors.blue} /> {phoneNo}
-          </Text>
-          <Text style={styles.userInfo}>
-            <FontAwesome name="user" size={20} color={Colors.blue} /> {gender}
-          </Text>
+        <Text style={styles.userTitle}>{capitalize(role)}</Text>
+
+        <View style={styles.infoContainer}>
+          <Entypo name="email" size={20} color={Colors.blue} />
+          <Text style={styles.userInfo}>{email}</Text>
         </View>
+
+        <View style={styles.infoContainer}>
+          <Foundation
+            name="telephone-accessible"
+            size={20}
+            color={Colors.blue}
+          />
+          <Text style={styles.userInfo}> {phoneNo}</Text>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <FontAwesome name="user" size={20} color={Colors.blue} />
+          <Text style={styles.userInfo}> {gender}</Text>
+        </View>
+
         {isSelf && (
-          <FormButton
-            title={Strings.logout}
-            onPress={() => props?.onLogout()}
+          <View
+            style={{
+              width: 150,
+              alignSelf: 'center',
+              top: 35,
+            }}
           />
         )}
-      </View>
-      <View style={styles.profileContainer}>
-        <Avatar
-          rounded
-          size="xlarge"
-          source={
-            picture
-              ? {
-                  uri: picture,
-                }
-              : Images.userPlaceholder
-          }
-          containerStyle={styles.profileImage}
-        />
       </View>
     </SafeAreaView>
   );

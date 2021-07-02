@@ -21,6 +21,12 @@ export const GENDER = [
   {label: 'Female', value: 'FEMALE'},
 ];
 
+export const FILTER = [
+  {label: 'High Rating', value: 'HIGH'},
+  {label: 'Low Rating', value: 'LOW'},
+  {label: 'Clear Rating', value: 'CLEAR'},
+];
+
 export const RATE = {
   ONE_STAR: 1,
   TWO_STAR: 2,

@@ -1,61 +1,111 @@
-import { Animated, Text, TouchableOpacity, View } from 'react-native'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
-import React, { useRef } from 'react'
+import {Animated, Text, TouchableOpacity, View} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import React, {useRef} from 'react';
+import {Icon} from 'react-native-elements';
+import {shallowEqual, useSelector} from 'react-redux';
 
-import { Colors, Metrics } from '../../Themes'
-import styles from './styles'
-import { Icon } from 'react-native-elements'
+import {Colors, Metrics} from '../../Themes';
+import styles from './styles';
+import {ROLE} from '../../Lib/constants';
 
-function SwipeableButton (props) {
+function SwipeableButton(props) {
+  const swipeableRow = useRef(null);
 
-  const swipeableRow = useRef(null)
+  const {role = ''} = useSelector(
+    ({auth: {user: {role = ''}} = {}}) => ({role}),
+    shallowEqual,
+  );
 
-  const { children, onSwipeableOpen = () => {}, onPressDelete, onPressEdit } = props || {}
+  const {
+    children,
+    onSwipeableOpen = () => {},
+    onPressDelete,
+    onPressEdit,
+    onPressReply,
+  } = props || {};
 
-  const renderRightAction = (text, color, xSlide, progress, image, onPressHandler, buttonStyle) => {
+  const renderRightAction = (
+    text,
+    color,
+    xSlide,
+    progress,
+    image,
+    onPressHandler,
+    buttonStyle,
+  ) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
       outputRange: [xSlide, 0],
-      extrapolate: 'clamp'
-    })
+      extrapolate: 'clamp',
+    });
 
     const pressHandler = () => {
-      close()
-      onPressHandler()
-    }
+      close();
+      onPressHandler();
+    };
 
     return (
-      <Animated.View style={[styles.rectButtonContainer, { transform: [{ translateX: trans }] }]}>
+      <Animated.View
+        style={[
+          styles.rectButtonContainer,
+          {transform: [{translateX: trans}]},
+        ]}>
         <TouchableOpacity
           activeOpacity={0.9}
-          style={[styles.rightAction, { backgroundColor: color }, buttonStyle]}
+          style={[styles.rightAction, {backgroundColor: color}, buttonStyle]}
           onPress={pressHandler}>
           <Icon
             name={image}
             type="font-awesome-5"
             color={Colors.white}
-            size={Metrics.doubleBaseMargin}
+            size={Metrics.doubleBase}
           />
           <Text style={[styles.textStyle]}>{text}</Text>
         </TouchableOpacity>
       </Animated.View>
-    )
-  }
+    );
+  };
 
-  const renderRightActions = (progress) => (
-    <View style={{ width: 200, flexDirection: 'row' }}>
-      {renderRightAction('Edit', Colors.blue, 100, progress, 'edit', onPressEdit)}
-      {renderRightAction('Remove', Colors.fire, 100, progress, 'trash-alt', onPressDelete)}
+  const renderRightActions = progress => (
+    <View style={{width: 200, flexDirection: 'row'}}>
+      {role === ROLE.ADMIN &&
+        renderRightAction(
+          'Edit',
+          Colors.blue,
+          200,
+          progress,
+          'edit',
+          onPressEdit,
+        )}
+      {(role === ROLE.ADMIN || role === ROLE.OWNER) &&
+        renderRightAction(
+          'Remove',
+          Colors.fire,
+          100,
+          progress,
+          'trash-alt',
+          onPressDelete,
+        )}
+
+      {role === ROLE.OWNER &&
+        renderRightAction(
+          'Reply',
+          Colors.green,
+          100,
+          progress,
+          'edit',
+          onPressReply,
+        )}
     </View>
-  )
+  );
 
   const onSwipeableWillOpen = () => {
-    onSwipeableOpen(swipeableRow.current)
-  }
+    onSwipeableOpen(swipeableRow.current);
+  };
 
   const close = () => {
-    swipeableRow.current.close?.()
-  }
+    swipeableRow.current.close?.();
+  };
 
   return (
     <Swipeable
@@ -63,12 +113,12 @@ function SwipeableButton (props) {
       friction={1}
       leftThreshold={30}
       rightThreshold={40}
+      containerStyle={styles.swipeAbleContainer}
       renderRightActions={renderRightActions}
-      onSwipeableWillOpen={onSwipeableWillOpen}
-    >
+      onSwipeableWillOpen={onSwipeableWillOpen}>
       {children}
     </Swipeable>
-  )
+  );
 }
 
-export default React.memo(SwipeableButton)
+export default React.memo(SwipeableButton);

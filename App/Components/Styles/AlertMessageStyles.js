@@ -11,8 +11,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   message: {
-    marginTop: Metrics.baseMargin,
-    marginHorizontal: Metrics.baseMargin,
+    marginTop: Metrics.base,
+    marginHorizontal: Metrics.base,
     textAlign: 'center',
     fontFamily: Fonts.type.base,
     fontSize: Fonts.size.regular,

@@ -1,22 +1,22 @@
 import {StyleSheet} from 'react-native';
+
 import {Metrics as MetricsMod, Colors, Fonts} from '../../Themes';
 
 export default StyleSheet.create({
   modal: {
-    padding: MetricsMod.doubleBaseMargin,
+    padding: MetricsMod.doubleBase,
     margin: 0,
   },
   container: {
     borderRadius: MetricsMod.fifteen,
     paddingVertical: MetricsMod.thirty,
-    paddingHorizontal: MetricsMod.doubleBaseMargin,
+    paddingHorizontal: MetricsMod.doubleBase,
   },
-  scrollView: {},
   contentContainerStyle: {
     justifyContent: 'center',
     borderRadius: MetricsMod.fifteen,
     paddingVertical: MetricsMod.thirty,
-    paddingHorizontal: MetricsMod.doubleBaseMargin,
+    paddingHorizontal: MetricsMod.doubleBase,
     backgroundColor: Colors.white,
   },
   buttonStyle: {
@@ -47,21 +47,21 @@ export default StyleSheet.create({
     fontSize: Fonts.size.medium,
     color: Colors.black,
     lineHeight: MetricsMod.twentyTwo,
-    marginTop: MetricsMod.baseMargin,
+    marginTop: MetricsMod.base,
   },
   body: {
     flexGrow: 1,
     flexDirection: 'row',
     backgroundColor: Colors.cloud,
-    borderRadius: MetricsMod.baseMargin,
-    padding: MetricsMod.baseMargin,
-    marginVertical: MetricsMod.baseMargin,
+    borderRadius: MetricsMod.base,
+    padding: MetricsMod.base,
+    marginVertical: MetricsMod.base,
   },
   bodyIcon: {
     width: MetricsMod.thirty,
     height: MetricsMod.thirty,
-    marginRight: MetricsMod.baseMargin,
-    marginTop: MetricsMod.baseMargin,
+    marginRight: MetricsMod.base,
+    marginTop: MetricsMod.base,
     resizeMode: 'contain',
   },
   bodyHeading: {
@@ -69,8 +69,8 @@ export default StyleSheet.create({
     textAlign: 'left',
     fontSize: Fonts.size.medium,
     color: Colors.background,
-    lineHeight: MetricsMod.doubleBaseMargin,
-    marginTop: MetricsMod.baseMargin,
+    lineHeight: MetricsMod.doubleBase,
+    marginTop: MetricsMod.base,
     flexShrink: 1,
     letterSpacing: 0.33,
   },
@@ -78,7 +78,7 @@ export default StyleSheet.create({
     textAlign: 'left',
     fontSize: Fonts.size.medium,
     color: Colors.background,
-    marginTop: MetricsMod.baseMargin,
+    marginTop: MetricsMod.base,
     fontWeight: '300',
     flexShrink: 1,
   },
@@ -87,7 +87,7 @@ export default StyleSheet.create({
     fontSize: Fonts.size.medium,
     color: Colors.black,
     lineHeight: MetricsMod.twentyTwo,
-    marginTop: MetricsMod.baseMargin,
+    marginTop: MetricsMod.base,
     fontWeight: '300',
   },
   buttonContainer: {

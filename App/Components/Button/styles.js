@@ -1,8 +1,19 @@
 import {StyleSheet} from 'react-native';
-import {Metrics} from '../../Themes';
+
+import {Colors, Fonts, Metrics} from '../../Themes';
 
 export default StyleSheet.create({
   buttonStyle: {
-    marginHorizontal: Metrics.base,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.blue,
+    borderRadius: Metrics.base,
+    paddingVertical: Metrics.base,
+  },
+  buttonTitle: {
+    color: Colors.white,
+    fontSize: Fonts.size.medium1,
+    marginRight: Metrics.base,
   },
 });

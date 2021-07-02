@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+
 import {Colors, Metrics} from '../../Themes';
 import Fonts from '../../Themes/Fonts';
 
@@ -25,7 +26,7 @@ export default StyleSheet.create({
   },
   roleSelection: {
     marginHorizontal: Metrics.base,
-    marginBottom: Metrics.doubleBaseMargin,
+    marginBottom: Metrics.doubleBase,
   },
   roleText: {
     fontSize: Fonts.size.input,
@@ -40,9 +41,9 @@ export default StyleSheet.create({
   },
   radioBtn: {
     fontSize: Fonts.size.regular,
-    paddingHorizontal: Metrics.doubleBaseMargin,
+    paddingHorizontal: Metrics.doubleBase,
   },
   errorMessage: {
-    marginBottom: 20,
+    marginBottom: Metrics.doubleBase,
   },
 });

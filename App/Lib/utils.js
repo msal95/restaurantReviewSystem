@@ -2,6 +2,7 @@ import {Strings} from '../Themes/Strings';
 import {Alert, Platform, Text, View} from 'react-native';
 import {showMessage as showFlashMessage} from 'react-native-flash-message';
 import {openSettings, PERMISSIONS, request} from 'react-native-permissions';
+
 import {MESSAGE_TYPES} from './constants';
 import React from 'react';
 
@@ -98,4 +99,12 @@ export function errorMessage(message, touched = false) {
       <Text style={styles.errorMessage}>{message}</Text>
     </View>
   );
+}
+
+export function getFormattedDescription(description, length = 30) {
+  if (description?.length > length) {
+    return <Text>{description?.slice(0, length)}...</Text>;
+  } else {
+    return description;
+  }
 }

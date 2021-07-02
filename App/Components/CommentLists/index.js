@@ -1,23 +1,23 @@
-import React, {useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {FlatList, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Icon, ListItem} from 'react-native-elements';
+import {ListItem} from 'react-native-elements';
+import {shallowEqual, useSelector} from 'react-redux';
 
 import {Strings} from '../../Themes/Strings';
-import {shallowEqual, useSelector} from 'react-redux';
-import {Colors} from '../../Themes';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {ROLE} from '../../Lib/constants';
 import ConfirmationModal from '../ConfirmationModal';
 import LoadingIndicator from '../LoadingIndicator';
 import styles from './styles';
-import ListFooterComponent from '../ListFooterComponent'
-import ListEmptyComponent from '../ListEmptyComponent'
+import ListFooterComponent from '../ListFooterComponent';
+import ListEmptyComponent from '../ListEmptyComponent';
+import SwipeableButton from '../../Components/SwipeableButton';
 
 function CommentLists(props) {
   const navigation = useNavigation();
   const {reviews, renderListHeader, onDeleteReview, details, deletingReview} =
     props;
+
+  const openedSwipeableRef = useRef();
 
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [reviewId, setReviewId] = useState(false);
@@ -27,7 +27,7 @@ function CommentLists(props) {
     shallowEqual,
   );
 
-  function onClickItem(review) {
+  function onPressReview(review) {
     navigation?.navigate('Reply', {review, isAdmin: true});
   }
 
@@ -46,37 +46,35 @@ function CommentLists(props) {
     onDeleteReview({reviewId, restaurantId: details?._id});
   }
 
+  const onSwipeableOpen = ref => {
+    if (openedSwipeableRef.current !== ref) {
+      openedSwipeableRef.current?.close();
+    }
+    openedSwipeableRef.current = ref;
+  };
+
   function renderListItem({item}) {
     const {comment, user = {}} = item || {};
     const {firstName = '', lastName = ''} = user ?? {};
     return (
-      <ListItem key={item._id} bottomDivider>
-        <ListItem.Content>
-          <ListItem.Title>
-            {firstName} {lastName}
-          </ListItem.Title>
-          <ListItem.Subtitle>{comment.slice(0, 30)}...</ListItem.Subtitle>
-        </ListItem.Content>
-        {role === ROLE.ADMIN && (
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => onClickItem(item)}>
-            <AntDesign name="edit" size={20} color={Colors.blue} />
-          </TouchableOpacity>
-        )}
-        <Icon
-          raised
-          disabled={reviewId === item?._id}
-          name="trash-alt"
-          type="font-awesome-5"
-          color={Colors.fire}
-          onPress={() => onPressDeleteReview(item)}
-        />
-        <LoadingIndicator loading={reviewId === item?._id && deletingReview} />
-        <TouchableOpacity activeOpacity={0.6} onPress={() => onClickItem(item)}>
-          <Text>{Strings.reply}</Text>
-        </TouchableOpacity>
-      </ListItem>
+      <SwipeableButton
+        activeOpacity={0.6}
+        onSwipeableOpen={onSwipeableOpen}
+        onPressDelete={() => onPressDeleteReview(item)}
+        onPressEdit={() => onPressReview(item)}>
+        <ListItem key={item._id} bottomDivider>
+          <ListItem.Content>
+            <ListItem.Title numberOfLines={1}>
+              {firstName} {lastName}
+            </ListItem.Title>
+            <ListItem.Subtitle numberOfLines={3}>{comment}</ListItem.Subtitle>
+          </ListItem.Content>
+
+          <LoadingIndicator
+            loading={reviewId === item?._id && deletingReview}
+          />
+        </ListItem>
+      </SwipeableButton>
     );
   }
 

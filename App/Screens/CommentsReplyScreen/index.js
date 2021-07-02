@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {
   Card,
@@ -14,12 +14,20 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import RestActions from '../../Redux/RestaurantRedux';
 import {connect} from 'react-redux';
-import {errorMessage, printLogs} from '../../Lib/utils';
+import {errorMessage} from '../../Lib/utils';
 import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
 import {replyReviewValidationSchema} from '../../Services/ValidationSchema/ReplyReviewValidationSchema';
 
 function CommentsReplyScreen(props) {
-  const {review = {}, isAdmin = false} = props?.route?.params ?? {};
+  const {review = {}, isAdmin = false, navigation} = props?.route?.params ?? {};
+
+  useEffect(() => {
+    if (isAdmin) {
+      navigation?.setOptions({
+        headerTitle: Strings.updateReview,
+      });
+    }
+  }, []);
 
   const reviewInfo = review || {};
 
@@ -144,14 +152,14 @@ function CommentsReplyScreen(props) {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Card containerStyle={styles.cardContainer}>
-          {isAdmin && (
+          {!isAdmin && (
             <ListItem.Content>
               <ListItem.Title>{review?.user?.fullName}</ListItem.Title>
               <ListItem.Subtitle>{review?.comment}</ListItem.Subtitle>
             </ListItem.Content>
           )}
           <Card.Divider />
-          {!isAdmin ? renderReviewUpdate() : renderCommentReply()}
+          {isAdmin ? renderReviewUpdate() : renderCommentReply()}
         </Card>
       </ScrollView>
     </SafeAreaView>

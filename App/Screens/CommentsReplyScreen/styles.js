@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+
 import {Colors, Fonts, Metrics} from '../../Themes';
 
 export default StyleSheet.create({
@@ -16,12 +17,12 @@ export default StyleSheet.create({
   },
   description: {
     lineHeight: Metrics.twentyTwo,
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
     fontSize: Fonts.size.medium,
     justifyContent: 'center',
   },
   h4Style: {
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
   },
   containerInputStyle: {
     margin: 0,
@@ -30,11 +31,11 @@ export default StyleSheet.create({
     margin: 0,
   },
   rating: {
-    marginVertical: Metrics.doubleBaseMargin,
+    marginVertical: Metrics.doubleBase,
   },
   visitDateContainer: {
     marginHorizontal: Metrics.base,
-    marginBottom: Metrics.doubleBaseMargin,
+    marginBottom: Metrics.doubleBase,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

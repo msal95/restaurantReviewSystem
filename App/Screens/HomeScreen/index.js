@@ -1,54 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
-import { Avatar, ListItem, Rating } from 'react-native-elements'
-import { connect, shallowEqual, useSelector } from 'react-redux'
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Avatar, ListItem, Rating} from 'react-native-elements';
+import {connect, shallowEqual, useSelector} from 'react-redux';
+import moment from 'moment';
 
-import { Strings } from '../../Themes/Strings'
-import FormButton from '../../Components/Button'
-import AuthActions from '../../Redux/AuthRedux'
-import RestActions from '../../Redux/RestaurantRedux'
-import { Images } from '../../Themes'
-import LoadingIndicator from '../../Components/LoadingIndicator'
-import ConfirmationModal from '../../Components/ConfirmationModal'
-import { PAGINATION_DEFAULTS, ROLE } from '../../Lib/constants'
-import SwipeableButton from '../../Components/SwipeableButton'
-import { printLogs } from '../../Lib/utils'
+import {Strings} from '../../Themes/Strings';
+import FormButton from '../../Components/Button';
+import AuthActions from '../../Redux/AuthRedux';
+import RestActions from '../../Redux/RestaurantRedux';
+import {Colors, Images} from '../../Themes';
+import LoadingIndicator from '../../Components/LoadingIndicator';
+import ConfirmationModal from '../../Components/ConfirmationModal';
+import {
+  capitalize,
+  FILTER,
+  PAGINATION_DEFAULTS,
+  ROLE,
+} from '../../Lib/constants';
+import SwipeableButton from '../../Components/SwipeableButton';
+import {printLogs} from '../../Lib/utils';
+import styles from './styles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import BottomSheetModal from '../../Components/BottomSheetModal';
+import RadioForm from 'react-native-simple-radio-button';
 
-function HomeScreen (props) {
+function HomeScreen(props) {
   const {
     onFetchRestaurantsList,
     navigation,
     data,
     deletingRestaurant,
     onDeleteRestaurant,
-  } = props
-  const [refreshing, setRefreshing] = useState(false)
-  const [restaurantId, setRestaurantId] = useState('')
-  const [isDeleteModal, setIsDeleteModal] = useState(false)
-  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE)
-  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE)
-  const flatListRefreshingRef = useRef()
-  const openedSwipeableRef = useRef()
+  } = props;
+  const [refreshing, setRefreshing] = useState(false);
+  const [restaurantId, setRestaurantId] = useState('');
+  const [filter, setFilter] = useState('');
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => (flatListRefreshingRef.current = refreshing))
+  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE);
+  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE);
+  const flatListRefreshingRef = useRef();
+  const openedSwipeableRef = useRef();
 
-  const { role = '' } = useSelector(
-    ({ auth: { user: { role = '' } } = {} }) => ({ role }),
+  useEffect(() => (flatListRefreshingRef.current = refreshing));
+
+  const {role = ''} = useSelector(
+    ({auth: {user: {role = ''}} = {}}) => ({role}),
     shallowEqual,
-  )
+  );
 
   useEffect(() => {
-    onFetchRestaurantsList({ pageNo, pageSize })
-  }, [pageNo])
+    onFetchRestaurantsList({pageNo, pageSize});
+  }, [pageNo]);
 
   useEffect(() => {
     if (!props?.loading && flatListRefreshingRef.current) {
-      setRefreshing(false)
+      setRefreshing(false);
     }
-  }, [props?.loading])
+  }, [props?.loading]);
+
+  const toggleModal = () => {
+    setModalVisible(prevState => !prevState);
+  };
 
   useEffect(() => {
-    onFetchRestaurantsList({ pageNo, pageSize })
+    onFetchRestaurantsList({pageNo, pageSize});
 
     if (role === ROLE.OWNER) {
       navigation?.setOptions({
@@ -58,93 +75,130 @@ function HomeScreen (props) {
             onPress={() => props?.navigation?.navigate('CreateRestaurant')}
           />
         ),
-      })
+      });
+    } else {
+      navigation?.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={toggleModal}
+            style={styles.filterIconContainer}>
+            <FontAwesome name="filter" size={25} color={Colors.white} />
+            <View style={styles.filterIcon} />
+          </TouchableOpacity>
+        ),
+      });
     }
-  }, [])
+  }, []);
 
-  function onRefresh () {
-    setRefreshing(true)
+  function onRefresh() {
+    setRefreshing(true);
     if (PAGINATION_DEFAULTS.PAGE === pageNo) {
-      onFetchRestaurantsList({ pageNo, pageSize })
+      onFetchRestaurantsList({pageNo, pageSize});
 
-      return
+      return;
     }
 
-    setPageNo(PAGINATION_DEFAULTS.PAGE)
+    setPageNo(PAGINATION_DEFAULTS.PAGE);
   }
 
-  function onPressDeleteItem (item) {
-    setRestaurantId(item?._id)
-    setTimeout(() => setIsDeleteModal(true), 500)
+  function onPressDeleteItem(item) {
+    setRestaurantId(item?._id);
+    setTimeout(() => setIsDeleteModal(true), 500);
   }
 
-  function onPressEdit (item) {
+  function onPressEdit(item) {
     props?.navigation?.navigate({
       name: 'CreateRestaurant',
       params: {restDetails: item, isEdit: true},
-    })
+    });
   }
 
-  function onDeleteConfirm () {
-    closeModal()
-    onDeleteRestaurant({ _id: restaurantId })
+  function onDeleteConfirm() {
+    closeModal();
+    onDeleteRestaurant({_id: restaurantId});
   }
 
-  function onCLickItem (item) {
+  function onCLickItem(item) {
     return props?.navigation?.navigate({
       name: 'RestaurantDetails',
-      params: { restaurantId: item?._id },
-    })
+      params: {restaurantId: item?._id},
+    });
   }
 
-  function closeModal () {
-    setRestaurantId('')
-    setIsDeleteModal(false)
-    printLogs('close')
+  function closeModal() {
+    setRestaurantId('');
+    setIsDeleteModal(false);
+    printLogs('close');
   }
 
-  function onEndReached () {
+  function onEndReached() {
     if (props?.isRemaining && !props.loading) {
-      setPageNo(prevState => prevState + 1)
+      setPageNo(prevState => prevState + 1);
     }
   }
 
-  const onSwipeableOpen = (ref) => {
+  const onSwipeableOpen = ref => {
     if (openedSwipeableRef.current !== ref) {
-      openedSwipeableRef.current?.close()
+      openedSwipeableRef.current?.close();
     }
-    openedSwipeableRef.current = ref
-  }
+    openedSwipeableRef.current = ref;
+  };
 
-  function renderListItem ({ item, index }) {
-    const { image, name, description, averageRating = 3 } = item || {}
-
+  function renderListItem({item, index}) {
+    const {
+      image,
+      name,
+      description,
+      averageRating = 3,
+      establishedAt,
+    } = item || {};
     return (
       <SwipeableButton
         activeOpacity={0.6}
         onSwipeableOpen={onSwipeableOpen}
         onPressDelete={() => onPressDeleteItem(item)}
-        onPressEdit={()=>onPressEdit(item)}
-      >
+        onPressEdit={() => onPressEdit(item)}>
         <TouchableOpacity activeOpacity={0.6} onPress={() => onCLickItem(item)}>
-          <ListItem key={String(item?._id ?? index)} bottomDivider containerStyle={{ padding: 0 }}>
+          <ListItem
+            key={String(item?._id ?? index)}
+            bottomDivider
+            containerStyle={styles.container}>
             <Avatar
-              containerStyle={{ width: 120, height: 120 }}
-              source={image ? { uri: image } : Images.restaurantPlaceholder}
+              containerStyle={styles.image}
+              source={image ? {uri: image} : Images.restaurantPlaceholder}
             />
-            <ListItem.Content>
-              <ListItem.Title>{name}</ListItem.Title>
-              <ListItem.Subtitle>{description.slice(0, 50)}...</ListItem.Subtitle>
+
+            <ListItem.Content style={styles.itemContainer}>
+              <ListItem.Title style={styles.title} numberOfLines={1}>
+                {capitalize(name)}
+              </ListItem.Title>
+              <ListItem.Subtitle numberOfLines={3}>
+                {description}
+              </ListItem.Subtitle>
+              <View style={styles.itemsInfo}>
+                <ListItem.Subtitle style={styles.infoDate}>
+                  <Text style={styles.infoDateText}>
+                    {establishedAt && moment(establishedAt).format('LL')}
+                  </Text>
+                </ListItem.Subtitle>
+                <Rating
+                  type="custom"
+                  imageSize={15}
+                  readonly
+                  startingValue={averageRating}
+                />
+              </View>
             </ListItem.Content>
-            <Rating imageSize={15} readonly startingValue={averageRating}/>
-            <ListItem.Chevron/>
+
+            <ListItem.Chevron iconStyle={styles.iconStyle} />
           </ListItem>
           <LoadingIndicator
             loading={item?._id === restaurantId && deletingRestaurant}
           />
         </TouchableOpacity>
       </SwipeableButton>
-    )
+    );
   }
 
   return (
@@ -167,15 +221,27 @@ function HomeScreen (props) {
         header={Strings.deleteRestaurantTitle}
         subHeader={Strings.deleteRestaurantMessage}
       />
+      <BottomSheetModal isVisible={isModalVisible} closeModal={toggleModal}>
+        <View style={styles.filtersButton}>
+          <RadioForm
+            radio_props={FILTER}
+            initial={-1}
+            formHorizontal={false}
+            labelHorizontal
+            onPress={value => setFilter({value: value})}
+            labelStyle={styles.radioBtn}
+          />
+        </View>
+      </BottomSheetModal>
     </>
-  )
+  );
 }
 
 const mapDispatchToProps = dispatch => ({
   onLogout: () => dispatch(AuthActions.logout()),
   onFetchRestaurantsList: data => dispatch(RestActions.restaurantsList(data)),
   onDeleteRestaurant: data => dispatch(RestActions.deleteRestaurant(data)),
-})
+});
 
 const mapStateToProps = ({
   restaurants: {
@@ -189,6 +255,6 @@ const mapStateToProps = ({
   deletingRestaurant,
   isRemaining,
   loading,
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

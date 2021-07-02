@@ -5,13 +5,18 @@ import {Colors, Metrics} from '../../Themes';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 10,
+    backgroundColor: Colors.white,
   },
   profileContainer: {
     marginVertical: Metrics.fifteen,
   },
   profileImage: {
     alignSelf: 'center',
+    marginTop: -Metrics.oneHundredFifty / 2,
+    resizeMode: 'cover',
+    width: Metrics.oneHundredFifty,
+    height: Metrics.oneHundredFifty,
+    borderRadius: Metrics.oneHundredFifty / 2,
     marginBottom: Metrics.fifteen,
     shadowColor: Colors.black,
     shadowOffset: {
@@ -20,24 +25,31 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 7,
+    elevation: Metrics.seven,
   },
   userTitle: {
-    top: 80,
     textAlign: 'center',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Metrics.doubleBase,
+    paddingVertical: Metrics.base,
   },
   profileInfoContainer: {
     backgroundColor: Colors.white,
-    height: 300,
-    position: 'absolute',
-    top: 100,
-    width: '100%',
-  },
-  userDetails: {
-    marginTop: '30%',
+    paddingVertical: Metrics.doubleBase,
   },
   userInfo: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginLeft: Metrics.small,
+  },
+  image: {
+    height: Metrics.twoHundred,
+    width: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    backgroundColor: Colors.red,
   },
 });
