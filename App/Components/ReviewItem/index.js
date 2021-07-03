@@ -32,7 +32,7 @@ function ReviewItem (props) {
           marginTop: Metrics.small
         }}>
           {heading}</Text>}
-        <ListItem key={user._id} bottomDivider>
+        <ListItem key={user._id} bottomDivider containerStyle={{ padding:0, paddingVertical: Metrics.base,  alignItems: 'flex-start',  }}>
           <Avatar
             size="medium"
             rounded
@@ -40,7 +40,23 @@ function ReviewItem (props) {
             avatarStyle={{ resizeMode: 'cover' }}
           />
           <ListItem.Content>
-            <ListItem.Title>{capitalize(fullName)}</ListItem.Title>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flex:1
+            }}>
+              <ListItem.Title style={{flex:1}}>{capitalize(fullName)}</ListItem.Title>
+              <StarRating
+                maxStars={5}
+                rating={rating}
+                halfStarEnabled
+                halfStarColor={Colors.golden}
+                fullStarColor={Colors.golden}
+                starSize={Metrics.fifteen}
+                disabled
+              />
+            </View>
             <Text
               style={{}}
               numberOfLines={lines}
@@ -61,15 +77,6 @@ function ReviewItem (props) {
               </TouchableOpacity>
             )}
           </ListItem.Content>
-          <StarRating
-            maxStars={5}
-            rating={rating}
-            halfStarEnabled
-            halfStarColor={Colors.golden}
-            fullStarColor={Colors.golden}
-            starSize={Metrics.fifteen}
-            disabled
-          />
         </ListItem>
         {!!reply && (
           <View style={{
@@ -121,7 +128,7 @@ function ReviewItem (props) {
         <View>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ backgroundColor: Colors.white, borderRadius: Metrics.base }}
+            style={{ backgroundColor: Colors.white, borderRadius: Metrics.small }}
             contentContainerStyle={{ padding: Metrics.section, }}
           >
             {renderReviewItem()}
