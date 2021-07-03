@@ -9,6 +9,7 @@ import Modal from 'react-native-modal'
 import SwipeableButton, { renderRightAction } from '../../Components/SwipeableButton'
 import { Strings } from '../../Themes/Strings'
 import ConfirmationModal from '../ConfirmationModal'
+import styles from './styles'
 
 function ReviewItem (props) {
   const [visible, setVisible] = useState(false)
@@ -90,7 +91,7 @@ function ReviewItem (props) {
     }
 
     return (
-      <View style={{width: 200, flexDirection: 'row'}}>
+      <View style={styles.actionButton}>
         {renderRightAction(
           'Reply',
           Colors.blue,
@@ -113,12 +114,7 @@ function ReviewItem (props) {
   const renderReviewItem = (lines) => {
     return (
       <View style={containerStyle}>
-        {!!heading && <Text style={{
-          fontSize: 15,
-          color: Colors.blue,
-          textTransform: 'uppercase',
-          marginTop: Metrics.small
-        }}>
+        {!!heading && <Text style={styles.heading}>
           {heading}</Text>}
         <SwipeableButton
           activeOpacity={0.8}
@@ -128,7 +124,8 @@ function ReviewItem (props) {
           onPressEdit={() => onPressEdit(item)}
           renderRightActions= {renderRightActions}>
 
-        <ListItem key={user._id} bottomDivider containerStyle={{ padding:0, paddingVertical: Metrics.base,  alignItems: 'flex-start',  }}>
+        <ListItem key={user._id} bottomDivider
+                  containerStyle={styles.listItemContainer}>
           <Avatar
             size="medium"
             rounded
@@ -136,13 +133,8 @@ function ReviewItem (props) {
             avatarStyle={{ resizeMode: 'cover' }}
           />
           <ListItem.Content>
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flex:1
-            }}>
-              <ListItem.Title style={{flex:1}}>{capitalize(fullName)}</ListItem.Title>
+            <View style={styles.listItemDetails}>
+              <ListItem.Title style={styles.userTitle}>{capitalize(fullName)}</ListItem.Title>
               <StarRating
                 maxStars={5}
                 rating={rating}
@@ -163,11 +155,7 @@ function ReviewItem (props) {
               <TouchableOpacity>
                 <Text
                   onPress={() => setVisible(true)}
-                  style={{
-                    color: Colors.blue,
-                    fontSize: 15,
-
-                  }}>
+                  style={styles.seeMore}>
                   See More
                 </Text>
               </TouchableOpacity>
@@ -176,36 +164,17 @@ function ReviewItem (props) {
         </ListItem>
         </SwipeableButton>
         {!!reply && (
-          <View style={{
-            borderBottomWidth: 1,
-            borderBottomColor: Colors.cloud,
-            marginVertical: Metrics.small,
-            marginLeft: Metrics.doubleBase
-          }}>
-            <Text style={{
-              fontSize: 12,
-              color: Colors.blue,
-              marginTop: Metrics.small,
-              marginLeft: Metrics.base,
-            }}>Reply</Text>
+          <View style={styles.replyContainer}>
+            <Text style={styles.replyText}>Reply</Text>
             <View
-              style={{
-                marginVertical: Metrics.small,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}>
+              style={styles.replyUserImage}>
               <Avatar
                 size="medium"
                 rounded
                 source={rPicture ? { uri: rPicture } : Images.userPlaceholder}
                 avatarStyle={{ resizeMode: 'cover' }}
               />
-              <Text style={{
-                flexShrink: 1,
-                fontSize: 12,
-                color: Colors.border,
-                marginHorizontal: Metrics.base
-              }}>{reply}</Text>
+              <Text style={styles.replyDescription}>{reply}</Text>
             </View>
           </View>
         )}
