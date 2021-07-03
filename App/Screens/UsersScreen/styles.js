@@ -5,7 +5,7 @@ import Fonts from '../../Themes/Fonts';
 
 export default StyleSheet.create({
   container: {
-    padding: Metrics.two,
+    padding: Metrics.small,
   },
   avatarStyle: {
     resizeMode: 'cover',

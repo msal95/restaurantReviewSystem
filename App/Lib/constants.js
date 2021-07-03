@@ -50,7 +50,7 @@ export const FILTER = [
   {label: '5 Only', value: 'FIVE'},
   {label: '4 and up', value: 'FOUR'},
   {label: '3 and up', value: 'THREE'},
-  {label: '2 and up', value: 'RWO'},
+  {label: '2 and up', value: 'TWO'},
   {label: '1 and up', value: 'ONE'},
 ];
 

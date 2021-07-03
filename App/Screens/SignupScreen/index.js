@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {SafeAreaView, Text, View, Platform} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import {connect} from 'react-redux';
@@ -16,8 +16,11 @@ import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpVali
 import FormButton from '../../Components/Button';
 import {errorMessage, printLogs} from '../../Lib/utils';
 import {editProfileValidationSchema} from '../../Services/ValidationSchema/EditProfileValidationSchema';
+import {useKeyboard} from '@react-native-community/hooks';
+import {getBottomSpace} from 'react-native-iphone-x-helper';
 
 function SignupScreen(props) {
+  const {keyboardShown, keyboardHeight} = useKeyboard();
   const {
     onSignUp,
     onEditProfile,
@@ -226,6 +229,15 @@ function SignupScreen(props) {
               title={isEditing ? Strings.save : Strings.signUp}
               onPress={handleSubmit}
               loading={loading}
+              buttonContainer={{
+                ...Platform.select({
+                  ios: {
+                    marginBottom: keyboardShown
+                      ? keyboardHeight - getBottomSpace() + 10
+                      : 0,
+                  },
+                }),
+              }}
             />
           </>
         )}
