@@ -3,11 +3,9 @@ import * as yup from 'yup';
 export const signUpValidationSchema = yup.object().shape({
   firstName: yup
     .string()
-    .matches(/(\w).+/, 'Enter first name')
     .required('First name is required'),
   lastName: yup
     .string()
-    .matches(/(\w).+/, 'Enter last name')
     .required('Last name is required'),
   email: yup
     .string()
