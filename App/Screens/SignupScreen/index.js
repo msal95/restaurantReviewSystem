@@ -180,30 +180,38 @@ function SignupScreen(props) {
                 </>
               )}
 
-              <View style={styles.roleSelection}>
-                <Text style={styles.roleText}>{Strings.selectRole}</Text>
-                <RNPickerSelect
-                  placeholder={{
-                    label: capitalize(ROLE.REGULAR),
-                    value: ROLE.REGULAR,
-                  }}
-                  onValueChange={handleChange('role')}
-                  items={[
-                    {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
-                    {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
-                  ]}
-                  value={values.role}>
-                  <Text style={styles.selectedOpt}>{values.role}</Text>
-                </RNPickerSelect>
-                {errorMessage(errors?.role, touched?.role)}
-              </View>
+              {!isEditing && (
+                <View style={styles.roleSelection}>
+                  <Text style={styles.roleText}>{Strings.selectRole}</Text>
+                  <RNPickerSelect
+                    placeholder={{
+                      label: capitalize(ROLE.REGULAR),
+                      value: ROLE.REGULAR,
+                    }}
+                    onValueChange={handleChange('role')}
+                    items={[
+                      {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
+                      {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
+                    ]}
+                    value={values.role}>
+                    <Text style={styles.selectedOpt}>{values.role}</Text>
+                  </RNPickerSelect>
+                  {errorMessage(errors?.role, touched?.role)}
+                </View>
+              )}
 
               <View style={styles.roleSelection}>
                 <Text style={styles.roleText}>{Strings.selectGender}</Text>
                 <View style={styles.errorMessage}>
                   <RadioForm
                     radio_props={GENDER}
-                    initial={-1}
+                    initial={
+                      isEditing
+                        ? user?.gender === GENDER[0]?.value
+                          ? 0
+                          : 1
+                        : -1
+                    }
                     formHorizontal={true}
                     labelHorizontal={true}
                     onPress={handleChange('gender')}

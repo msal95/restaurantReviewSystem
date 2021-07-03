@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {Avatar, Text as TextElement} from 'react-native-elements';
+import {Avatar, Button, Text as TextElement} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -104,11 +104,12 @@ function ProfileScreen(props) {
         </View>
 
         {isSelf && (
-          <FormButton
+          <Button
             title={Strings.logout}
             onPress={() => props?.onLogout()}
             iconName="logout"
-            buttonContainer={styles.buttonContainer}
+            containerStyle={styles.buttonContainer}
+            buttonStyle={styles.button}
           />
         )}
       </View>

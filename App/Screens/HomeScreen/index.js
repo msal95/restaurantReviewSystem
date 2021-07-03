@@ -1,23 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
-import { Avatar, FAB, Icon, ListItem, Rating } from 'react-native-elements'
-import { connect, shallowEqual, useSelector } from 'react-redux'
-import moment from 'moment'
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Avatar, FAB, Icon, ListItem, Rating} from 'react-native-elements';
+import {connect, shallowEqual, useSelector} from 'react-redux';
+import moment from 'moment';
 
-import { Strings } from '../../Themes/Strings'
-import AuthActions from '../../Redux/AuthRedux'
-import RestActions from '../../Redux/RestaurantRedux'
-import { Colors, Images } from '../../Themes'
-import LoadingIndicator from '../../Components/LoadingIndicator'
-import ConfirmationModal from '../../Components/ConfirmationModal'
-import { capitalize, FILTER, FILTER_VALUES, PAGINATION_DEFAULTS, ROLE, } from '../../Lib/constants'
-import SwipeableButton from '../../Components/SwipeableButton'
-import { printLogs } from '../../Lib/utils'
-import styles from './styles'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import BottomSheetModal from '../../Components/BottomSheetModal'
-import RadioForm from 'react-native-simple-radio-button'
-import { isEmpty } from 'ramda'
+import {Strings} from '../../Themes/Strings';
+import AuthActions from '../../Redux/AuthRedux';
+import RestActions from '../../Redux/RestaurantRedux';
+import {Colors, Images} from '../../Themes';
+import LoadingIndicator from '../../Components/LoadingIndicator';
+import ConfirmationModal from '../../Components/ConfirmationModal';
+import {
+  capitalize,
+  FILTER,
+  FILTER_VALUES,
+  PAGINATION_DEFAULTS,
+  ROLE,
+} from '../../Lib/constants';
+import SwipeableButton from '../../Components/SwipeableButton';
+import {printLogs} from '../../Lib/utils';
+import styles from './styles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import BottomSheetModal from '../../Components/BottomSheetModal';
+import RadioForm from 'react-native-simple-radio-button';
+import {isEmpty} from 'ramda';
 
 function HomeScreen(props) {
   const {
@@ -46,7 +52,7 @@ function HomeScreen(props) {
           onPress={toggleModal}
           style={styles.filterIconContainer}>
           <FontAwesome name="filter" size={25} color={Colors.white} />
-          {!isEmpty(filterKey) && <View style={styles.filterIcon} /> }
+          {!isEmpty(filterKey) && <View style={styles.filterIcon} />}
         </TouchableOpacity>
       ),
     });
@@ -54,9 +60,8 @@ function HomeScreen(props) {
 
   useEffect(() => {
     onFetchRestaurantsList({pageNo, pageSize});
-    flatListRefreshingRef.current = refreshing
-  }, [])
-
+    flatListRefreshingRef.current = refreshing;
+  }, []);
 
   const {role = ''} = useSelector(
     ({auth: {user: {role = ''}} = {}}) => ({role}),
@@ -64,7 +69,11 @@ function HomeScreen(props) {
   );
 
   useEffect(() => {
-    onFetchRestaurantsList({pageNo, pageSize});
+    onFetchRestaurantsList({
+      pageNo,
+      pageSize,
+      ...(FILTER_VALUES?.[filterKey] ?? {}),
+    });
   }, [pageNo]);
 
   useEffect(() => {
@@ -77,22 +86,26 @@ function HomeScreen(props) {
     setModalVisible(prevState => !prevState);
   }
 
-  function onChangeFilters(filter){
-    setModalVisible(false)
-    setFilterKey(filter)
+  function onChangeFilters(filter) {
+    setModalVisible(false);
+    setFilterKey(filter);
     onFetchRestaurantsList({pageNo: 0, pageSize, ...FILTER_VALUES?.[filter]});
   }
 
-  function onClearFilters(){
-    setModalVisible(false)
-    setFilterKey('')
-    onFetchRestaurantsList({pageNo: 0, pageSize,});
+  function onClearFilters() {
+    setModalVisible(false);
+    setFilterKey('');
+    onFetchRestaurantsList({pageNo: 0, pageSize});
   }
 
   function onRefresh() {
     setRefreshing(true);
     if (PAGINATION_DEFAULTS.PAGE === pageNo) {
-      onFetchRestaurantsList({pageNo, pageSize});
+      onFetchRestaurantsList({
+        pageNo,
+        pageSize,
+        ...(FILTER_VALUES?.[filterKey] ?? {}),
+      });
 
       return;
     }
@@ -100,8 +113,8 @@ function HomeScreen(props) {
     setPageNo(PAGINATION_DEFAULTS.PAGE);
   }
 
-  function createRestaurant(){
-    props?.navigation?.navigate('CreateRestaurant')
+  function createRestaurant() {
+    props?.navigation?.navigate('CreateRestaurant');
   }
 
   function onPressDeleteItem(item) {
@@ -147,12 +160,14 @@ function HomeScreen(props) {
     openedSwipeableRef.current = ref;
   };
 
-  function renderEmptyMessage(){
-    if(!props?.loading) {
-      return <Text style={styles.emptyMessage}>{Strings.noRestaurantFound}</Text>
+  function renderEmptyMessage() {
+    if (!props?.loading) {
+      return (
+        <Text style={styles.emptyMessage}>{Strings.noRestaurantFound}</Text>
+      );
     }
 
-    return null
+    return null;
   }
 
   function renderListItem({item, index}) {
@@ -189,9 +204,11 @@ function HomeScreen(props) {
               </ListItem.Subtitle>
               <View style={styles.itemsInfo}>
                 <ListItem.Subtitle style={styles.infoDate}>
-                  {establishedAt && <Text style={styles.infoDateText}>
-                    {moment(establishedAt).format('LL')}
-                  </Text>}
+                  {establishedAt && (
+                    <Text style={styles.infoDateText}>
+                      {moment(establishedAt).format('LL')}
+                    </Text>
+                  )}
                 </ListItem.Subtitle>
                 <Rating
                   type="custom"
@@ -225,7 +242,14 @@ function HomeScreen(props) {
         onEndReachedThreshold={0.1}
         ListEmptyComponent={renderEmptyMessage}
       />
-      {role === ROLE.OWNER && <FAB icon={() =><Icon name='add' color='white' />} color={Colors.blue} style={styles.addButton} onPress={createRestaurant}/>}
+      {role === ROLE.OWNER && (
+        <FAB
+          icon={() => <Icon name="add" color="white" />}
+          color={Colors.blue}
+          style={styles.addButton}
+          onPress={createRestaurant}
+        />
+      )}
       <ConfirmationModal
         closeModal={closeModal}
         onPressDone={onDeleteConfirm}
@@ -234,7 +258,14 @@ function HomeScreen(props) {
         header={Strings.deleteRestaurantTitle}
         subHeader={Strings.deleteRestaurantMessage}
       />
-      <BottomSheetModal isTopBar showClear={!isEmpty(filterKey)} onClear={onClearFilters} isVisible={isModalVisible} isHeader headerText={Strings.applyFilters} closeModal={toggleModal}>
+      <BottomSheetModal
+        isTopBar
+        showClear={!isEmpty(filterKey)}
+        onClear={onClearFilters}
+        isVisible={isModalVisible}
+        isHeader
+        headerText={Strings.applyFilters}
+        closeModal={toggleModal}>
         <View style={styles.filtersButton}>
           <RadioForm
             radio_props={FILTER}
@@ -243,7 +274,7 @@ function HomeScreen(props) {
             onPress={onChangeFilters}
             labelStyle={styles.radioLabel}
             radioStyle={styles.radioBtn}
-            initial={FILTER?.findIndex((item) => item?.value === filterKey )}
+            initial={FILTER?.findIndex(item => item?.value === filterKey)}
           />
         </View>
       </BottomSheetModal>

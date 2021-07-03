@@ -55,7 +55,7 @@ function CommentLists(props) {
 
   function renderListItem({item}) {
     const {comment, user = {}} = item || {};
-    const {firstName = '', lastName = ''} = user ?? {};
+    const {fullName = ''} = user ?? {};
     return (
       <SwipeableButton
         activeOpacity={0.6}
@@ -64,9 +64,7 @@ function CommentLists(props) {
         onPressEdit={() => onPressReview(item)}>
         <ListItem key={item._id} bottomDivider>
           <ListItem.Content>
-            <ListItem.Title numberOfLines={1}>
-              {firstName} {lastName}
-            </ListItem.Title>
+            <ListItem.Title numberOfLines={1}>{fullName}</ListItem.Title>
             <ListItem.Subtitle numberOfLines={3}>{comment}</ListItem.Subtitle>
           </ListItem.Content>
 

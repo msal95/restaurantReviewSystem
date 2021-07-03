@@ -23,21 +23,26 @@ export const GENDER = [
 
 export const FILTER_VALUES = {
   FIVE: {
-    min: 5, max: 5,
+    min: 5,
+    max: 6,
   },
   FOUR: {
-    min: 4, max: 5,
+    min: 4,
+    max: 5,
   },
   THREE: {
-    min: 3, max: 4,
+    min: 3,
+    max: 4,
   },
   TWO: {
-    min: 2, max: 3,
+    min: 2,
+    max: 3,
   },
   ONE: {
-    min: 1, max: 2,
-  }
-}
+    min: 1,
+    max: 2,
+  },
+};
 
 export const FILTER = [
   {label: '5 Only', value: 'FIVE'},

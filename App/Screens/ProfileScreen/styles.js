@@ -55,4 +55,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
     top: Metrics.section,
   },
+  button: {
+    backgroundColor: Colors.red,
+  },
 });

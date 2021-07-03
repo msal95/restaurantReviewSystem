@@ -42,7 +42,7 @@ export function* onCreateRestaurant(api, {data = {}}) {
       form_data,
     );
     yield put(RestaurantActions.createRestaurantSuccess(response));
-    NavigationService.goBack()
+    NavigationService.goBack();
     showMessage(Strings.createRestaurantSuccess, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(RestaurantActions.createRestaurantFailure(message));

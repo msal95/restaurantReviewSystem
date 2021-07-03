@@ -22,6 +22,7 @@ import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/
 import {errorMessage, printLogs} from '../../Lib/utils';
 import ListFooterComponent from '../../Components/ListFooterComponent';
 import ListEmptyComponent from '../../Components/ListEmptyComponent';
+import ReviewsListing from '../../Components/ReviewsListing';
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -32,8 +33,12 @@ function RestaurantDetailsScreen(props) {
     onGetAllReviews,
     totalReviewsCount,
     averageRating,
-    navigation,
+    highestRatedReview,
+    lowestRatedReview,
+    lastReview,
   } = props ?? {};
+
+  printLogs({highestRatedReview});
 
   const [rating, setRating] = useState('0');
   const [refreshing, setRefreshing] = useState(false);
@@ -88,6 +93,7 @@ function RestaurantDetailsScreen(props) {
       setPageNo(prevState => prevState + 1);
     }
   }
+
   function renderCommentsList({item, index}) {
     const {rating: commentRating, comment: commentText, user = {}} = item || {};
     const {fullName} = user ?? {};
@@ -234,9 +240,11 @@ function RestaurantDetailsScreen(props) {
         {role === ROLE.OWNER ? (
           <TextElement h4>{Strings.allComments}</TextElement>
         ) : (
-          <TextElement style={styles.commentHeading} h4>
-            {Strings.previousReviews}
-          </TextElement>
+          <>
+            <ReviewsListing highestRatedReview={highestRatedReview} />
+          </>
+
+          // reviewListing(reviews)
         )}
       </View>
     );
@@ -261,6 +269,9 @@ const mapStateToProps = ({
   restaurants: {
     restaurantDetails: {
       restaurantInfo = {},
+      highestRatedReview = {},
+      lowestRatedReview = {},
+      lastReview = {},
       totalReviewsCount,
       averageRating,
     } = {},
@@ -271,6 +282,9 @@ const mapStateToProps = ({
 }) => ({
   totalReviewsCount,
   averageRating,
+  highestRatedReview,
+  lowestRatedReview,
+  lastReview,
   reviews: allReviews,
   details: restaurantInfo,
   isRemaining,
