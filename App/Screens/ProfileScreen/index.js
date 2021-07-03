@@ -18,7 +18,7 @@ import {Colors, Images} from '../../Themes';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import {capitalize, ROLE} from '../../Lib/constants';
-import { phonecall } from 'react-native-communications'
+import {phonecall, email as emailCall} from 'react-native-communications';
 
 function ProfileScreen(props) {
   const {user, route, navigation} = props || {};
@@ -55,6 +55,10 @@ function ProfileScreen(props) {
     phonecall(phone, true);
   }
 
+  function openEmailClient(email) {
+    emailCall(email);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={Images.cover} style={styles.image} />
@@ -72,10 +76,13 @@ function ProfileScreen(props) {
         </TextElement>
         <Text style={styles.userTitle}>{capitalize(role)}</Text>
 
-        <View style={styles.infoContainer}>
+        <TouchableOpacity
+          style={styles.infoContainer}
+          onPress={openEmailClient(email)}
+          activeOpacity={0.6}>
           <Entypo name="email" size={20} color={Colors.blue} />
           <Text style={styles.userInfo}>{email}</Text>
-        </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={openDialPad(phoneNo)}

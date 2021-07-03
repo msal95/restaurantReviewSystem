@@ -1,3 +1,5 @@
+import {startCase} from 'lodash'
+
 export const IMAGE_OPTIONS = {
   width: 250,
   height: 250,
@@ -73,7 +75,9 @@ export const capitalize = text => {
     return text;
   }
 
-  return text?.[0].toUpperCase() + text?.slice(1)?.toLowerCase?.();
+  text = text?.toLowerCase?.();
+
+  return startCase(text);
 };
 
 export const PAGINATION_DEFAULTS = {
