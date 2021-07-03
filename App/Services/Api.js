@@ -34,35 +34,35 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   // Since we can't hide from that, we embrace it by getting out of the
   // way at this level.
   //
-  const getRoot = () => api.get('');
   const signup = data => api.post('users', data);
   const login = data => api.post('users/login', data);
-  const restaurants = data => api.get('restaurants', data);
-  const createRestaurantApi = data => api.post('restaurants', data);
-  const deleteRestaurant = data => api.delete(`restaurants/${data?._id}`, data);
-  const deleteReview = ({restaurantId, reviewId}) =>
-    api.delete(`restaurants/${restaurantId}/reviews/${reviewId}`, {
-      restaurantId,
-      reviewId,
-    });
-  const restaurantDetails = ({restaurantId}) =>
-    api.get(`restaurants/${restaurantId}`);
-  const createReview = ({restaurantId, data}) =>
-    api.post(`restaurants/${restaurantId}/reviews`, data);
-  const getAllReviews = ({data: {restaurantId = '', ...others} = {}}) =>
-    api.get(`restaurants/${restaurantId}/reviews`, others);
-  const replyReviews = ({restaurantId, data, reviewId}) =>
-    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
-  const updateRestaurant = ({id, data}) => api.put(`restaurants/${id}`, data);
-  const updateReview = ({restaurantId, data, reviewId}) =>
-    api.put(`restaurants/${restaurantId}/reviews/${reviewId}`, data);
-  const getRate = () => api.get('rate_limit');
   const getUser = username => api.get('search/users', {q: username});
   const userProfile = data => api.get('users/me', data);
   const editProfile = data => api.put('users/me', data);
   const allUsers = data => api.get('users', data);
   const editOtherUser = ({data, _id}) => api.put(`users/${_id}`, data);
   const deleteUser = data => api.delete(`users/${data?._id}`, data);
+
+  const restaurants = data => api.get('restaurants', data);
+  const createRestaurantApi = data => api.post('restaurants', data);
+  const deleteRestaurant = data => api.delete(`restaurants/${data?._id}`, data);
+  const restaurantDetails = ({restaurantId}) =>
+    api.get(`restaurants/${restaurantId}`);
+  const updateRestaurant = ({id, data}) => api.put(`restaurants/${id}`, data);
+
+  const deleteReview = ({restaurantId, reviewId}) =>
+    api.delete(`restaurants/${restaurantId}/reviews/${reviewId}`, {
+      restaurantId,
+      reviewId,
+    });
+  const createReview = ({restaurantId, data}) =>
+    api.post(`restaurants/${restaurantId}/reviews`, data);
+  const getAllReviews = ({data: {restaurantId = '', ...others} = {}}) =>
+    api.get(`restaurants/${restaurantId}/reviews`, others);
+  const replyReviews = ({restaurantId, data, reviewId}) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
+  const updateReview = ({restaurantId, data, reviewId}) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}`, data);
 
   // ------
   // STEP 3
@@ -79,26 +79,26 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   return {
     ...api,
     // a list of the API functions from step 2
-    getRoot,
-    getRate,
     getUser,
     signup,
     login,
-    restaurants,
-    restaurantDetails,
-    createRestaurantApi,
-    deleteRestaurant,
-    deleteReview,
-    createReview,
-    getAllReviews,
-    replyReviews,
     userProfile,
-    updateRestaurant,
-    updateReview,
     editProfile,
     editOtherUser,
     deleteUser,
     allUsers,
+
+    restaurants,
+    restaurantDetails,
+    createRestaurantApi,
+    deleteRestaurant,
+    updateRestaurant,
+
+    deleteReview,
+    createReview,
+    getAllReviews,
+    replyReviews,
+    updateReview,
   };
 };
 

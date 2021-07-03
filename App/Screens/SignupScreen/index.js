@@ -253,4 +253,5 @@ const mapDispatchToProps = dispatch => ({
   onEditProfile: data => dispatch(SignUpActions.editProfile(data)),
   onEditOtherUser: data => dispatch(SignUpActions.editOtherUser(data)),
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
