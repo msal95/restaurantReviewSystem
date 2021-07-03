@@ -56,8 +56,6 @@ export default StyleSheet.create({
   visitDateContainer: {
     marginHorizontal: Metrics.base,
     marginBottom: Metrics.doubleBase,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   visitDateTitle: {
     fontSize: Fonts.size.input,
@@ -79,5 +77,9 @@ export default StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: Metrics.base,
     width: Metrics.twoSeventy
+  },
+  dateError: {
+    marginHorizontal: 10,
+    top: -10
   }
 });

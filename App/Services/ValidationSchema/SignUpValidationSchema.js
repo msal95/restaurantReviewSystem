@@ -2,13 +2,13 @@ import * as yup from 'yup';
 
 export const signUpValidationSchema = yup.object().shape({
   firstName: yup
-    .string()
+    .string().trim()
     .required('First name is required'),
   lastName: yup
-    .string()
+    .string().trim()
     .required('Last name is required'),
   email: yup
-    .string()
+    .string().trim()
     .email('Please enter valid email')
     .required('Email Address is Required'),
   phoneNo: yup

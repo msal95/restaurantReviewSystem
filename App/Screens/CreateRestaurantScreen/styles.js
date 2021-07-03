@@ -30,9 +30,6 @@ export default StyleSheet.create({
   establishedDate: {
     marginHorizontal: Metrics.base,
     marginBottom: Metrics.doubleBase,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   dateTitle: {
     fontSize: Fonts.size.input,
@@ -43,6 +40,10 @@ export default StyleSheet.create({
     backgroundColor: Colors.silver,
   },
   dateError: {
-    marginHorizontal: 0, top: -7
-  }
+    marginHorizontal: 0,
+    top: 5,
+  },
+  dateContainer: {
+    width: Metrics.screenWidth - Metrics.forty,
+  },
 });

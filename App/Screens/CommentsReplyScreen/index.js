@@ -17,6 +17,8 @@ import {connect} from 'react-redux';
 import {errorMessage} from '../../Lib/utils';
 import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
 import {replyReviewValidationSchema} from '../../Services/ValidationSchema/ReplyReviewValidationSchema';
+import StarRating from 'react-native-star-rating'
+import { Colors } from '../../Themes'
 
 function CommentsReplyScreen(props) {
   const {review = {}, isAdmin = false, navigation} = props?.route?.params ?? {};
@@ -61,13 +63,15 @@ function CommentsReplyScreen(props) {
             <TextElement style={styles.commentHeading} h4>
               {Strings.updateReview}
             </TextElement>
-            <Rating
-              showRating
-              startingValue={rating}
-              size={20}
-              onStartRating={startingValue => setRating(startingValue)}
-              style={styles.rating}
-            />
+            <View style={styles.ratingContainer}>
+              <StarRating
+                maxStars={5}
+                rating={rating}
+                halfStarColor={Colors.golden}
+                fullStarColor={Colors.golden}
+                selectedStar={startingValue => setRating(startingValue)}
+              />
+            </View>
             <InputFormField
               label={Strings.comment}
               placeholder={Strings.enterYourComment}
@@ -81,8 +85,9 @@ function CommentsReplyScreen(props) {
             {errorMessage(errors?.comment, touched.comment)}
 
             <View style={styles.visitDateContainer}>
-              <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
+              <Text style={styles.visitDateTitle}>{Strings.visitDate}</Text>
               <InputFormField
+                inputContainerStyle={styles.dateInputContainer}
                 label={Strings.visitDate}
                 placeholder={Strings.selectDate}
                 selectedOption={values?.dateOfVisit ?? ''}

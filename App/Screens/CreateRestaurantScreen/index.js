@@ -110,11 +110,9 @@ function CreateRestaurantScreen(props) {
               {errorMessage(errors?.location, touched.location)}
 
               <View style={styles.establishedDate}>
-                <View>
-                <Text style={styles.dateTitle}>{Strings.establishedAt} : </Text>
-                  {errorMessage(errors?.establishedAt, touched.establishedAt, styles.dateError)}
-                  </View>
+                <Text style={styles.dateTitle}>{Strings.establishedAt}</Text>
                 <InputFormField
+                  inputContainerStyle={styles.dateContainer}
                   label={Strings.establishedAt}
                   placeholder={Strings.selectDate}
                   selectedOption={values?.establishedAt ?? ''}
@@ -122,6 +120,7 @@ function CreateRestaurantScreen(props) {
                   onBlur={handleBlur('establishedAt')}
                   dateTime
                 />
+                {errorMessage(errors?.establishedAt, touched.establishedAt, styles.dateError)}
               </View>
             </KeyboardAwareScrollView>
             <FormButton

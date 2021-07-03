@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
 export const editProfileValidationSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
+  firstName: yup.string().trim().required('First name is required'),
+  lastName: yup.string().trim().required('Last name is required'),
   email: yup
     .string()
     .email('Please enter valid email')

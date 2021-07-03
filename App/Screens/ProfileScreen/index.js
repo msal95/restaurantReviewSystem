@@ -51,13 +51,15 @@ function ProfileScreen(props) {
       });
   }, []);
 
-  function openDialPad(phone) {
-    phonecall(phone, true);
-  }
 
-  function openEmailClient(email) {
-    emailCall(email);
-  }
+  const openDialPad = phone => () => {
+    phonecall(phone, true);
+  };
+
+  const openEmailClient = email => () => {
+    emailCall(email, '', '', '', '');
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>

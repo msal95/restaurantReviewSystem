@@ -140,7 +140,6 @@ function RestaurantDetailsScreen(props) {
               <StarRating
                 maxStars={5}
                 rating={rating}
-                halfStarEnabled
                 halfStarColor={Colors.golden}
                 fullStarColor={Colors.golden}
                 selectedStar={startingValue => setRating(startingValue)}
@@ -159,7 +158,7 @@ function RestaurantDetailsScreen(props) {
             {errorMessage(errors?.comment, touched.comment)}
 
             <View style={styles.visitDateContainer}>
-              <Text style={styles.visitDateTitle}>{Strings.visitDate} : </Text>
+              <Text style={styles.visitDateTitle}>{Strings.visitDate}</Text>
               <InputFormField
                 label={Strings.visitDate}
                 placeholder={Strings.selectDate}
@@ -168,8 +167,8 @@ function RestaurantDetailsScreen(props) {
                 onBlur={handleBlur('dateOfVisit')}
                 dateTime
               />
-              {errorMessage(errors?.dateOfVisit, touched.dateOfVisit)}
             </View>
+            {errorMessage(errors?.dateOfVisit, touched.dateOfVisit, styles.dateError)}
             <FormButton title={Strings.submitReview} onPress={handleSubmit} />
           </View>
         )}

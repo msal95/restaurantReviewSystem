@@ -36,8 +36,6 @@ export default StyleSheet.create({
   visitDateContainer: {
     marginHorizontal: Metrics.base,
     marginBottom: Metrics.doubleBase,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   visitDateTitle: {
     fontSize: Fonts.size.input,
@@ -50,5 +48,13 @@ export default StyleSheet.create({
   },
   reviewContainer: {
     backgroundColor: 'white',
+  },
+  dateInputContainer: {
+    width: Metrics.screenWidth - Metrics.doubleSection,
+  },
+  ratingContainer: {
+    alignSelf: 'center',
+    paddingVertical: Metrics.base,
+    width: Metrics.twoSeventy,
   },
 });

@@ -27,7 +27,7 @@ export default function InputFormField(props) {
     return (
       <DatePicker
         maxDate={new Date()}
-        style={styles.datePicker}
+        style={[styles.datePicker, inputContainerStyle]}
         date={selectedOption}
         mode="date"
         placeholder={placeholder}

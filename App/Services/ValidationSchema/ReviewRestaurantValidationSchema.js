@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 export const reviewRestaurantValidationSchema = yup.object().shape({
   comment: yup
-    .string()
+    .string().trim()
     .min(10, ({min, value}) => `${min - value.length} characters to go`)
     .required('Restaurant Review is required'),
   dateOfVisit: yup
