@@ -1,5 +1,13 @@
 import React, {useEffect} from 'react';
-import {ImageBackground, SafeAreaView, Text, View} from 'react-native';
+import {
+  ImageBackground,
+  Linking,
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {Avatar, Text as TextElement} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -44,6 +52,18 @@ function ProfileScreen(props) {
       });
   }, []);
 
+  function openDialPad() {
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${1234567890}';
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
+
+    Linking.openURL(phoneNumber);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={Images.cover} style={styles.image} />
@@ -66,14 +86,17 @@ function ProfileScreen(props) {
           <Text style={styles.userInfo}>{email}</Text>
         </View>
 
-        <View style={styles.infoContainer}>
+        <TouchableOpacity
+          onPress={openDialPad}
+          activeOpacity={0.6}
+          style={styles.infoContainer}>
           <Foundation
             name="telephone-accessible"
             size={20}
             color={Colors.blue}
           />
           <Text style={styles.userInfo}> {phoneNo}</Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.infoContainer}>
           <FontAwesome name="user" size={20} color={Colors.blue} />
@@ -81,12 +104,11 @@ function ProfileScreen(props) {
         </View>
 
         {isSelf && (
-          <View
-            style={{
-              width: 150,
-              alignSelf: 'center',
-              top: 35,
-            }}
+          <FormButton
+            title={Strings.logout}
+            onPress={() => props?.onLogout()}
+            iconName="logout"
+            buttonContainer={styles.buttonContainer}
           />
         )}
       </View>

@@ -14,7 +14,7 @@ import {capitalize, GENDER, ROLE} from '../../Lib/constants';
 import SignUpActions from '../../Redux/AuthRedux';
 import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpValidationSchema';
 import FormButton from '../../Components/Button';
-import {errorMessage} from '../../Lib/utils';
+import {errorMessage, printLogs} from '../../Lib/utils';
 
 function SignupScreen(props) {
   const {
@@ -46,6 +46,7 @@ function SignupScreen(props) {
   const phoneRef = useRef();
 
   function onPressSignUp(values) {
+    printLogs(values);
     const data = {
       ...values,
       _id: userInfo?._id,

@@ -16,12 +16,12 @@ import InputFormField from '../../Components/InputFormField';
 import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
-import {PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
+import {capitalize, PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
 import {Images} from '../../Themes';
 import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
 import {errorMessage, printLogs} from '../../Lib/utils';
-import ListFooterComponent from '../../Components/ListFooterComponent'
-import ListEmptyComponent from '../../Components/ListEmptyComponent'
+import ListFooterComponent from '../../Components/ListFooterComponent';
+import ListEmptyComponent from '../../Components/ListEmptyComponent';
 
 function RestaurantDetailsScreen(props) {
   const {
@@ -60,21 +60,6 @@ function RestaurantDetailsScreen(props) {
   }, [props?.loading]);
 
   useEffect(() => {
-    if (role === ROLE.ADMIN || role === ROLE.OWNER) {
-      navigation?.setOptions({
-        headerRight: () => (
-          <FormButton
-            title={Strings.edit}
-            onPress={() =>
-              props?.navigation?.navigate({
-                name: 'CreateRestaurant',
-                params: {restDetails: details, isEdit: true},
-              })
-            }
-          />
-        ),
-      });
-    }
     onFetchRestaurantDetails({restaurantId});
     onGetAllReviews({restaurantId, pageNo, pageSize});
   }, []);
@@ -103,16 +88,14 @@ function RestaurantDetailsScreen(props) {
       setPageNo(prevState => prevState + 1);
     }
   }
-
   function renderCommentsList({item, index}) {
     const {rating: commentRating, comment: commentText, user = {}} = item || {};
-    const {firstName = '', lastName = ''} = user ?? {};
+    const {fullName} = user ?? {};
+    printLogs({user});
     return (
       <ListItem key={user.id} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>
-            {firstName} {lastName}
-          </ListItem.Title>
+          <ListItem.Title>{capitalize(fullName)}</ListItem.Title>
           <ListItem.Subtitle>{commentText}</ListItem.Subtitle>
         </ListItem.Content>
         <Rating imageSize={15} readonly startingValue={commentRating} />

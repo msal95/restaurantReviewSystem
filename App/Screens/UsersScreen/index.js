@@ -1,5 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Linking,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Avatar, ListItem} from 'react-native-elements';
 import {connect} from 'react-redux';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -88,6 +95,18 @@ function UsersScreen(props) {
     openedSwipeableRef.current = ref;
   };
 
+  function openDialPad() {
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${1234567890}';
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
+
+    Linking.openURL(phoneNumber);
+  }
+
   function onPressEdit(item) {
     navigation.navigate('SignUp', {
       isEditing: true,
@@ -128,14 +147,17 @@ function UsersScreen(props) {
                     {createdAt && moment(createdAt).format('LL')}
                   </Text>
                 </ListItem.Subtitle>
-                <View style={styles.infoDatePhone}>
+                <TouchableOpacity
+                  onPress={openDialPad}
+                  activeOpacity={0.6}
+                  style={styles.infoDatePhone}>
                   <Foundation
                     name="telephone-accessible"
                     size={20}
                     color={Colors.blue}
                   />
                   <Text style={styles.phoneText}> {phoneNo}</Text>
-                </View>
+                </TouchableOpacity>
               </View>
             </ListItem.Content>
 

@@ -27,12 +27,12 @@ export function* onSignup(api, {data = {}}) {
     }
     const {response} = yield call(Api.callServer, api.signup, form_data);
     if (response?.authToken) {
+      yield put(AuthActions.authSuccess(response));
       yield put(AuthActions.signupSuccess(response));
       showMessage(Strings.accountCreatedSuccessful, MESSAGE_TYPES.SUCCESS);
     }
   } catch ({message}) {
     yield put(AuthActions.signupFailure(message));
-    showMessage(Strings.accountCreatedFailure, MESSAGE_TYPES.ERROR);
   }
 }
 
@@ -91,7 +91,6 @@ export function* onLogin(api, {data = {}}) {
     }
   } catch ({message}) {
     yield put(AuthActions.loginFailure(message));
-    showMessage(Strings.loginFailure, MESSAGE_TYPES.ERROR);
   }
 }
 

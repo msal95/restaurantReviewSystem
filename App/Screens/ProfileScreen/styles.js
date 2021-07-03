@@ -51,5 +51,8 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: Colors.red,
+    width: Metrics.oneHundredFifty,
+    alignSelf: 'center',
+    top: Metrics.section,
   },
 });

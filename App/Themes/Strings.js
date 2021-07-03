@@ -87,4 +87,7 @@ export const Strings = {
   restaurantsDeleted: 'Restaurants Deleted Successfully',
   confirmPassword: 'Confirm Password',
   noRecordFound: 'No List Items are Found belong to this category',
+  highestRatedReview: 'Highest Rated Review',
+  lowestRatedReview: 'Highest Rated Review',
+  lastReview: 'Highest Rated Review',
 };
