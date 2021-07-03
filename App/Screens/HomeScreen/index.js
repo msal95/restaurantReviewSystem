@@ -163,7 +163,7 @@ function HomeScreen (props) {
       image,
       name,
       description,
-      averageRating = 3,
+      averageRating = 0,
       establishedAt,
     } = item || {}
 
