@@ -88,8 +88,9 @@ export const Strings = {
   confirmPassword: 'Confirm Password',
   noRecordFound: 'No List Items are Found belong to this category',
   highestRatedReview: 'Highest Rated Review',
-  lowestRatedReview: 'Highest Rated Review',
-  lastReview: 'Highest Rated Review',
+  lowestRatedReview: 'Lowest Rated Review',
+  lastReview: 'Latest Review',
+  otherReviews: 'Other Reviews',
   noRestaurantFound: 'No Restaurants Found',
   applyFilters: 'Apply Filters',
 };
