@@ -26,6 +26,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
+    marginTop: Metrics.small,
     paddingBottom: Metrics.base,
   },
   infoDateText: {
