@@ -33,7 +33,7 @@ function RestaurantDetailsScreen (props) {
     lastReview,
   } = props ?? {}
 
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(1)
   const [refreshing, setRefreshing] = useState(false)
   const flatListRefreshingRef = useRef()
   const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE)
@@ -160,7 +160,7 @@ function RestaurantDetailsScreen (props) {
                 />
               </View>
               {errorMessage(errors?.dateOfVisit, touched.dateOfVisit, styles.dateError)}
-              <FormButton title={Strings.submitReview} onPress={handleSubmit}/>
+              <FormButton title={Strings.submitReview} onPress={handleSubmit} loading={props?.reviewCreateLoading}/>
             </View>
           )}
         </Formik>
@@ -233,12 +233,12 @@ function RestaurantDetailsScreen (props) {
           <TextElement h4 style={styles.commentHeadingText}>{Strings.allComments}</TextElement>
         ) : (
           <>
-            <ReviewItem onDeleteReview={props.onDeleteReview}
-                        heading={Strings.highestRatedReview} item={highestRatedReview} key={Strings.highestRatedReview} navigation={props?.navigation}/>
-            <ReviewItem onDeleteReview={props.onDeleteReview}
-                        heading={Strings.lowestRatedReview} item={lowestRatedReview} key={Strings.lowestRatedReview} navigation={props?.navigation}/>
-            <ReviewItem onDeleteReview={props.onDeleteReview}
-                        heading={Strings.lastReview} item={lastReview} key={Strings.lastReview} navigation={props?.navigation}/>
+            {Boolean(highestRatedReview?._id) && <ReviewItem onDeleteReview={props.onDeleteReview}
+                                               heading={Strings.highestRatedReview} item={highestRatedReview} key={Strings.highestRatedReview} navigation={props?.navigation}/>}
+            {Boolean(lowestRatedReview?._id) && <ReviewItem onDeleteReview={props.onDeleteReview}
+                                              heading={Strings.lowestRatedReview} item={lowestRatedReview} key={Strings.lowestRatedReview} navigation={props?.navigation}/>}
+            {Boolean(lastReview?._id) && <ReviewItem onDeleteReview={props.onDeleteReview}
+                                       heading={Strings.lastReview} item={lastReview} key={Strings.lastReview} navigation={props?.navigation}/>}
           </>
         )}
       </View>
@@ -273,6 +273,7 @@ const mapStateToProps = ({
       isReviewed,
     } = {},
     allReviews = [],
+    reviewCreateLoading = false,
     resDetailsLoading = true,
     isRevRemaining: isRemaining = false,
     revLoading: loading = false,
@@ -288,7 +289,8 @@ const mapStateToProps = ({
   isRemaining,
   isReviewed,
   loading,
-  resDetailsLoading
+  resDetailsLoading,
+  reviewCreateLoading
 })
 
 export default connect(

@@ -93,6 +93,6 @@ export const Strings = {
   lastReview: 'Latest Review',
   otherReviews: 'Other Reviews',
   noRestaurantFound: 'No Restaurants Found',
-  noReviewFound: 'noReviewFound',
+  noReviewFound: 'No Reviews Found',
   applyFilters: 'Apply Filters',
 }

@@ -130,17 +130,17 @@ export const _createRestaurantFailure = (state, { error = '' }) => ({
 
 export const _createReview = state => ({
   ...state,
-  loading: true,
+  reviewCreateLoading: true,
 })
 export const _createReviewSuccess = (state, { response }) => ({
   ...state,
   restaurantDetails: { ...state?.restaurantDetails, isReviewed: true },
   createReview: response || {},
-  loading: false,
+  reviewCreateLoading: false,
 })
 export const _createReviewFailure = (state, { error = '' }) => ({
   ...state,
-  loading: false,
+  reviewCreateLoading: false,
   error,
 })
 

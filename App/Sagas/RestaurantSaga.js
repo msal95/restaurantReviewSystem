@@ -59,7 +59,7 @@ export function * onCreateReview (api, { data = {}, restaurantId }) {
     showMessage(Strings.createReviewSuccess, MESSAGE_TYPES.SUCCESS)
   } catch ({ message }) {
     yield put(RestaurantActions.createReviewFailure(message))
-    showMessage(Strings.createReviewFail, MESSAGE_TYPES.ERROR)
+    showMessage(message ?? Strings.createReviewFail, MESSAGE_TYPES.ERROR)
   }
 }
 
