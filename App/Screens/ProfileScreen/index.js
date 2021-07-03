@@ -41,7 +41,7 @@ function ProfileScreen(props) {
           <FormButton
             title={Strings.edit}
             onPress={() =>
-              navigation.navigate('SignUp', {
+              navigation.navigate('EditProfile', {
                 isEditing: true,
                 isSelf,
                 otherUser,

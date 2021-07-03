@@ -36,6 +36,7 @@ function TabNavigator(props) {
 
   return (
     <Tab.Navigator
+      initialRouteName={'Home'}
       screenOptions={({route}) => ({
         tabBarIcon: props => renderTabIcon({...props, route}),
         tabBarActiveTintColor: Colors.blue,

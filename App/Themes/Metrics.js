@@ -27,6 +27,8 @@ const metrics = {
   oneHundredTen: 110,
   oneHundredFifty: 150,
   twoHundred: 200,
+  twoSeventy: 270,
+  threeHundred: 300,
   horizontalLineHeight: 1,
   screenWidth: width < height ? width : height,
   screenHeight: width < height ? height : width,

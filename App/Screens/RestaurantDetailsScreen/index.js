@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, SafeAreaView, Text, View} from 'react-native';
+import {FlatList, SafeAreaView, Text, View, Image} from 'react-native';
 import {
   Card,
-  Image,
   ListItem,
-  Rating,
   Text as TextElement,
 } from 'react-native-elements';
+import StarRating from 'react-native-star-rating';
 import {connect, shallowEqual, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 
@@ -17,10 +16,9 @@ import FormButton from '../../Components/Button';
 import CommentLists from '../../Components/CommentLists';
 import RestActions from '../../Redux/RestaurantRedux';
 import {capitalize, PAGINATION_DEFAULTS, ROLE} from '../../Lib/constants';
-import {Images} from '../../Themes';
+import { Colors, Images, Metrics } from '../../Themes'
 import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
 import {errorMessage, printLogs} from '../../Lib/utils';
-import ListFooterComponent from '../../Components/ListFooterComponent';
 import ListEmptyComponent from '../../Components/ListEmptyComponent';
 import ReviewsListing from '../../Components/ReviewsListing';
 
@@ -40,7 +38,7 @@ function RestaurantDetailsScreen(props) {
 
   printLogs({highestRatedReview});
 
-  const [rating, setRating] = useState('0');
+  const [rating, setRating] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const flatListRefreshingRef = useRef();
   const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE);
@@ -97,14 +95,22 @@ function RestaurantDetailsScreen(props) {
   function renderCommentsList({item, index}) {
     const {rating: commentRating, comment: commentText, user = {}} = item || {};
     const {fullName} = user ?? {};
-    printLogs({user});
+
     return (
       <ListItem key={user.id} bottomDivider>
         <ListItem.Content>
           <ListItem.Title>{capitalize(fullName)}</ListItem.Title>
           <ListItem.Subtitle>{commentText}</ListItem.Subtitle>
         </ListItem.Content>
-        <Rating imageSize={15} readonly startingValue={commentRating} />
+        <StarRating
+          maxStars={5}
+          rating={commentRating}
+          halfStarEnabled
+          halfStarColor={Colors.golden}
+          fullStarColor={Colors.golden}
+          starSize={Metrics.fifteen}
+          disabled
+        />
       </ListItem>
     );
   }
@@ -130,14 +136,16 @@ function RestaurantDetailsScreen(props) {
             <TextElement style={styles.commentHeading} h4>
               {Strings.leaveAComment}
             </TextElement>
-            <Rating
-              showRating
-              startingValue={3}
-              size={20}
-              onStartRating={startingValue => setRating(startingValue)}
-              style={styles.rating}
-            />
-
+            <View style={styles.ratingContainer}>
+              <StarRating
+                maxStars={5}
+                rating={rating}
+                halfStarEnabled
+                halfStarColor={Colors.golden}
+                fullStarColor={Colors.golden}
+                selectedStar={startingValue => setRating(startingValue)}
+              />
+            </View>
             <InputFormField
               label={Strings.comment}
               placeholder={Strings.enterYourComment}
@@ -189,6 +197,7 @@ function RestaurantDetailsScreen(props) {
         keyExtractor={(item, index) => String(item?._id ?? index)}
         initialNumToRender={3}
         data={reviews}
+        extraData={reviews}
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderListFooter}
         renderItem={renderCommentsList}
@@ -229,11 +238,14 @@ function RestaurantDetailsScreen(props) {
           </Text>
           <Text style={styles.reviewsTitle}>
             {Strings.avgRating}
-            <Rating
-              imageSize={15}
-              fractions
-              startingValue={averageRating}
-              style={{paddingRight: 20}}
+            <StarRating
+              disabled
+              maxStars={5}
+              rating={averageRating}
+              halfStarEnabled
+              halfStarColor={Colors.golden}
+              fullStarColor={Colors.golden}
+              starSize={Metrics.fifteen}
             />
           </Text>
         </View>

@@ -49,9 +49,6 @@ export default StyleSheet.create({
   containerInputStyle: {
     height: Metrics.hundred,
   },
-  rating: {
-    marginVertical: Metrics.doubleBase,
-  },
   cardContainer: {
     margin: 0,
     flex: 1,
@@ -78,4 +75,9 @@ export default StyleSheet.create({
     backgroundColor: Colors.white,
     padding: Metrics.base,
   },
+  ratingContainer: {
+    alignSelf: 'center',
+    paddingVertical: Metrics.base,
+    width: Metrics.twoSeventy
+  }
 });

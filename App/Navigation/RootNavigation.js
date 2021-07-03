@@ -71,7 +71,7 @@ function RootNavigation(props) {
         component={ProfileScreen}
         options={{title: Strings.profile}}
       />
-      <Stack.Screen name="SignUp" component={SignupScreen} />
+      <Stack.Screen name="EditProfile" component={SignupScreen} />
     </Stack.Navigator>
   );
 }

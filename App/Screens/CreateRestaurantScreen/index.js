@@ -68,7 +68,7 @@ function CreateRestaurantScreen(props) {
           handleBlur,
           touched,
         }) => (
-          <View>
+          <View style={styles.container}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
               <ImageCropPicker
                 onSelectImage={param => setImageSource(param)}

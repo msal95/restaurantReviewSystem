@@ -1,13 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {Avatar, FAB, Icon, ListItem, Rating} from 'react-native-elements';
+import {Avatar, FAB, Icon, ListItem} from 'react-native-elements';
 import {connect, shallowEqual, useSelector} from 'react-redux';
 import moment from 'moment';
 
 import {Strings} from '../../Themes/Strings';
 import AuthActions from '../../Redux/AuthRedux';
 import RestActions from '../../Redux/RestaurantRedux';
-import {Colors, Images} from '../../Themes';
+import { Colors, Images, Metrics } from '../../Themes'
 import LoadingIndicator from '../../Components/LoadingIndicator';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import {
@@ -26,6 +26,7 @@ import RadioForm from 'react-native-simple-radio-button';
 import {isEmpty} from 'ramda';
 import ListEmptyComponent from '../../Components/ListEmptyComponent';
 import ListFooterComponent from '../../Components/ListFooterComponent';
+import StarRating from 'react-native-star-rating'
 
 function HomeScreen(props) {
   const {
@@ -203,11 +204,14 @@ function HomeScreen(props) {
                     </Text>
                   )}
                 </ListItem.Subtitle>
-                <Rating
-                  type="custom"
-                  imageSize={15}
-                  readonly
-                  startingValue={averageRating}
+                <StarRating
+                  maxStars={5}
+                  rating={averageRating}
+                  halfStarEnabled
+                  halfStarColor={Colors.golden}
+                  fullStarColor={Colors.golden}
+                  starSize={Metrics.fifteen}
+                  disabled
                 />
               </View>
             </ListItem.Content>

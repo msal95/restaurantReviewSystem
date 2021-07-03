@@ -108,7 +108,7 @@ function UsersScreen(props) {
   }
 
   function onPressEdit(item) {
-    navigation.navigate('SignUp', {
+    navigation.navigate('EditProfile', {
       isEditing: true,
       isSelf: false,
       otherUser: item,

@@ -16,7 +16,6 @@ function CommentLists(props) {
   const navigation = useNavigation();
   const {reviews, renderListHeader, onDeleteReview, details, deletingReview} =
     props;
-
   const openedSwipeableRef = useRef();
 
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -79,8 +78,9 @@ function CommentLists(props) {
   return (
     <View style={styles.listContainer}>
       <FlatList
-        keyExtractor={item => item.id}
+        keyExtractor={item => item?._id}
         data={reviews}
+        extraData={reviews}
         ListHeaderComponent={renderListHeader}
         renderItem={renderListItem}
         onEndReached={props.onEndReached}

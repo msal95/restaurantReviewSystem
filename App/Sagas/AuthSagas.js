@@ -48,7 +48,6 @@ export function* onEditProfile(api, {data = {}}) {
     NavigationService.goBack();
   } catch ({message}) {
     yield put(AuthActions.editProfileFailure(message));
-    showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }
 export function* onEditOtherUser(api, {data = {}}) {
@@ -66,7 +65,6 @@ export function* onEditOtherUser(api, {data = {}}) {
     NavigationService.goBack();
   } catch ({message}) {
     yield put(AuthActions.editOtherUserFailure(message));
-    showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }
 export function* onDeleteUser(api, {data = {}}) {
@@ -78,7 +76,6 @@ export function* onDeleteUser(api, {data = {}}) {
     showMessage(Strings.userDeleted, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(AuthActions.deleteUserFailure(message));
-    showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }
 

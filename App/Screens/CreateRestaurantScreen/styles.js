@@ -9,6 +9,9 @@ export default StyleSheet.create({
     marginHorizontal: Metrics.fifteen,
     marginTop: Metrics.fifteen,
   },
+  container: {
+    flex: 1,
+  },
   headingText: {
     textAlign: 'center',
     marginVertical: Metrics.doubleSection,

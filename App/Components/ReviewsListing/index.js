@@ -1,19 +1,16 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import RestActions from '../../Redux/RestaurantRedux';
-import {ListItem, Rating, Text as TextElement} from 'react-native-elements';
-import {capitalize} from '../../Lib/constants';
-import AuthActions from '../../Redux/AuthRedux';
-import {Strings} from '../../Themes/Strings';
-import {Text, View} from 'react-native';
-import {printLogs} from '../../Lib/utils';
+import React from 'react'
+import { connect } from 'react-redux'
+import { ListItem, Rating } from 'react-native-elements'
+import { capitalize } from '../../Lib/constants'
+import AuthActions from '../../Redux/AuthRedux'
+import { Strings } from '../../Themes/Strings'
+import { Text, View } from 'react-native'
 
 function ReviewsListing(props) {
   const {user, highestRatedReview} = props;
-  printLogs({highestRatedReview});
-  const {fullName = '', picture = ''} = user || {};
+  const {fullName = ''} = user || {};
   const {comment, rating = ''} = highestRatedReview || {};
-  printLogs({rating});
+
   return (
     <View>
       <Text>{Strings.highestRatedReview}</Text>
