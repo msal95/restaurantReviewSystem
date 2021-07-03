@@ -18,8 +18,7 @@ function ReviewItem (props) {
   const [reviewId, setReviewId] = useState('')
   const [isDeleteModal, setIsDeleteModal] = useState(false)
   const { user, item, heading, containerStyle = {}, rPicture = '', rFullName = '' } = props
-  const { fullName = '' } = user || {}
-  const { comment, rating = '', user: { picture } = {}, reply } = item || {}
+  const { comment, rating = '', user: { picture, fullName = '' } = {}, reply } = item || {}
   const openedSwipeableRef = useRef()
 
   const closeModal = () => {
@@ -172,9 +171,19 @@ function ReviewItem (props) {
                 size="medium"
                 rounded
                 source={rPicture ? { uri: rPicture } : Images.userPlaceholder}
-                avatarStyle={{ resizeMode: 'cover' }}
+                avatarStyle={{ resizeMode: 'cover'}}
               />
-              <Text style={styles.replyDescription}>{reply}</Text>
+              <ListItem.Content style={{paddingLeft: Metrics.base}}>
+                <View style={styles.listItemDetails}>
+                  <ListItem.Title style={styles.userTitle}>{capitalize(rFullName)}</ListItem.Title>
+                </View>
+                <Text
+                  style={{}}
+                  numberOfLines={lines}
+                  onTextLayout={onTextLayout}>
+                  {reply}
+                </Text>
+              </ListItem.Content>
             </View>
           </View>
         )}
