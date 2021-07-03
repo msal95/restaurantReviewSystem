@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Avatar, ListItem } from 'react-native-elements'
-import { capitalize, ROLE } from '../../Lib/constants'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import StarRating from 'react-native-star-rating'
-import { Colors, Images, Metrics } from '../../Themes'
 import Modal from 'react-native-modal'
+
+import { capitalize, ROLE } from '../../Lib/constants'
+import { Colors, Images, Metrics } from '../../Themes'
 import SwipeableButton, { renderRightAction } from '../../Components/SwipeableButton'
 import { Strings } from '../../Themes/Strings'
 import ConfirmationModal from '../ConfirmationModal'
@@ -66,7 +67,7 @@ function ReviewItem (props) {
     const close = () => openedSwipeableRef.current?.close()
 
     if (user?.role === ROLE.ADMIN) {
-      return <View style={{width: 200, flexDirection: 'row'}}>
+      return <View style={styles.actionButtons}>
         {renderRightAction(
           'Edit',
           Colors.blue,

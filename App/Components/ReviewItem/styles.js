@@ -49,4 +49,8 @@ export default StyleSheet.create({
     color: Colors.border,
     marginHorizontal: Metrics.base,
   },
+  actionButtons: {
+    width: 200,
+    flexDirection: 'row'
+  }
 });

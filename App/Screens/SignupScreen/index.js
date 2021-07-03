@@ -5,6 +5,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import {connect} from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
 import {Formik} from 'formik';
+import {useKeyboard} from '@react-native-community/hooks';
+import {getBottomSpace} from 'react-native-iphone-x-helper';
 
 import styles from './styles';
 import InputFormField from '../../Components/InputFormField';
@@ -16,8 +18,6 @@ import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpVali
 import FormButton from '../../Components/Button';
 import {errorMessage, printLogs} from '../../Lib/utils';
 import {editProfileValidationSchema} from '../../Services/ValidationSchema/EditProfileValidationSchema';
-import {useKeyboard} from '@react-native-community/hooks';
-import {getBottomSpace} from 'react-native-iphone-x-helper';
 
 function SignupScreen(props) {
   const {keyboardShown, keyboardHeight} = useKeyboard();

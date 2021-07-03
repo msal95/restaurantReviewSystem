@@ -1,9 +1,9 @@
-import React from 'react';
-import {Text, View} from 'react-native';
-import ContentLoader, {Facebook} from 'react-content-loader/native';
+import React from 'react'
+import { Text, View } from 'react-native'
+import { Facebook } from 'react-content-loader/native'
 
-import styles from './styles';
-import {Strings} from '../../Themes/Strings';
+import styles from './styles'
+import { Strings } from '../../Themes/Strings'
 
 function ListEmptyComponent(props) {
   if (props?.loading) {

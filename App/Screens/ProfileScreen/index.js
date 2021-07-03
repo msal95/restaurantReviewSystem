@@ -11,6 +11,7 @@ import {Avatar, Button, Text as TextElement} from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {phonecall, email as emailCall} from 'react-native-communications';
 
 import styles from './styles';
 import AuthActions from '../../Redux/AuthRedux';
@@ -18,7 +19,6 @@ import {Colors, Images} from '../../Themes';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import {capitalize, ROLE} from '../../Lib/constants';
-import {phonecall, email as emailCall} from 'react-native-communications';
 
 function ProfileScreen(props) {
   const {user, route, navigation} = props || {};

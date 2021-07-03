@@ -1,8 +1,9 @@
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal'
-import styles from './styles'
 import PropTypes from 'prop-types'
+
+import styles from './styles'
 
 function BottomSheetModal (props) {
   const {

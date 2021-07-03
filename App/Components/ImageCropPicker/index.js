@@ -6,7 +6,7 @@ import {Avatar, BottomSheet, ListItem} from 'react-native-elements';
 
 import styles from './styles';
 import {Strings} from '../../Themes/Strings';
-import {Colors} from '../../Themes';
+import { Colors, Metrics } from '../../Themes'
 import {checkCameraPermission, checkStoragePermission} from '../../Lib/utils';
 import {IMAGE_CONFIGS} from '../../Lib/constants';
 
@@ -55,7 +55,7 @@ function ImageCropPicker(props) {
           name: 'camera',
           color: Colors.blue,
           type: 'font-awesome',
-          size: 30,
+          size: Metrics.thirty,
         }}
         source={{
           uri: imgSrc.path,

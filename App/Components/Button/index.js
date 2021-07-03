@@ -1,8 +1,9 @@
 import React from 'react'
-import styles from './styles'
 import propTypes from 'prop-types'
 import { Button } from 'react-native-elements'
 import { ViewPropTypes } from 'react-native'
+
+import styles from './styles'
 
 export default function FormButton(props) {
   const {onPress, title, loading, disabled, buttonContainer} = props;

@@ -1,11 +1,12 @@
 import {Image, Text, View} from 'react-native';
-import styles from './styles';
-import {Images, Metrics as MetricsMod} from '../../Themes';
 import Modal from 'react-native-modal';
 import React, {forwardRef, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Button} from 'react-native-elements';
+
+import styles from './styles';
+import {Images, Metrics as MetricsMod} from '../../Themes';
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const {
