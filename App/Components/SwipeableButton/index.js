@@ -66,10 +66,14 @@ function SwipeableButton(props) {
     );
   };
 
-  const renderRightActions = progress => (
-    <View style={{width: 200, flexDirection: 'row'}}>
-      {role === ROLE.ADMIN &&
-        renderRightAction(
+  const renderRightActions = progress => {
+    if (role !== ROLE.ADMIN) {
+      return null;
+    }
+
+    return (
+      <View style={{width: 200, flexDirection: 'row'}}>
+        {renderRightAction(
           'Edit',
           Colors.blue,
           200,
@@ -77,8 +81,7 @@ function SwipeableButton(props) {
           'edit',
           onPressEdit,
         )}
-      {(role === ROLE.ADMIN || role === ROLE.OWNER) &&
-        renderRightAction(
+        {renderRightAction(
           'Remove',
           Colors.fire,
           100,
@@ -86,18 +89,9 @@ function SwipeableButton(props) {
           'trash-alt',
           onPressDelete,
         )}
-
-      {role === ROLE.OWNER &&
-        renderRightAction(
-          'Reply',
-          Colors.green,
-          100,
-          progress,
-          'edit',
-          onPressReply,
-        )}
-    </View>
-  );
+      </View>
+    );
+  };
 
   const onSwipeableWillOpen = () => {
     onSwipeableOpen(swipeableRow.current);

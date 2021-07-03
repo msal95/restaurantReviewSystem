@@ -90,6 +90,6 @@ export const Strings = {
   highestRatedReview: 'Highest Rated Review',
   lowestRatedReview: 'Highest Rated Review',
   lastReview: 'Highest Rated Review',
-  noRestaurantFound: 'No Restaurant Found',
+  noRestaurantFound: 'No Restaurants Found',
   applyFilters: 'Apply Filters',
 };
