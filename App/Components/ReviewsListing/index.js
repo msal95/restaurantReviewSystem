@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ListItem, Rating } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { capitalize } from '../../Lib/constants'
 import AuthActions from '../../Redux/AuthRedux'
 import { Strings } from '../../Themes/Strings'
 import { Text, View } from 'react-native'
+import StarRating from 'react-native-star-rating'
+import { Colors, Metrics } from '../../Themes'
 
 function ReviewsListing(props) {
   const {user, highestRatedReview} = props;
@@ -19,7 +21,15 @@ function ReviewsListing(props) {
           <ListItem.Title>{capitalize(fullName)}</ListItem.Title>
           <ListItem.Subtitle>{comment}</ListItem.Subtitle>
         </ListItem.Content>
-        <Rating imageSize={15} readonly startingValue={rating} />
+        <StarRating
+          maxStars={5}
+          rating={rating}
+          halfStarEnabled
+          halfStarColor={Colors.golden}
+          fullStarColor={Colors.golden}
+          starSize={Metrics.fifteen}
+          disabled
+        />
       </ListItem>
     </View>
   );
