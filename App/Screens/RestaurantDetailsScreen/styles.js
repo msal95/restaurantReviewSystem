@@ -65,6 +65,7 @@ export default StyleSheet.create({
   commentHeading: {
     marginTop: Metrics.fifteen,
     marginHorizontal: Metrics.base,
+    alignSelf: 'center'
   },
   reviewContainer: {
     backgroundColor: 'white',

@@ -86,16 +86,14 @@ function RestaurantDetailsScreen (props) {
   }
 
   function renderCommentsList ({ item, index }) {
-    const { rating: commentRating, comment: commentText, user = {} } = item || {}
-    const { fullName } = user ?? {}
-
     return (
-      <ReviewItem item={item} containerStyle={{ paddingHorizontal: Metrics.base, }} heading={index === 0 ? Strings.otherReviews : ''}/>
+      <ReviewItem item={item} containerStyle={{ paddingHorizontal: Metrics.base, }}
+                  onDeleteReview={props.onDeleteReview}
+                  heading={index === 0 ? Strings.otherReviews : ''} navigation={props?.navigation}/>
     )
   }
 
   function renderListFooter () {
-
     if (role !== ROLE.REGULAR || props?.isReviewed) {
       return null
     }
@@ -161,7 +159,6 @@ function RestaurantDetailsScreen (props) {
   }
 
   function renderComments () {
-
     return (
       <FlatList
         keyExtractor={(item, index) => String(item?._id ?? index)}
@@ -224,9 +221,12 @@ function RestaurantDetailsScreen (props) {
           <TextElement h4>{Strings.allComments}</TextElement>
         ) : (
           <>
-            <ReviewItem heading={Strings.highestRatedReview} item={highestRatedReview} key={Strings.highestRatedReview}/>
-            <ReviewItem heading={Strings.lowestRatedReview} item={lowestRatedReview} key={Strings.lowestRatedReview}/>
-            <ReviewItem heading={Strings.lastReview} item={lastReview} key={Strings.lastReview}/>
+            <ReviewItem onDeleteReview={props.onDeleteReview}
+                        heading={Strings.highestRatedReview} item={highestRatedReview} key={Strings.highestRatedReview} navigation={props?.navigation}/>
+            <ReviewItem onDeleteReview={props.onDeleteReview}
+                        heading={Strings.lowestRatedReview} item={lowestRatedReview} key={Strings.lowestRatedReview} navigation={props?.navigation}/>
+            <ReviewItem onDeleteReview={props.onDeleteReview}
+                        heading={Strings.lastReview} item={lastReview} key={Strings.lastReview} navigation={props?.navigation}/>
           </>
         )}
       </View>
@@ -246,6 +246,7 @@ const mapDispatchToProps = dispatch => ({
   onCreateReview: (data, restaurantId) =>
     dispatch(RestActions.createReview(data, restaurantId)),
   onGetAllReviews: data => dispatch(RestActions.getAllReviews(data)),
+  onDeleteReview: data => dispatch(RestActions.deleteReview(data)),
 })
 
 const mapStateToProps = ({

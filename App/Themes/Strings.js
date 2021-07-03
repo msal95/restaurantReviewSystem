@@ -88,6 +88,7 @@ export const Strings = {
   confirmPassword: 'Confirm Password',
   noRecordFound: 'No List Items are Found belong to this category',
   highestRatedReview: 'Highest Rated Review',
+  userReview: 'User Review',
   lowestRatedReview: 'Lowest Rated Review',
   lastReview: 'Latest Review',
   otherReviews: 'Other Reviews',

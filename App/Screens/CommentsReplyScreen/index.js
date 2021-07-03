@@ -1,48 +1,45 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
-import {
-  Card,
-  ListItem,
-  Rating,
-  Text as TextElement,
-} from 'react-native-elements';
-import {Formik} from 'formik';
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import { Card, Text as TextElement, } from 'react-native-elements'
+import { Formik } from 'formik'
 
-import styles from './styles';
-import {Strings} from '../../Themes/Strings';
-import InputFormField from '../../Components/InputFormField';
-import FormButton from '../../Components/Button';
-import RestActions from '../../Redux/RestaurantRedux';
-import {connect} from 'react-redux';
-import {errorMessage} from '../../Lib/utils';
-import {reviewRestaurantValidationSchema} from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema';
-import {replyReviewValidationSchema} from '../../Services/ValidationSchema/ReplyReviewValidationSchema';
+import styles from './styles'
+import { Strings } from '../../Themes/Strings'
+import InputFormField from '../../Components/InputFormField'
+import FormButton from '../../Components/Button'
+import RestActions from '../../Redux/RestaurantRedux'
+import { connect } from 'react-redux'
+import { errorMessage } from '../../Lib/utils'
+import { reviewRestaurantValidationSchema } from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema'
+import { replyReviewValidationSchema } from '../../Services/ValidationSchema/ReplyReviewValidationSchema'
 import StarRating from 'react-native-star-rating'
 import { Colors } from '../../Themes'
+import ReviewItem from '../../Components/ReviewItem'
 
-function CommentsReplyScreen(props) {
-  const {review = {}, isAdmin = false, navigation} = props?.route?.params ?? {};
+function CommentsReplyScreen (props) {
+  const { review = {}, isAdmin = false, navigation } = props?.route?.params ?? {}
 
   useEffect(() => {
     if (isAdmin) {
       navigation?.setOptions({
         headerTitle: Strings.updateReview,
-      });
+      })
     }
-  }, []);
+  }, [])
 
-  const reviewInfo = review || {};
+  const reviewInfo = review || {}
 
-  const [rating, setRating] = useState(reviewInfo?.rating);
-  function onUpdateReview(values) {
+  const [rating, setRating] = useState(reviewInfo?.rating)
+
+  function onUpdateReview (values) {
     const data = {
       ...values,
       rating,
-    };
-    props?.onUpdateReview(data, review?.restaurant?._id, review?._id);
+    }
+    props?.onUpdateReview(data, review?.restaurant?._id, review?._id)
   }
 
-  function renderReviewUpdate() {
+  function renderReviewUpdate () {
     return (
       <Formik
         validationSchema={reviewRestaurantValidationSchema}
@@ -105,17 +102,17 @@ function CommentsReplyScreen(props) {
           </View>
         )}
       </Formik>
-    );
+    )
   }
 
-  function renderCommentReply() {
+  function renderCommentReply () {
     return (
       <Formik
         validationSchema={replyReviewValidationSchema}
         initialValues={{
           reply: '',
         }}
-        onSubmit={props?.onReviewReply}>
+        onSubmit={data => props?.onReviewReply(data, review?.restaurant?._id, review?._id)}>
         {({
           handleSubmit,
           values,
@@ -150,7 +147,7 @@ function CommentsReplyScreen(props) {
           </View>
         )}
       </Formik>
-    );
+    )
   }
 
   return (
@@ -158,17 +155,17 @@ function CommentsReplyScreen(props) {
       <ScrollView>
         <Card containerStyle={styles.cardContainer}>
           {!isAdmin && (
-            <ListItem.Content>
-              <ListItem.Title>{review?.user?.fullName}</ListItem.Title>
-              <ListItem.Subtitle>{review?.comment}</ListItem.Subtitle>
-            </ListItem.Content>
+            <ReviewItem heading={Strings.userReview}
+                        item={review}
+                        disableRightActions
+                        key={Strings.userReview}/>
           )}
-          <Card.Divider />
+          <Card.Divider/>
           {isAdmin ? renderReviewUpdate() : renderCommentReply()}
         </Card>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -176,13 +173,13 @@ const mapDispatchToProps = dispatch => ({
     dispatch(RestActions.reviewReply(data, restaurantId, reviewId)),
   onUpdateReview: (data, restaurantId, reviewId) =>
     dispatch(RestActions.updateReview(data, restaurantId, reviewId)),
-});
+})
 
-const mapStateToProps = ({restaurants: {replying} = {}}) => ({
+const mapStateToProps = ({ restaurants: { replying } = {} }) => ({
   replying,
-});
+})
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CommentsReplyScreen);
+)(CommentsReplyScreen)

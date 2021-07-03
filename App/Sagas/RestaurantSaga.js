@@ -108,11 +108,12 @@ export function* onReviewReply(
       restaurantId,
       reviewId,
     });
-    yield put(RestaurantActions.reviewReplySuccess());
+    yield put(RestaurantActions.reviewReplySuccess(data?.reply, reviewId));
+    NavigationService?.goBack();
     showMessage(Strings.replied, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(RestaurantActions.reviewReplyFailure(message));
-    showMessage(Strings.replied, MESSAGE_TYPES.ERROR);
+    showMessage(message, MESSAGE_TYPES.ERROR);
   }
 }
 
@@ -150,6 +151,7 @@ export function* onUpdateReview(
     });
     yield put(RestaurantActions.updateReviewSuccess(response, reviewId));
     showMessage(Strings.updateReviewSuccess, MESSAGE_TYPES.SUCCESS);
+    NavigationService?.goBack();
   } catch ({message}) {
     yield put(RestaurantActions.updateReviewFailure(message));
     showMessage(Strings.updateReviewFailure, MESSAGE_TYPES.ERROR);

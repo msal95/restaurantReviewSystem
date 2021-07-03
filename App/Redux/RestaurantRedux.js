@@ -27,7 +27,7 @@ const {Types, Creators} = createActions({
   getAllReviewsFailure: ['error'],
 
   reviewReply: ['data', 'restaurantId', 'reviewId'],
-  reviewReplySuccess: null,
+  reviewReplySuccess: ['reply', 'reviewId'],
   reviewReplyFailure: ['error'],
 
   updateRestaurant: ['data', 'restaurantId'],
@@ -132,6 +132,7 @@ export const _createReview = state => ({
 });
 export const _createReviewSuccess = (state, {response}) => ({
   ...state,
+  restaurantDetails: {...state?.restaurantDetails, isReviewed: true},
   createReview: response || {},
   loading: false,
 });
@@ -205,10 +206,16 @@ export const _getAllReviewsFailure = (state, {error = ''}) => ({
 });
 
 export const _reviewReply = state => ({...state, replying: true});
-export const _reviewReplySuccess = state => ({
-  ...state,
-  replying: false,
-});
+export const _reviewReplySuccess = (state, {reply, reviewId}) => {
+  return ({
+    ...state,
+    allReviews: (state.allReviews || []).map(
+      review => String(review?._id) === String(reviewId) ? {...review, reply}: review,
+    ),
+    replying: false,
+  })
+};
+
 export const _reviewReplyFailure = (state, {error = ''}) => ({
   ...state,
   replying: false,

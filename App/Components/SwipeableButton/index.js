@@ -8,6 +8,49 @@ import {Colors, Metrics} from '../../Themes';
 import styles from './styles';
 import {ROLE} from '../../Lib/constants';
 
+export const renderRightAction = (
+  text,
+  color,
+  xSlide,
+  progress,
+  image,
+  onPressHandler,
+  buttonStyle,
+  close
+) => {
+  const trans = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [xSlide, 0],
+    extrapolate: 'clamp',
+  });
+
+  const pressHandler = () => {
+    close();
+    onPressHandler();
+  };
+
+  return (
+    <Animated.View
+      style={[
+        styles.rectButtonContainer,
+        {transform: [{translateX: trans}]},
+      ]}>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        style={[styles.rightAction, {backgroundColor: color}, buttonStyle]}
+        onPress={pressHandler}>
+        <Icon
+          name={image}
+          type="font-awesome-5"
+          color={Colors.white}
+          size={Metrics.doubleBase}
+        />
+        <Text style={[styles.textStyle]}>{text}</Text>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
 function SwipeableButton(props) {
   const swipeableRow = useRef(null);
 
@@ -24,48 +67,6 @@ function SwipeableButton(props) {
     onPressReply,
   } = props || {};
 
-  const renderRightAction = (
-    text,
-    color,
-    xSlide,
-    progress,
-    image,
-    onPressHandler,
-    buttonStyle,
-  ) => {
-    const trans = progress.interpolate({
-      inputRange: [0, 1],
-      outputRange: [xSlide, 0],
-      extrapolate: 'clamp',
-    });
-
-    const pressHandler = () => {
-      close();
-      onPressHandler();
-    };
-
-    return (
-      <Animated.View
-        style={[
-          styles.rectButtonContainer,
-          {transform: [{translateX: trans}]},
-        ]}>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          style={[styles.rightAction, {backgroundColor: color}, buttonStyle]}
-          onPress={pressHandler}>
-          <Icon
-            name={image}
-            type="font-awesome-5"
-            color={Colors.white}
-            size={Metrics.doubleBase}
-          />
-          <Text style={[styles.textStyle]}>{text}</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  };
-
   const renderRightActions = progress => {
     if (role !== ROLE.ADMIN) {
       return null;
@@ -80,6 +81,8 @@ function SwipeableButton(props) {
           progress,
           'edit',
           onPressEdit,
+          {},
+          close
         )}
         {renderRightAction(
           'Remove',
@@ -88,6 +91,8 @@ function SwipeableButton(props) {
           progress,
           'trash-alt',
           onPressDelete,
+          {},
+          close
         )}
       </View>
     );
@@ -107,8 +112,8 @@ function SwipeableButton(props) {
       friction={1}
       leftThreshold={30}
       rightThreshold={40}
-      containerStyle={styles.swipeAbleContainer}
-      renderRightActions={renderRightActions}
+      containerStyle={props.swipeContainerStyle ?? styles.swipeAbleContainer}
+      renderRightActions={props?.renderRightActions ?? renderRightActions}
       onSwipeableWillOpen={onSwipeableWillOpen}>
       {children}
     </Swipeable>
