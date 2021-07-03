@@ -41,7 +41,7 @@ export const AuthTypes = Types;
 export default Creators;
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
-  loading: false,
+  loading: true,
   user: {},
   error: '',
   pageNo: PAGINATION_DEFAULTS.PAGE,

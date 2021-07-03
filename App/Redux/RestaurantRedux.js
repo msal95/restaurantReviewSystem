@@ -62,7 +62,7 @@ export const INITIAL_STATE = Immutable({
   updatingReview: false,
   isResRemaining: false,
   isRevRemaining: false,
-  loading: false,
+  loading: true,
   revLoading: false,
   resPageNo: PAGINATION_DEFAULTS.PAGE,
   resPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
@@ -244,18 +244,6 @@ export const _updateReviewSuccess = (state, {review, reviewId}) => ({
   ...state,
   loading: false,
   updatingReview: false,
-  highestRatedReview:
-    String(state?.highestRatedReview?._id) === String(reviewId)
-      ? review
-      : state?.highestRatedReview,
-  lowestRatedReview:
-    String(state?.lowestRatedReview?._id) === String(reviewId)
-      ? review
-      : state?.lowestRatedReview,
-  lastReview:
-    String(state?.lastReview?._id) === String(reviewId)
-      ? review
-      : state?.lastReview,
   allReviews: Immutable.asMutable?.(state.allReviews, {
     deep: true,
   }).map(item => (String(item?._id) === String(reviewId) ? review : item)),
