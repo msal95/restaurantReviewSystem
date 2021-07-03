@@ -1,9 +1,10 @@
-import { call } from 'redux-saga/effects'
+import { call, put } from 'redux-saga/effects'
+
 import { checkConnected } from '../Lib/NetworkUtils'
 import { showMessage } from '../Lib/utils'
 import { MESSAGE_TYPES } from '../Lib/constants'
-// import {logToConsole, showMessage} from '../Utils/Utils'
-// import AuthActions from '../Redux/LoginRedux'
+import AuthActions from '../Redux/AuthRedux'
+
 function * callServer (apiFunction, reqData = {}, showError = true, id = null) {
   try {
     const isConnected = yield checkConnected()
@@ -40,9 +41,9 @@ function * callServer (apiFunction, reqData = {}, showError = true, id = null) {
       if (showError) {
         showMessage(message, MESSAGE_TYPES.ERROR)
       }
-      if (status === 401 || (status === 500 && message === 'jwt expired')) {
-        // showMessage('Your session expired. Kindly login again.')
-        // yield put(AuthActions.logout())
+      if (status === 401) {
+        showMessage('Your session expired. Kindly login again.', MESSAGE_TYPES.ERROR)
+        yield put(AuthActions.logout())
       }
       throw {
         error: true,
