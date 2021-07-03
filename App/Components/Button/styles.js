@@ -4,12 +4,10 @@ import {Colors, Fonts, Metrics} from '../../Themes';
 
 export default StyleSheet.create({
   buttonStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.blue,
-    borderRadius: Metrics.base,
-    paddingVertical: Metrics.base,
+    marginHorizontal: Metrics.base,
+  },
+  disabledButtonStyle: {
+    backgroundColor: Colors.blueI
   },
   buttonTitle: {
     color: Colors.white,

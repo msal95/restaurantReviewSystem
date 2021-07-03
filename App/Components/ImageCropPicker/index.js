@@ -15,18 +15,18 @@ function ImageCropPicker(props) {
   const {onSelectImage, imgSrc = {}} = props;
 
   async function openCamera() {
-    setIsVisible(false);
     await checkCameraPermission(() => {
       ImagePicker.openCamera(IMAGE_CONFIGS).then(imageData => {
+        setIsVisible(false);
         onSelectImage(imageData);
       });
     });
   }
 
   async function openGallery(index) {
-    setIsVisible(false);
     await checkStoragePermission(() => {
       ImagePicker.openPicker(IMAGE_CONFIGS).then(imageData => {
+        setIsVisible(false);
         onSelectImage(imageData);
       });
     });

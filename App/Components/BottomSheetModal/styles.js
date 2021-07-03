@@ -21,25 +21,37 @@ const styles = StyleSheet.create({
     marginTop: Metrics.twoHundred + bottomSpace,
   },
   topBar: {
-    width: Metrics.fourtyFive,
+    width: Metrics.fortyFive,
     height: Metrics.small,
     alignSelf: 'center',
     marginVertical: Metrics.base,
-    backgroundColor: Colors.silver,
+    backgroundColor: Colors.steel,
     borderRadius: Metrics.doubleSection,
   },
   headerStyle: {
+    flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    paddingHorizontal: Metrics.fifteen,
+    borderBottomColor: Colors.steel,
     marginBottom: Metrics.eight,
+    paddingBottom: Metrics.fifteen,
   },
   headerTextStyle: {
+    flex: 1,
+    textAlign: 'center',
+    alignSelf: 'center',
     fontSize: Metrics.eighteen,
-    fontWeight: Platform.OS === 'android' ? 'bold' : '600',
-    color: Colors.white,
-    marginBottom: Metrics.fifteen,
   },
+  rightButton: {
+    position: 'absolute',
+    right: Metrics.fifteen,
+    top: 0,
+  },
+  buttonsText: {
+    color: 'red',
+    fontSize: Metrics.eighteen,
+  }
 });
 
 export default styles;

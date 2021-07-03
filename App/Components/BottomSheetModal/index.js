@@ -1,10 +1,10 @@
-import React from 'react';
-import {Text, View} from 'react-native';
-import Modal from 'react-native-modal';
-import styles from './styles';
-import PropTypes from 'prop-types';
+import React from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Modal from 'react-native-modal'
+import styles from './styles'
+import PropTypes from 'prop-types'
 
-function BottomSheetModal(props) {
+function BottomSheetModal (props) {
   const {
     children,
     isVisible,
@@ -18,7 +18,9 @@ function BottomSheetModal(props) {
     headerText,
     backdropOpacity,
     avoidKeyboard,
-  } = props;
+    showClear,
+    onClear
+  } = props
   return (
     <Modal
       avoidKeyboard={avoidKeyboard}
@@ -27,7 +29,7 @@ function BottomSheetModal(props) {
       onBackdropPress={backdropPress || closeModal}
       onSwipeComplete={closeModal}
       backdropOpacity={backdropOpacity}
-      animationType="slide"
+      animationType='slide'
       propagateSwipe
       swipeDirection={['down']}
       style={[styles.modal, modalStyle]}>
@@ -36,12 +38,15 @@ function BottomSheetModal(props) {
         {isHeader && (
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>{headerText}</Text>
+            {showClear && <TouchableOpacity style={styles.rightButton} onPress={onClear}>
+              <Text style={styles.buttonsText}>Clear</Text>
+            </TouchableOpacity>}
           </View>
         )}
         {children}
       </View>
     </Modal>
-  );
+  )
 }
 
 BottomSheetModal.propTypes = {
@@ -53,8 +58,8 @@ BottomSheetModal.propTypes = {
   barStyle: PropTypes.object,
   isHeader: PropTypes.bool,
   avoidKeyboard: PropTypes.bool,
-  backdropOpacity: PropTypes.number,
-};
+  backdropOpacity: PropTypes.number
+}
 
 BottomSheetModal.defaultProps = {
   children: [],
@@ -67,6 +72,7 @@ BottomSheetModal.defaultProps = {
   isHeader: false,
   avoidKeyboard: false,
   backdropOpacity: 0.7,
-};
+  onClear: () => {}
+}
 
-export default React.memo(BottomSheetModal);
+export default React.memo(BottomSheetModal)

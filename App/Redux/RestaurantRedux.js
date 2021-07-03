@@ -114,7 +114,7 @@ export const _restaurantDetailsFailure = (state, {error = ''}) => ({
 export const _createRestaurant = state => ({...state, loading: true});
 export const _createRestaurantSuccess = (state, {response}) => ({
   ...state,
-  createRestaurant: response || {},
+  restaurantsList: [...state.restaurantsList, response],
   loading: false,
 });
 export const _createRestaurantFailure = (state, {error = ''}) => ({

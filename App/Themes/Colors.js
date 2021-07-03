@@ -3,6 +3,7 @@ const colors = {
   clear: 'rgba(0,0,0,0)',
   facebook: '#3b5998',
   blue: '#2089DC',
+  blueI: 'rgba(32,137,220,0.25)',
   red: 'red',
   green: 'green',
   transparent: 'rgba(0,0,0,0)',

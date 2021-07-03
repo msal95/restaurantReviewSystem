@@ -28,6 +28,7 @@ export default StyleSheet.create({
     marginHorizontal: Metrics.base,
     marginBottom: Metrics.doubleBase,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   dateTitle: {
@@ -38,4 +39,7 @@ export default StyleSheet.create({
   radioButton: {
     backgroundColor: Colors.silver,
   },
+  dateError: {
+    marginHorizontal: 0, top: -7
+  }
 });

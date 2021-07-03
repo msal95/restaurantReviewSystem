@@ -57,7 +57,7 @@ function CreateRestaurantScreen(props) {
           name: restaurantInfo?.name ?? '',
           description: restaurantInfo?.description ?? '',
           location: restaurantInfo?.location ?? '',
-          establishedDate: restaurantInfo?.establishedDate ?? '',
+          establishedAt: restaurantInfo?.establishedAt ?? '',
         }}
         onSubmit={createRestaurant}>
         {({
@@ -110,16 +110,18 @@ function CreateRestaurantScreen(props) {
               {errorMessage(errors?.location, touched.location)}
 
               <View style={styles.establishedDate}>
+                <View>
                 <Text style={styles.dateTitle}>{Strings.establishedAt} : </Text>
+                  {errorMessage(errors?.establishedAt, touched.establishedAt, styles.dateError)}
+                  </View>
                 <InputFormField
                   label={Strings.establishedAt}
                   placeholder={Strings.selectDate}
-                  selectedOption={values?.establishedDate ?? ''}
-                  onSelect={handleChange('establishedDate')}
-                  onBlur={handleBlur('establishedDate')}
+                  selectedOption={values?.establishedAt ?? ''}
+                  onSelect={handleChange('establishedAt')}
+                  onBlur={handleBlur('establishedAt')}
                   dateTime
                 />
-                {errorMessage(errors?.establishedDate, touched.establishedDate)}
               </View>
             </KeyboardAwareScrollView>
             <FormButton
@@ -134,7 +136,7 @@ function CreateRestaurantScreen(props) {
   );
 }
 
-const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapStateToProps = ({restaurants: {loading = false} = {}}) => ({loading});
 const mapDispatchToProps = dispatch => ({
   onCreateRestaurant: data => dispatch(RestActions.createRestaurant(data)),
   onUpdateRestaurant: (data, restaurantId) =>

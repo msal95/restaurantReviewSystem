@@ -15,6 +15,7 @@ import SignUpActions from '../../Redux/AuthRedux';
 import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpValidationSchema';
 import FormButton from '../../Components/Button';
 import {errorMessage, printLogs} from '../../Lib/utils';
+import {editProfileValidationSchema} from '../../Services/ValidationSchema/EditProfileValidationSchema';
 
 function SignupScreen(props) {
   const {
@@ -72,7 +73,9 @@ function SignupScreen(props) {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Formik
-        validationSchema={signUpValidationSchema}
+        validationSchema={
+          isEditing ? editProfileValidationSchema : signUpValidationSchema
+        }
         initialValues={{
           firstName: userInfo?.firstName ?? '',
           lastName: userInfo?.lastName ?? '',

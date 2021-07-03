@@ -13,7 +13,7 @@ export const createRestaurantValidationSchema = yup.object().shape({
     .string()
     .matches(/(\w).+/, 'Enter Restaurant Location')
     .required('Restaurant Location is required'),
-  establishedDate: yup
+  establishedAt: yup
     .string()
     // .matches(/(01)(\d){8}\b/, 'Enter a valid phone number')
     .required('Date is required'),

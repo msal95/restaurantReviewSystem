@@ -21,10 +21,30 @@ export const GENDER = [
   {label: 'Female', value: 'FEMALE'},
 ];
 
+export const FILTER_VALUES = {
+  FIVE: {
+    min: 5, max: 5,
+  },
+  FOUR: {
+    min: 4, max: 5,
+  },
+  THREE: {
+    min: 3, max: 4,
+  },
+  TWO: {
+    min: 2, max: 3,
+  },
+  ONE: {
+    min: 1, max: 2,
+  }
+}
+
 export const FILTER = [
-  {label: 'High Rating', value: 'HIGH'},
-  {label: 'Low Rating', value: 'LOW'},
-  {label: 'Clear Rating', value: 'CLEAR'},
+  {label: '5 Only', value: 'FIVE'},
+  {label: '4 and up', value: 'FOUR'},
+  {label: '3 and up', value: 'THREE'},
+  {label: '2 and up', value: 'RWO'},
+  {label: '1 and up', value: 'ONE'},
 ];
 
 export const RATE = {

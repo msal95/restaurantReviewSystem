@@ -8,6 +8,7 @@ export default StyleSheet.create({
     fontSize: Fonts.size.input,
   },
   datePicker: {
-    width: Metrics.oneHundredFifty,
+    flex: 1,
+    marginLeft: Metrics.base
   },
 });

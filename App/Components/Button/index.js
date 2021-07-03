@@ -1,24 +1,20 @@
-import React from 'react';
-import styles from './styles';
-import propTypes from 'prop-types';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Text, TouchableOpacity, ViewPropTypes} from 'react-native';
-
-import {Colors} from '../../Themes';
+import React from 'react'
+import styles from './styles'
+import propTypes from 'prop-types'
+import { Button } from 'react-native-elements'
+import { ViewPropTypes } from 'react-native'
 
 export default function FormButton(props) {
-  const {onPress, title, loading, disabled, iconName, buttonContainer} = props;
+  const {onPress, title, loading, disabled, buttonContainer} = props;
   return (
-    <TouchableOpacity
+    <Button
       loading={loading}
       disabled={loading || disabled}
       onPress={onPress}
-      style={[styles.buttonStyle, buttonContainer]}>
-      <Text style={styles.buttonTitle}>{title}</Text>
-      {!!iconName && (
-        <AntDesign name={iconName} size={20} color={Colors.white} />
-      )}
-    </TouchableOpacity>
+      title={title}
+      disabledStyle={styles.disabledButtonStyle}
+      buttonStyle={[styles.buttonStyle, buttonContainer]}
+     />
   );
 }
 

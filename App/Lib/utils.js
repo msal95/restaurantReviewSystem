@@ -89,13 +89,13 @@ export function showMessage(message, type = MESSAGE_TYPES.DEFAULT) {
   showFlashMessage({message, type});
 }
 
-export function errorMessage(message, touched = false) {
+export function errorMessage(message, touched = false, style) {
   if (!message?.trim() || !touched) {
     return null;
   }
 
   return (
-    <View style={styles.errorContainer}>
+    <View style={[styles.errorContainer, style]}>
       <Text style={styles.errorMessage}>{message}</Text>
     </View>
   );
