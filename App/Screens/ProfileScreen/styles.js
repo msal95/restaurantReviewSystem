@@ -38,7 +38,7 @@ export default StyleSheet.create({
   },
   profileInfoContainer: {
     backgroundColor: Colors.white,
-    paddingVertical: Metrics.doubleBase,
+    paddingBottom: Metrics.doubleBase,
   },
   userInfo: {
     marginLeft: Metrics.small,

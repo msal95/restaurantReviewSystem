@@ -24,6 +24,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import BottomSheetModal from '../../Components/BottomSheetModal';
 import RadioForm from 'react-native-simple-radio-button';
 import {isEmpty} from 'ramda';
+import ListEmptyComponent from '../../Components/ListEmptyComponent';
+import ListFooterComponent from '../../Components/ListFooterComponent';
 
 function HomeScreen(props) {
   const {
@@ -58,9 +60,10 @@ function HomeScreen(props) {
     });
   }, [filterKey]);
 
+  useEffect(() => (flatListRefreshingRef.current = refreshing));
+
   useEffect(() => {
     onFetchRestaurantsList({pageNo, pageSize});
-    flatListRefreshingRef.current = refreshing;
   }, []);
 
   const {role = ''} = useSelector(
@@ -160,16 +163,6 @@ function HomeScreen(props) {
     openedSwipeableRef.current = ref;
   };
 
-  function renderEmptyMessage() {
-    if (!props?.loading) {
-      return (
-        <Text style={styles.emptyMessage}>{Strings.noRestaurantFound}</Text>
-      );
-    }
-
-    return null;
-  }
-
   function renderListItem({item, index}) {
     const {
       image,
@@ -240,7 +233,15 @@ function HomeScreen(props) {
         renderItem={renderListItem}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.1}
-        ListEmptyComponent={renderEmptyMessage}
+        ListEmptyComponent={
+          <ListEmptyComponent
+            loading={props?.loading}
+            message={Strings.noRestaurantFound}
+          />
+        }
+        ListFooterComponent={
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+        }
       />
       {role === ROLE.OWNER && (
         <FAB
