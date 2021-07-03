@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import {
   ImageBackground,
-  Linking,
-  Platform,
   SafeAreaView,
   Text,
   TouchableOpacity,
@@ -20,6 +18,7 @@ import {Colors, Images} from '../../Themes';
 import FormButton from '../../Components/Button';
 import {Strings} from '../../Themes/Strings';
 import {capitalize, ROLE} from '../../Lib/constants';
+import { phonecall } from 'react-native-communications'
 
 function ProfileScreen(props) {
   const {user, route, navigation} = props || {};
@@ -52,16 +51,8 @@ function ProfileScreen(props) {
       });
   }, []);
 
-  function openDialPad() {
-    let phoneNumber = '';
-
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${1234567890}';
-    } else {
-      phoneNumber = 'telprompt:${1234567890}';
-    }
-
-    Linking.openURL(phoneNumber);
+  function openDialPad(phone) {
+    phonecall(phone, true);
   }
 
   return (
@@ -87,7 +78,7 @@ function ProfileScreen(props) {
         </View>
 
         <TouchableOpacity
-          onPress={openDialPad}
+          onPress={openDialPad(phoneNo)}
           activeOpacity={0.6}
           style={styles.infoContainer}>
           <Foundation
