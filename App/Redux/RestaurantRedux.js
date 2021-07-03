@@ -35,7 +35,7 @@ const {Types, Creators} = createActions({
   updateRestaurantFailure: ['error'],
 
   updateReview: ['data', 'restaurantId', 'reviewId'],
-  updateReviewSuccess: ['response'],
+  updateReviewSuccess: ['review', 'reviewId'],
   updateReviewFailure: ['error'],
 
   deleteRestaurant: ['data'],
@@ -45,6 +45,8 @@ const {Types, Creators} = createActions({
   deleteReview: ['data'],
   deleteReviewSuccess: ['id'],
   deleteReviewFailure: ['error'],
+
+  updateUserInResAndReviews: ['user'],
 });
 export const RestTypes = Types;
 export default Creators;
@@ -53,6 +55,7 @@ export default Creators;
 export const INITIAL_STATE = Immutable({
   error: '',
   restaurantsList: [],
+  allReviews: [],
   restaurantDetails: {},
   replying: false,
   updatingRestaurant: false,
@@ -223,8 +226,10 @@ export const _updateRestaurantSuccess = (
 ) => ({
   ...state,
   updatingRestaurant: false,
-  restaurantsList: (state.restaurantsList || []).map(item =>
-    item?._id === restaurantId ? restaurant : item,
+  restaurantsList: Immutable.asMutable?.(state.restaurantsList, {
+    deep: true,
+  }).map(item =>
+    String(item?._id) === String(restaurantId) ? restaurant : item,
   ),
   loading: false,
 });
@@ -234,11 +239,28 @@ export const _updateReview = state => ({
   updatingReview: true,
   loading: true,
 });
-export const _updateReviewSuccess = state => ({
+
+export const _updateReviewSuccess = (state, {review, reviewId}) => ({
   ...state,
   loading: false,
   updatingReview: false,
+  highestRatedReview:
+    String(state?.highestRatedReview?._id) === String(reviewId)
+      ? review
+      : state?.highestRatedReview,
+  lowestRatedReview:
+    String(state?.lowestRatedReview?._id) === String(reviewId)
+      ? review
+      : state?.lowestRatedReview,
+  lastReview:
+    String(state?.lastReview?._id) === String(reviewId)
+      ? review
+      : state?.lastReview,
+  allReviews: Immutable.asMutable?.(state.allReviews, {
+    deep: true,
+  }).map(item => (String(item?._id) === String(reviewId) ? review : item)),
 });
+
 export const _updateReviewFailure = (state, {error = ''}) => ({
   ...state,
   updatingReview: false,
@@ -252,6 +274,30 @@ export const _updateRestaurantFailure = (state, {error = ''}) => ({
   updatingRestaurant: false,
   error,
 });
+
+export const _updateUserInResAndReviews = (state, {user = ''}) => {
+  let restaurantsList =
+    Immutable.asMutable?.(state.restaurantsList, {deep: true}) || [];
+  let allReviews = Immutable.asMutable?.(state.allReviews, {deep: true}) || [];
+
+  restaurantsList = restaurantsList.map(restaurant => {
+    if (String(restaurant?.user?._id) === String(user?._id)) {
+      restaurant.user = user;
+    }
+
+    return restaurant;
+  });
+
+  allReviews = allReviews.map(review => {
+    if (String(review?.user?._id) === String(user?._id)) {
+      review.user = user;
+    }
+
+    return review;
+  });
+
+  return {...state, restaurantsList, allReviews};
+};
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
@@ -278,7 +324,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.UPDATE_RESTAURANT_SUCCESS]: _updateRestaurantSuccess,
   [Types.UPDATE_RESTAURANT_FAILURE]: _updateRestaurantFailure,
   [Types.UPDATE_RESTAURANT]: _updateReview,
-  [Types.UPDATE_RESTAURANT_SUCCESS]: _updateReviewSuccess,
+  [Types.UPDATE_REVIEW_SUCCESS]: _updateReviewSuccess,
   [Types.UPDATE_RESTAURANT_FAILURE]: _updateReviewFailure,
 
   [Types.DELETE_RESTAURANT]: _deleteRestaurant,
@@ -288,4 +334,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DELETE_REVIEW]: _deleteReview,
   [Types.DELETE_REVIEW_SUCCESS]: _deleteReviewSuccess,
   [Types.DELETE_REVIEW_FAILURE]: _deleteReviewFailure,
+  [Types.UPDATE_USER_IN_RES_AND_REVIEWS]: _updateUserInResAndReviews,
 });

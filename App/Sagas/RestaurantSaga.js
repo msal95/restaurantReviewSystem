@@ -127,7 +127,9 @@ export function* onUpdateRestaurant(api, {data = {}, restaurantId = null}) {
       data: form_data,
       id: restaurantId,
     });
-    yield put(RestaurantActions.updateRestaurantSuccess(response));
+    yield put(
+      RestaurantActions.updateRestaurantSuccess(response, restaurantId),
+    );
     showMessage(Strings.restaurantUpdateSuccess, MESSAGE_TYPES.SUCCESS);
     NavigationService?.goBack();
   } catch ({message}) {
@@ -141,12 +143,12 @@ export function* onUpdateReview(
   {data = {}, restaurantId = null, reviewId = null},
 ) {
   try {
-    yield call(Api.callServer, api.updateReview, {
+    const {response} = yield call(Api.callServer, api.updateReview, {
       data,
       restaurantId,
       reviewId,
     });
-    yield put(RestaurantActions.updateReviewSuccess());
+    yield put(RestaurantActions.updateReviewSuccess(response, reviewId));
     showMessage(Strings.updateReviewSuccess, MESSAGE_TYPES.SUCCESS);
   } catch ({message}) {
     yield put(RestaurantActions.updateReviewFailure(message));

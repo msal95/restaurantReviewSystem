@@ -6,6 +6,7 @@ import {Strings} from '../Themes/Strings';
 import {printLogs, showMessage} from '../Lib/utils';
 import {MESSAGE_TYPES} from '../Lib/constants';
 import {NavigationService} from '../Utils/NavigationService';
+import RestaurantActions from '../Redux/RestaurantRedux'
 
 export function* onAuthSuccess(api, {user = {}}) {
   try {
@@ -60,6 +61,7 @@ export function* onEditOtherUser(api, {data = {}}) {
       data: form_data,
       _id: data?._id,
     });
+    yield put(RestaurantActions.updateUserInResAndReviews(response));
     yield put(AuthActions.editOtherUserSuccess(response, data?._id));
     showMessage(Strings.profileUpdated, MESSAGE_TYPES.SUCCESS);
     NavigationService.goBack();
