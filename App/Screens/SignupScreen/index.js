@@ -1,26 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView, Text, View, Platform} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import RNPickerSelect from 'react-native-picker-select';
-import {connect} from 'react-redux';
-import RadioForm from 'react-native-simple-radio-button';
-import {Formik} from 'formik';
-import {useKeyboard} from '@react-native-community/hooks';
-import {getBottomSpace} from 'react-native-iphone-x-helper';
+import React, { useEffect, useRef, useState } from 'react'
+import { Platform, SafeAreaView, Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import RNPickerSelect from 'react-native-picker-select'
+import { connect } from 'react-redux'
+import RadioForm from 'react-native-simple-radio-button'
+import { Formik } from 'formik'
+import { useKeyboard } from '@react-native-community/hooks'
+import { getBottomSpace } from 'react-native-iphone-x-helper'
 
-import styles from './styles';
-import InputFormField from '../../Components/InputFormField';
-import {Strings} from '../../Themes/Strings';
-import ImageCropPicker from '../../Components/ImageCropPicker';
-import {capitalize, GENDER, ROLE} from '../../Lib/constants';
-import SignUpActions from '../../Redux/AuthRedux';
-import {signUpValidationSchema} from '../../Services/ValidationSchema/SignUpValidationSchema';
-import FormButton from '../../Components/Button';
-import {errorMessage, printLogs} from '../../Lib/utils';
-import {editProfileValidationSchema} from '../../Services/ValidationSchema/EditProfileValidationSchema';
+import styles from './styles'
+import InputFormField from '../../Components/InputFormField'
+import { Strings } from '../../Themes/Strings'
+import ImageCropPicker from '../../Components/ImageCropPicker'
+import { capitalize, GENDER, ROLE } from '../../Lib/constants'
+import SignUpActions from '../../Redux/AuthRedux'
+import { signUpValidationSchema } from '../../Services/ValidationSchema/SignUpValidationSchema'
+import FormButton from '../../Components/Button'
+import { errorMessage } from '../../Lib/utils'
+import { editProfileValidationSchema } from '../../Services/ValidationSchema/EditProfileValidationSchema'
 
-function SignupScreen(props) {
-  const {keyboardShown, keyboardHeight} = useKeyboard();
+function SignupScreen (props) {
+  const { keyboardShown, keyboardHeight } = useKeyboard()
   const {
     onSignUp,
     onEditProfile,
@@ -29,47 +29,46 @@ function SignupScreen(props) {
     route,
     loading,
     user = {},
-  } = props || {};
+  } = props || {}
 
-  const {isEditing = false, isSelf, otherUser = {}} = route?.params || {};
+  const { isEditing = false, isSelf, otherUser = {} } = route?.params || {}
 
-  const userInfo = isEditing ? (isSelf ? user : otherUser) : {};
+  const userInfo = isEditing ? (isSelf ? user : otherUser) : {}
 
-  const [file, setImageSource] = useState({path: userInfo?.picture});
+  const [file, setImageSource] = useState({ path: userInfo?.picture })
 
   useEffect(() => {
     navigation.setOptions({
       title: isEditing ? Strings.editProfile : Strings.signUp,
-    });
-  }, []);
+    })
+  }, [])
 
-  const passwordRef = useRef();
-  const confirmPasswordRef = useRef();
-  const lastNameRef = useRef();
-  const emailRef = useRef();
-  const phoneRef = useRef();
+  const passwordRef = useRef()
+  const confirmPasswordRef = useRef()
+  const lastNameRef = useRef()
+  const emailRef = useRef()
+  const phoneRef = useRef()
 
-  function onPressSignUp(values) {
-    printLogs(values);
+  function onPressSignUp (values) {
     const data = {
       ...values,
       _id: userInfo?._id,
-    };
+    }
 
     if (file?.mime) {
       data.file = {
         uri: file?.path,
         type: file?.mime,
         name: file?.filename || 'profile image',
-      };
+      }
     }
 
     if (isEditing && !isSelf) {
-      onEditOtherUser({_id: userInfo?._id, ...data});
+      onEditOtherUser({ _id: userInfo?._id, ...data })
     } else if (isEditing) {
-      onEditProfile(data);
+      onEditProfile(data)
     } else {
-      onSignUp(data);
+      onSignUp(data)
     }
   }
 
@@ -193,8 +192,8 @@ function SignupScreen(props) {
                     }}
                     onValueChange={handleChange('role')}
                     items={[
-                      {label: capitalize(ROLE.OWNER), value: ROLE.OWNER},
-                      {label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN},
+                      { label: capitalize(ROLE.OWNER), value: ROLE.OWNER },
+                      { label: capitalize(ROLE.ADMIN), value: ROLE.ADMIN },
                     ]}
                     value={values.role}>
                     <Text style={styles.selectedOpt}>{values.role}</Text>
@@ -211,8 +210,8 @@ function SignupScreen(props) {
                     initial={
                       isEditing
                         ? user?.gender === GENDER[0]?.value
-                          ? 0
-                          : 1
+                        ? 0
+                        : 1
                         : -1
                     }
                     formHorizontal={true}
@@ -253,17 +252,17 @@ function SignupScreen(props) {
         </Text>
       )}
     </SafeAreaView>
-  );
+  )
 }
 
-const mapStateToProps = ({auth: {loading = false, user = {}} = {}}) => ({
+const mapStateToProps = ({ auth: { loading = false, user = {} } = {} }) => ({
   loading,
   user,
-});
+})
 const mapDispatchToProps = dispatch => ({
   onSignUp: data => dispatch(SignUpActions.signup(data)),
   onEditProfile: data => dispatch(SignUpActions.editProfile(data)),
   onEditOtherUser: data => dispatch(SignUpActions.editOtherUser(data)),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen)

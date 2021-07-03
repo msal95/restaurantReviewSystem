@@ -1,20 +1,20 @@
-import React, {useRef} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
-import {Text as TextElement} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {connect} from 'react-redux';
-import {Formik} from 'formik';
+import React, { useRef } from 'react'
+import { SafeAreaView, Text, View } from 'react-native'
+import { Text as TextElement } from 'react-native-elements'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
+import { Formik } from 'formik'
 
-import styles from './styles';
-import InputFormField from '../../Components/InputFormField';
-import FormButton from '../../Components/Button';
-import {Strings} from '../../Themes/Strings';
-import LoginActions from '../../Redux/AuthRedux';
-import {loginValidationSchema} from '../../Services/ValidationSchema/LoginValidationSchema';
-import {errorMessage} from '../../Lib/utils';
+import styles from './styles'
+import InputFormField from '../../Components/InputFormField'
+import FormButton from '../../Components/Button'
+import { Strings } from '../../Themes/Strings'
+import LoginActions from '../../Redux/AuthRedux'
+import { loginValidationSchema } from '../../Services/ValidationSchema/LoginValidationSchema'
+import { errorMessage } from '../../Lib/utils'
 
-function LoginScreen(props) {
-  const passwordRef = useRef();
+function LoginScreen (props) {
+  const passwordRef = useRef()
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -25,7 +25,7 @@ function LoginScreen(props) {
       <KeyboardAwareScrollView>
         <Formik
           validationSchema={loginValidationSchema}
-          initialValues={{email: '', password: ''}}
+          initialValues={{ email: '', password: '' }}
           onSubmit={props?.onLogin}>
           {({
             handleSubmit,
@@ -66,6 +66,7 @@ function LoginScreen(props) {
             </View>
           )}
         </Formik>
+
         <Text style={styles.msgText}>
           {Strings.dontHaveAccount}
           <Text
@@ -74,14 +75,15 @@ function LoginScreen(props) {
             {Strings.signUp}
           </Text>
         </Text>
+
       </KeyboardAwareScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
-const mapStateToProps = ({auth: {loading = false} = {}}) => ({loading});
+const mapStateToProps = ({ auth: { loading = false } = {} }) => ({ loading })
 const mapDispatchToProps = dispatch => ({
   onLogin: data => dispatch(LoginActions.login(data)),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)

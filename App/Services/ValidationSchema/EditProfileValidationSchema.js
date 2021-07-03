@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 export const editProfileValidationSchema = yup.object().shape({
   firstName: yup.string().trim().required('First name is required'),
@@ -15,4 +15,4 @@ export const editProfileValidationSchema = yup.object().shape({
     )
     .required('Phone number is required'),
   gender: yup.string().required('Gender is required'),
-});
+})

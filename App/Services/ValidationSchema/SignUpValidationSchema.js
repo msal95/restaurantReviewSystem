@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 export const signUpValidationSchema = yup.object().shape({
   firstName: yup
@@ -24,7 +24,7 @@ export const signUpValidationSchema = yup.object().shape({
       /[!@#$%^&*()\-_"=+{}; :,<.>]/,
       'Password must have a special character',
     )
-    .min(8, ({min}) => `Password must be at least ${min} characters`)
+    .min(8, ({ min }) => `Password must be at least ${min} characters`)
     .required('Password is required'),
   gender: yup
     .string()
@@ -38,4 +38,4 @@ export const signUpValidationSchema = yup.object().shape({
     .string()
     // .matches(/(01)(\d){8}\b/, 'Enter a valid phone number')
     .required('Role is required'),
-});
+})

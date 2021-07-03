@@ -1,21 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FlatList, Image, SafeAreaView, Text, View } from 'react-native'
-import { Card, Text as TextElement, } from 'react-native-elements'
+import { Text as TextElement, } from 'react-native-elements'
 import StarRating from 'react-native-star-rating'
 import { connect, shallowEqual, useSelector } from 'react-redux'
 import { Formik } from 'formik'
+import { Instagram } from 'react-content-loader/native'
 
 import styles from './styles'
 import { Strings } from '../../Themes/Strings'
 import InputFormField from '../../Components/InputFormField'
 import FormButton from '../../Components/Button'
 import RestActions from '../../Redux/RestaurantRedux'
-import { PAGINATION_DEFAULTS, ROLE } from '../../Lib/constants'
+import { capitalize, PAGINATION_DEFAULTS, ROLE } from '../../Lib/constants'
 import { Colors, Images, Metrics } from '../../Themes'
 import { reviewRestaurantValidationSchema } from '../../Services/ValidationSchema/ReviewRestaurantValidationSchema'
 import { errorMessage } from '../../Lib/utils'
 import ListEmptyComponent from '../../Components/ListEmptyComponent'
 import ReviewItem from '../../Components/ReviewItem'
+import ListFooterComponent from '../../Components/ListFooterComponent'
 
 function RestaurantDetailsScreen (props) {
   const {
@@ -58,10 +60,15 @@ function RestaurantDetailsScreen (props) {
   useEffect(() => {
     onFetchRestaurantDetails({ restaurantId })
     onGetAllReviews({ restaurantId, pageNo, pageSize })
+    props.navigation.setOptions({
+      title: capitalize(route?.params?.restaurantName)
+    })
   }, [])
 
   function onRefresh () {
     setRefreshing(true)
+    onFetchRestaurantDetails({ restaurantId })
+
     if (PAGINATION_DEFAULTS.PAGE === pageNo) {
       onGetAllReviews({ restaurantId, pageNo, pageSize })
 
@@ -95,66 +102,69 @@ function RestaurantDetailsScreen (props) {
 
   function renderListFooter () {
     if (role !== ROLE.REGULAR || props?.isReviewed) {
-      return null
+      return <ListFooterComponent loading={props?.pageNo > 0 && props?.loading}/>
     }
 
     return (
-      <Formik
-        validationSchema={reviewRestaurantValidationSchema}
-        initialValues={{
-          comment: '',
-          dateOfVisit: '',
-        }}
-        onSubmit={onCreateReview}>
-        {({
-          handleSubmit,
-          values,
-          errors,
-          handleChange,
-          handleBlur,
-          touched,
-        }) => (
-          <View style={styles.reviewContainer}>
-            <TextElement style={styles.commentHeading} h4>
-              {Strings.leaveAComment}
-            </TextElement>
-            <View style={styles.ratingContainer}>
-              <StarRating
-                maxStars={5}
-                rating={rating}
-                halfStarColor={Colors.golden}
-                fullStarColor={Colors.golden}
-                selectedStar={startingValue => setRating(startingValue)}
-              />
-            </View>
-            <InputFormField
-              label={Strings.comment}
-              placeholder={Strings.enterYourComment}
-              selectedOption={values?.comment ?? ''}
-              onSelect={handleChange('comment')}
-              onBlur={handleBlur('comment')}
-              returnKeyType={'done'}
-              inputContainerStyle={styles.containerInputStyle}
-              multiline
-            />
-            {errorMessage(errors?.comment, touched.comment)}
-
-            <View style={styles.visitDateContainer}>
-              <Text style={styles.visitDateTitle}>{Strings.visitDate}</Text>
+      <>
+        <ListFooterComponent loading={props?.pageNo > 0 && props?.loading}/>
+        <Formik
+          validationSchema={reviewRestaurantValidationSchema}
+          initialValues={{
+            comment: '',
+            dateOfVisit: '',
+          }}
+          onSubmit={onCreateReview}>
+          {({
+            handleSubmit,
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+          }) => (
+            <View style={styles.reviewContainer}>
+              <TextElement style={styles.commentHeading} h4>
+                {Strings.leaveAComment}
+              </TextElement>
+              <View style={styles.ratingContainer}>
+                <StarRating
+                  maxStars={5}
+                  rating={rating}
+                  halfStarColor={Colors.golden}
+                  fullStarColor={Colors.golden}
+                  selectedStar={startingValue => setRating(startingValue)}
+                />
+              </View>
               <InputFormField
-                label={Strings.visitDate}
-                placeholder={Strings.selectDate}
-                selectedOption={values?.dateOfVisit ?? ''}
-                onSelect={handleChange('dateOfVisit')}
-                onBlur={handleBlur('dateOfVisit')}
-                dateTime
+                label={Strings.comment}
+                placeholder={Strings.enterYourComment}
+                selectedOption={values?.comment ?? ''}
+                onSelect={handleChange('comment')}
+                onBlur={handleBlur('comment')}
+                returnKeyType={'done'}
+                inputContainerStyle={styles.containerInputStyle}
+                multiline
               />
+              {errorMessage(errors?.comment, touched.comment)}
+
+              <View style={styles.visitDateContainer}>
+                <Text style={styles.visitDateTitle}>{Strings.visitDate}</Text>
+                <InputFormField
+                  label={Strings.visitDate}
+                  placeholder={Strings.selectDate}
+                  selectedOption={values?.dateOfVisit ?? ''}
+                  onSelect={handleChange('dateOfVisit')}
+                  onBlur={handleBlur('dateOfVisit')}
+                  dateTime
+                />
+              </View>
+              {errorMessage(errors?.dateOfVisit, touched.dateOfVisit, styles.dateError)}
+              <FormButton title={Strings.submitReview} onPress={handleSubmit}/>
             </View>
-            {errorMessage(errors?.dateOfVisit, touched.dateOfVisit, styles.dateError)}
-            <FormButton title={Strings.submitReview} onPress={handleSubmit}/>
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
+      </>
     )
   }
 
@@ -176,7 +186,7 @@ function RestaurantDetailsScreen (props) {
         ListEmptyComponent={
           <ListEmptyComponent
             loading={props?.loading}
-            message={Strings.noRecordFound}
+            message={Strings.noReviewFound}
           />
         }
       />
@@ -184,10 +194,12 @@ function RestaurantDetailsScreen (props) {
   }
 
   function renderListHeader () {
+    if (props?.resDetailsLoading) {
+      return <Instagram/>
+    }
+
     return (
       <View style={styles.flatListHeader}>
-        <Card.Title>{details.name}</Card.Title>
-        <Card.Divider/>
         <Image
           style={styles.restaurantBanner}
           resizeMode="cover"
@@ -218,7 +230,7 @@ function RestaurantDetailsScreen (props) {
           </Text>
         </View>
         {role === ROLE.OWNER ? (
-          <TextElement h4>{Strings.allComments}</TextElement>
+          <TextElement h4 style={styles.commentHeadingText}>{Strings.allComments}</TextElement>
         ) : (
           <>
             <ReviewItem onDeleteReview={props.onDeleteReview}
@@ -261,6 +273,7 @@ const mapStateToProps = ({
       isReviewed,
     } = {},
     allReviews = [],
+    resDetailsLoading = true,
     isRevRemaining: isRemaining = false,
     revLoading: loading = false,
   } = {},
@@ -275,6 +288,7 @@ const mapStateToProps = ({
   isRemaining,
   isReviewed,
   loading,
+  resDetailsLoading
 })
 
 export default connect(

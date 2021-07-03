@@ -5,23 +5,23 @@ import { ActivityIndicator, View } from 'react-native'
 import { Colors } from '../../Themes'
 import styles from './styles'
 
-export default function LoadingIndicator(props) {
-  const {loading} = props;
+export default function LoadingIndicator (props) {
+  const { loading } = props
 
   if (!loading) {
-    return null;
+    return null
   }
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={'large'} color={Colors.blue} />
+      <ActivityIndicator size={'large'} color={Colors.blue}/>
     </View>
-  );
+  )
 }
 
 LoadingIndicator.propTypes = {
   loading: propTypes.bool,
-};
+}
 LoadingIndicator.defaultProps = {
   loading: false,
-};
+}

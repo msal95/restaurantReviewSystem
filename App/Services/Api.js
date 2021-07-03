@@ -1,5 +1,5 @@
 // a library to wrap and simplify api calls
-import apisauce from 'apisauce';
+import apisauce from 'apisauce'
 
 // our "constructor"
 const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
@@ -18,7 +18,7 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     },
     // 10 second timeout...
     timeout: 10000,
-  });
+  })
 
   // ------
   // STEP 2
@@ -34,35 +34,35 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
   // Since we can't hide from that, we embrace it by getting out of the
   // way at this level.
   //
-  const signup = data => api.post('users', data);
-  const login = data => api.post('users/login', data);
-  const getUser = username => api.get('search/users', {q: username});
-  const userProfile = data => api.get('users/me', data);
-  const editProfile = data => api.put('users/me', data);
-  const allUsers = data => api.get('users', data);
-  const editOtherUser = ({data, _id}) => api.put(`users/${_id}`, data);
-  const deleteUser = data => api.delete(`users/${data?._id}`, data);
+  const signup = data => api.post('users', data)
+  const login = data => api.post('users/login', data)
+  const getUser = username => api.get('search/users', { q: username })
+  const userProfile = data => api.get('users/me', data)
+  const editProfile = data => api.put('users/me', data)
+  const allUsers = data => api.get('users', data)
+  const editOtherUser = ({ data, _id }) => api.put(`users/${_id}`, data)
+  const deleteUser = data => api.delete(`users/${data?._id}`, data)
 
-  const restaurants = data => api.get('restaurants', data);
-  const createRestaurantApi = data => api.post('restaurants', data);
-  const deleteRestaurant = data => api.delete(`restaurants/${data?._id}`, data);
-  const restaurantDetails = ({restaurantId}) =>
-    api.get(`restaurants/${restaurantId}`);
-  const updateRestaurant = ({id, data}) => api.put(`restaurants/${id}`, data);
+  const restaurants = data => api.get('restaurants', data)
+  const createRestaurantApi = data => api.post('restaurants', data)
+  const deleteRestaurant = data => api.delete(`restaurants/${data?._id}`, data)
+  const restaurantDetails = ({ restaurantId }) =>
+    api.get(`restaurants/${restaurantId}`)
+  const updateRestaurant = ({ id, data }) => api.put(`restaurants/${id}`, data)
 
-  const deleteReview = ({restaurantId, reviewId}) =>
+  const deleteReview = ({ restaurantId, reviewId }) =>
     api.delete(`restaurants/${restaurantId}/reviews/${reviewId}`, {
       restaurantId,
       reviewId,
-    });
-  const createReview = ({restaurantId, data}) =>
-    api.post(`restaurants/${restaurantId}/reviews`, data);
-  const getAllReviews = ({data: {restaurantId = '', ...others} = {}}) =>
-    api.get(`restaurants/${restaurantId}/reviews`, others);
-  const replyReviews = ({restaurantId, data, reviewId}) =>
-    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data);
-  const updateReview = ({restaurantId, data, reviewId}) =>
-    api.put(`restaurants/${restaurantId}/reviews/${reviewId}`, data);
+    })
+  const createReview = ({ restaurantId, data }) =>
+    api.post(`restaurants/${restaurantId}/reviews`, data)
+  const getAllReviews = ({ data: { restaurantId = '', ...others } = {} }) =>
+    api.get(`restaurants/${restaurantId}/reviews`, others)
+  const replyReviews = ({ restaurantId, data, reviewId }) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}/reply`, data)
+  const updateReview = ({ restaurantId, data, reviewId }) =>
+    api.put(`restaurants/${restaurantId}/reviews/${reviewId}`, data)
 
   // ------
   // STEP 3
@@ -99,10 +99,10 @@ const create = (baseURL = 'http://192.168.1.22:8083/api/v1/') => {
     getAllReviews,
     replyReviews,
     updateReview,
-  };
-};
+  }
+}
 
 // let's return back our create method as the default.
 export default {
   create,
-};
+}

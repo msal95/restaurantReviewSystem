@@ -1,15 +1,15 @@
-import {Strings} from '../Themes/Strings';
-import {Alert, Platform, Text, View} from 'react-native';
-import {showMessage as showFlashMessage} from 'react-native-flash-message';
-import {openSettings, PERMISSIONS, request} from 'react-native-permissions';
+import { Strings } from '../Themes/Strings'
+import { Alert, Platform, Text, View } from 'react-native'
+import { showMessage as showFlashMessage } from 'react-native-flash-message'
+import { openSettings, PERMISSIONS, request } from 'react-native-permissions'
 
-import {MESSAGE_TYPES} from './constants';
-import React from 'react';
+import { MESSAGE_TYPES } from './constants'
+import React from 'react'
 
 const styles = {
-  errorContainer: {marginHorizontal: 10, top: -20},
-  errorMessage: {fontSize: 10, color: 'red', top: 0, marginTop: 0},
-};
+  errorContainer: { marginHorizontal: 10, top: -20 },
+  errorMessage: { fontSize: 10, color: 'red', top: 0, marginTop: 0 },
+}
 
 export const checkStoragePermission = async (
   callback = () => {},
@@ -23,7 +23,7 @@ export const checkStoragePermission = async (
   )
     .then(response => {
       if (response === 'granted') {
-        callback();
+        callback()
       } else {
         Alert.alert(
           Platform.OS === 'android'
@@ -33,19 +33,19 @@ export const checkStoragePermission = async (
             ? Strings.storagePermissionMessage
             : Strings.photosPermissionMessage,
           [
-            {text: Strings.cancel, style: 'cancel'},
+            { text: Strings.cancel, style: 'cancel' },
             {
               text: Strings.settings,
               onPress: () => openSettings(),
             },
           ],
-        );
+        )
       }
     })
     .catch(() => {
-      errorCallback();
-    });
-};
+      errorCallback()
+    })
+}
 export const checkCameraPermission = async (
   callback = () => {},
   errorCallback = () => {},
@@ -58,53 +58,53 @@ export const checkCameraPermission = async (
   )
     .then(response => {
       if (response === 'granted') {
-        callback();
+        callback()
       } else {
         Alert.alert(
           Strings.cameraPermissionTitle,
           Strings.cameraPermissionMessage,
           [
-            {text: Strings.cancel, style: 'cancel'},
+            { text: Strings.cancel, style: 'cancel' },
             {
               text: Strings.settings,
               onPress: () => openSettings(),
             },
           ],
-        );
+        )
       }
     })
     .catch(() => {
-      errorCallback();
-    });
-};
+      errorCallback()
+    })
+}
 
-export function printLogs(logs) {
+export function printLogs (logs) {
   if (__DEV__) {
-    console.log(logs);
-    console.tron.warn(logs);
+    console.log(logs)
+    console.tron.warn(logs)
   }
 }
 
-export function showMessage(message, type = MESSAGE_TYPES.DEFAULT) {
-  showFlashMessage({message, type});
+export function showMessage (message, type = MESSAGE_TYPES.DEFAULT) {
+  showFlashMessage({ message, type })
 }
 
-export function errorMessage(message, touched = false, style) {
+export function errorMessage (message, touched = false, style) {
   if (!message?.trim() || !touched) {
-    return null;
+    return null
   }
 
   return (
     <View style={[styles.errorContainer, style]}>
       <Text style={styles.errorMessage}>{message}</Text>
     </View>
-  );
+  )
 }
 
-export function getFormattedDescription(description, length = 30) {
+export function getFormattedDescription (description, length = 30) {
   if (description?.length > length) {
-    return <Text>{description?.slice(0, length)}...</Text>;
+    return <Text>{description?.slice(0, length)}...</Text>
   } else {
-    return description;
+    return description
   }
 }

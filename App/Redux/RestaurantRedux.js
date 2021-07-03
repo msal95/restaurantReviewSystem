@@ -1,11 +1,11 @@
-import {createActions, createReducer} from 'reduxsauce';
-import Immutable from 'seamless-immutable';
-import {uniqBy} from 'lodash';
+import { createActions, createReducer } from 'reduxsauce'
+import Immutable from 'seamless-immutable'
+import { uniqBy } from 'lodash'
 
-import {PAGINATION_DEFAULTS} from '../Lib/constants';
+import { PAGINATION_DEFAULTS } from '../Lib/constants'
 
 /* ------------- Types and Action Creators ------------- */
-const {Types, Creators} = createActions({
+const { Types, Creators } = createActions({
   restaurantsList: ['data'],
   restaurantsListSuccess: ['response'],
   restaurantsListFailure: ['error'],
@@ -47,9 +47,9 @@ const {Types, Creators} = createActions({
   deleteReviewFailure: ['error'],
 
   updateUserInResAndReviews: ['user'],
-});
-export const RestTypes = Types;
-export default Creators;
+})
+export const RestTypes = Types
+export default Creators
 
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
@@ -63,28 +63,29 @@ export const INITIAL_STATE = Immutable({
   isResRemaining: false,
   isRevRemaining: false,
   loading: true,
+  resDetailsLoading: false,
   revLoading: false,
   resPageNo: PAGINATION_DEFAULTS.PAGE,
   resPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
   revPageNo: PAGINATION_DEFAULTS.PAGE,
   revPageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
-});
+})
 
 /* ------------- Reducers ------------- */
 
-export const _restaurantsList = (state, {data}) => ({
+export const _restaurantsList = (state, { data }) => ({
   ...state,
   resPageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
   resPageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
   loading: true,
-});
+})
 
-export const _restaurantsListSuccess = (state, {response}) => {
-  let {restaurantsList} = state;
+export const _restaurantsListSuccess = (state, { response }) => {
+  let { restaurantsList } = state
   if (state?.resPageNo === PAGINATION_DEFAULTS.PAGE) {
-    restaurantsList = response ?? [];
+    restaurantsList = response ?? []
   } else {
-    restaurantsList = [...(restaurantsList ?? []), ...(response ?? [])];
+    restaurantsList = [...(restaurantsList ?? []), ...(response ?? [])]
   }
 
   return {
@@ -92,144 +93,146 @@ export const _restaurantsListSuccess = (state, {response}) => {
     restaurantsList: uniqBy(restaurantsList, '_id'),
     isResRemaining: Boolean(response?.length),
     loading: false,
-  };
-};
+  }
+}
 
-export const _restaurantsListFailure = (state, {error = ''}) => ({
+export const _restaurantsListFailure = (state, { error = '' }) => ({
   ...state,
   loading: false,
   isResRemaining: false,
   error,
-});
+})
 
-export const _restaurantDetails = state => ({...state});
-export const _restaurantDetailsSuccess = (state, {response}) => ({
+export const _restaurantDetails = state => ({ ...state, resDetailsLoading: true })
+export const _restaurantDetailsSuccess = (state, { response }) => ({
   ...state,
   restaurantDetails: response || {},
-  loading: false,
-});
-export const _restaurantDetailsFailure = (state, {error = ''}) => ({
+  resDetailsLoading: false,
+})
+export const _restaurantDetailsFailure = (state, { error = '' }) => ({
   ...state,
   loading: false,
+  resDetailsLoading: false,
   error,
-});
+})
 
-export const _createRestaurant = state => ({...state, loading: true});
-export const _createRestaurantSuccess = (state, {response}) => ({
+export const _createRestaurant = state => ({ ...state, loading: true })
+export const _createRestaurantSuccess = (state, { response }) => ({
   ...state,
   restaurantsList: [...state.restaurantsList, response],
   loading: false,
-});
-export const _createRestaurantFailure = (state, {error = ''}) => ({
+})
+export const _createRestaurantFailure = (state, { error = '' }) => ({
   ...state,
   loading: false,
   error,
-});
+})
 
 export const _createReview = state => ({
   ...state,
   loading: true,
-});
-export const _createReviewSuccess = (state, {response}) => ({
+})
+export const _createReviewSuccess = (state, { response }) => ({
   ...state,
-  restaurantDetails: {...state?.restaurantDetails, isReviewed: true},
+  restaurantDetails: { ...state?.restaurantDetails, isReviewed: true },
   createReview: response || {},
   loading: false,
-});
-export const _createReviewFailure = (state, {error = ''}) => ({
+})
+export const _createReviewFailure = (state, { error = '' }) => ({
   ...state,
   loading: false,
   error,
-});
+})
 
 export const _deleteRestaurant = state => ({
   ...state,
   deletingRestaurant: true,
-});
+})
 
-export const _deleteRestaurantSuccess = (state, {id}) => ({
+export const _deleteRestaurantSuccess = (state, { id }) => ({
   ...state,
   restaurantsList: (state.restaurantsList || []).filter(
     item => item?._id !== id,
   ),
   deletingRestaurant: false,
-});
+})
 
-export const _deleteRestaurantFailure = (state, {error = ''}) => ({
+export const _deleteRestaurantFailure = (state, { error = '' }) => ({
   ...state,
   error,
   deletingRestaurant: false,
-});
+})
 
-export const _deleteReview = state => ({...state, deletingReview: true});
+export const _deleteReview = state => ({ ...state, deletingReview: true })
 
-export const _deleteReviewSuccess = (state, {id}) => ({
+export const _deleteReviewSuccess = (state, { id }) => ({
   ...state,
   allReviews: (state.allReviews || []).filter(item => item?._id !== id),
   deletingReview: false,
-});
+})
 
-export const _deleteReviewFailure = (state, {error = ''}) => ({
+export const _deleteReviewFailure = (state, { error = '' }) => ({
   ...state,
   error,
   deletingReview: false,
-});
+})
 
-export const _getAllReviews = (state, {data}) => ({
+export const _getAllReviews = (state, { data }) => ({
   ...state,
   revPageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
   revPageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
   revLoading: true,
-});
+})
 
-export const _getAllReviewsSuccess = (state, {response}) => {
-  let {allReviews} = state;
+export const _getAllReviewsSuccess = (state, { response }) => {
+  let { allReviews } = state
   if (state?.revPageNo === PAGINATION_DEFAULTS.PAGE) {
-    allReviews = response ?? [];
+    allReviews = response ?? []
   } else {
-    allReviews = [...(allReviews ?? []), ...(response ?? [])];
+    allReviews = [...(allReviews ?? []), ...(response ?? [])]
   }
 
   return {
     ...state,
     allReviews: uniqBy(allReviews, '_id'),
-    revLoading: Boolean(response?.length),
+    isRevRemaining: Boolean(response?.length),
+    revLoading: false,
     loading: false,
-  };
-};
+  }
+}
 
-export const _getAllReviewsFailure = (state, {error = ''}) => ({
+export const _getAllReviewsFailure = (state, { error = '' }) => ({
   ...state,
   revLoading: false,
   error,
   isRevRemaining: false,
-});
+})
 
-export const _reviewReply = state => ({...state, replying: true});
-export const _reviewReplySuccess = (state, {reply, reviewId}) => {
+export const _reviewReply = state => ({ ...state, replying: true })
+export const _reviewReplySuccess = (state, { reply, reviewId }) => {
   return ({
     ...state,
     allReviews: (state.allReviews || []).map(
-      review => String(review?._id) === String(reviewId) ? {...review, reply}: review,
+      review => String(review?._id) === String(reviewId) ? { ...review, reply } : review,
     ),
     replying: false,
   })
-};
+}
 
-export const _reviewReplyFailure = (state, {error = ''}) => ({
+export const _reviewReplyFailure = (state, { error = '' }) => ({
   ...state,
   replying: false,
   error,
-});
+})
 
 export const _updateRestaurant = state => ({
   ...state,
   loading: true,
   updatingRestaurant: true,
-});
+})
 export const _updateRestaurantSuccess = (
   state,
-  {restaurant = {}, restaurantId},
+  { restaurant = {}, restaurantId },
 ) => ({
   ...state,
   updatingRestaurant: false,
@@ -239,60 +242,60 @@ export const _updateRestaurantSuccess = (
     String(item?._id) === String(restaurantId) ? restaurant : item,
   ),
   loading: false,
-});
+})
 
 export const _updateReview = state => ({
   ...state,
   updatingReview: true,
   loading: true,
-});
+})
 
-export const _updateReviewSuccess = (state, {review, reviewId}) => ({
+export const _updateReviewSuccess = (state, { review, reviewId }) => ({
   ...state,
   loading: false,
   updatingReview: false,
   allReviews: Immutable.asMutable?.(state.allReviews, {
     deep: true,
   }).map(item => (String(item?._id) === String(reviewId) ? review : item)),
-});
+})
 
-export const _updateReviewFailure = (state, {error = ''}) => ({
+export const _updateReviewFailure = (state, { error = '' }) => ({
   ...state,
   updatingReview: false,
   loading: false,
   error,
-});
+})
 
-export const _updateRestaurantFailure = (state, {error = ''}) => ({
+export const _updateRestaurantFailure = (state, { error = '' }) => ({
   ...state,
   loading: false,
   updatingRestaurant: false,
   error,
-});
+})
 
-export const _updateUserInResAndReviews = (state, {user = ''}) => {
+export const _updateUserInResAndReviews = (state, { user = '' }) => {
   let restaurantsList =
-    Immutable.asMutable?.(state.restaurantsList, {deep: true}) || [];
-  let allReviews = Immutable.asMutable?.(state.allReviews, {deep: true}) || [];
+    Immutable.asMutable?.(state.restaurantsList, { deep: true }) || []
+  let allReviews = Immutable.asMutable?.(state.allReviews, { deep: true }) || []
 
   restaurantsList = restaurantsList.map(restaurant => {
     if (String(restaurant?.user?._id) === String(user?._id)) {
-      restaurant.user = user;
+      restaurant.user = user
     }
 
-    return restaurant;
-  });
+    return restaurant
+  })
 
   allReviews = allReviews.map(review => {
     if (String(review?.user?._id) === String(user?._id)) {
-      review.user = user;
+      review.user = user
     }
 
-    return review;
-  });
+    return review
+  })
 
-  return {...state, restaurantsList, allReviews};
-};
+  return { ...state, restaurantsList, allReviews }
+}
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
@@ -330,4 +333,4 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DELETE_REVIEW_SUCCESS]: _deleteReviewSuccess,
   [Types.DELETE_REVIEW_FAILURE]: _deleteReviewFailure,
   [Types.UPDATE_USER_IN_RES_AND_REVIEWS]: _updateUserInResAndReviews,
-});
+})

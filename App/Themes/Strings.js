@@ -6,7 +6,7 @@ export const Strings = {
   password: 'Password',
   firstName: 'First Name',
   lastName: 'Last Name',
-  dontHaveAccount: "Don't have account? ",
+  dontHaveAccount: 'Don\'t have account? ',
   alreadyHaveAccount: 'Already have Account? ',
   role: 'Role',
   gender: 'Gender',
@@ -93,5 +93,6 @@ export const Strings = {
   lastReview: 'Latest Review',
   otherReviews: 'Other Reviews',
   noRestaurantFound: 'No Restaurants Found',
+  noReviewFound: 'noReviewFound',
   applyFilters: 'Apply Filters',
-};
+}

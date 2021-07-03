@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import {Colors, Metrics} from '../../Themes';
-import Fonts from '../../Themes/Fonts';
+import { Colors, Metrics } from '../../Themes'
+import Fonts from '../../Themes/Fonts'
 
 export default StyleSheet.create({
   mainContainer: {
@@ -46,4 +46,4 @@ export default StyleSheet.create({
   dateContainer: {
     width: Metrics.screenWidth - Metrics.forty,
   },
-});
+})

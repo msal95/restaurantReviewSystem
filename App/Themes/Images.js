@@ -5,6 +5,6 @@ const images = {
   userPlaceholderII: require('../Images/profile-placeholder.png'),
   delete: require('../Images/delete.png'),
   cover: require('../Images/restaurant-cover.jpg'),
-};
+}
 
-export default images;
+export default images

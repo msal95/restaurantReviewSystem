@@ -1,51 +1,51 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {connect} from 'react-redux';
-import {Formik} from 'formik';
+import React, { useEffect, useRef, useState } from 'react'
+import { SafeAreaView, Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { connect } from 'react-redux'
+import { Formik } from 'formik'
 
-import styles from './styles';
-import InputFormField from '../../Components/InputFormField';
-import FormButton from '../../Components/Button';
-import {Strings} from '../../Themes/Strings';
-import ImageCropPicker from '../../Components/ImageCropPicker';
-import RestActions from '../../Redux/RestaurantRedux';
-import {errorMessage} from '../../Lib/utils';
-import {createRestaurantValidationSchema} from '../../Services/ValidationSchema/CreateRestaurantValidationSchema';
+import styles from './styles'
+import InputFormField from '../../Components/InputFormField'
+import FormButton from '../../Components/Button'
+import { Strings } from '../../Themes/Strings'
+import ImageCropPicker from '../../Components/ImageCropPicker'
+import RestActions from '../../Redux/RestaurantRedux'
+import { errorMessage } from '../../Lib/utils'
+import { createRestaurantValidationSchema } from '../../Services/ValidationSchema/CreateRestaurantValidationSchema'
 
-function CreateRestaurantScreen(props) {
-  const {restDetails = {}, isEdit = false} = props?.route?.params || {};
+function CreateRestaurantScreen (props) {
+  const { restDetails = {}, isEdit = false } = props?.route?.params || {}
 
   useEffect(() => {
     if (isEdit) {
       props?.navigation?.setOptions({
         headerTitle: Strings.updateRestaurant,
-      });
+      })
     }
-  }, []);
+  }, [])
 
-  const restaurantInfo = isEdit ? restDetails : {};
+  const restaurantInfo = isEdit ? restDetails : {}
 
-  const [file, setImageSource] = useState({path: restaurantInfo?.image});
+  const [file, setImageSource] = useState({ path: restaurantInfo?.image })
 
-  const descriptionRef = useRef();
-  const locationRef = useRef();
+  const descriptionRef = useRef()
+  const locationRef = useRef()
 
-  function createRestaurant(values) {
+  function createRestaurant (values) {
     const data = {
       ...values,
-    };
+    }
     if (file?.mime) {
       data.file = {
         uri: file?.path,
         type: file?.mime,
         name: file?.filename || 'profile image',
-      };
+      }
     }
     if (isEdit) {
-      props?.onUpdateRestaurant(data, restDetails?._id);
+      props?.onUpdateRestaurant(data, restDetails?._id)
     } else {
-      props?.onCreateRestaurant(data);
+      props?.onCreateRestaurant(data)
     }
   }
 
@@ -132,16 +132,16 @@ function CreateRestaurantScreen(props) {
         )}
       </Formik>
     </SafeAreaView>
-  );
+  )
 }
 
-const mapStateToProps = ({restaurants: {loading = false} = {}}) => ({loading});
+const mapStateToProps = ({ restaurants: { loading = false } = {} }) => ({ loading })
 const mapDispatchToProps = dispatch => ({
   onCreateRestaurant: data => dispatch(RestActions.createRestaurant(data)),
   onUpdateRestaurant: (data, restaurantId) =>
     dispatch(RestActions.updateRestaurant(data, restaurantId)),
-});
+})
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CreateRestaurantScreen);
+)(CreateRestaurantScreen)

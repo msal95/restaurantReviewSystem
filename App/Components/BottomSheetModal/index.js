@@ -30,12 +30,12 @@ function BottomSheetModal (props) {
       onBackdropPress={backdropPress || closeModal}
       onSwipeComplete={closeModal}
       backdropOpacity={backdropOpacity}
-      animationType='slide'
+      animationType="slide"
       propagateSwipe
       swipeDirection={['down']}
       style={[styles.modal, modalStyle]}>
       <View activeOpacity={1} style={[styles.container, containerStyle]}>
-        {isTopBar && <View style={[styles.topBar, barStyle]} />}
+        {isTopBar && <View style={[styles.topBar, barStyle]}/>}
         {isHeader && (
           <View style={styles.headerStyle}>
             <Text style={styles.headerTextStyle}>{headerText}</Text>

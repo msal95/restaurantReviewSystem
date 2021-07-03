@@ -1,60 +1,60 @@
-import React, {useRef, useState} from 'react';
-import {FlatList, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {ListItem} from 'react-native-elements';
-import {shallowEqual, useSelector} from 'react-redux';
+import React, { useRef, useState } from 'react'
+import { FlatList, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { ListItem } from 'react-native-elements'
+import { shallowEqual, useSelector } from 'react-redux'
 
-import {Strings} from '../../Themes/Strings';
-import ConfirmationModal from '../ConfirmationModal';
-import LoadingIndicator from '../LoadingIndicator';
-import styles from './styles';
-import ListFooterComponent from '../ListFooterComponent';
-import ListEmptyComponent from '../ListEmptyComponent';
-import SwipeableButton from '../../Components/SwipeableButton';
+import { Strings } from '../../Themes/Strings'
+import ConfirmationModal from '../ConfirmationModal'
+import LoadingIndicator from '../LoadingIndicator'
+import styles from './styles'
+import ListFooterComponent from '../ListFooterComponent'
+import ListEmptyComponent from '../ListEmptyComponent'
+import SwipeableButton from '../../Components/SwipeableButton'
 
-function CommentLists(props) {
-  const navigation = useNavigation();
-  const {reviews, renderListHeader, onDeleteReview, details, deletingReview} =
-    props;
-  const openedSwipeableRef = useRef();
+function CommentLists (props) {
+  const navigation = useNavigation()
+  const { reviews, renderListHeader, onDeleteReview, details, deletingReview } =
+    props
+  const openedSwipeableRef = useRef()
 
-  const [isDeleteModal, setIsDeleteModal] = useState(false);
-  const [reviewId, setReviewId] = useState(false);
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
+  const [reviewId, setReviewId] = useState(false)
 
-  const {role = ''} = useSelector(
-    ({auth: {user: {role = ''}} = {}}) => ({role}),
+  const { role = '' } = useSelector(
+    ({ auth: { user: { role = '' } } = {} }) => ({ role }),
     shallowEqual,
-  );
+  )
 
-  function onPressReview(review) {
-    navigation?.navigate('Reply', {review, isAdmin: true});
+  function onPressReview (review) {
+    navigation?.navigate('Reply', { review, isAdmin: true })
   }
 
-  function onPressDeleteReview(item) {
-    setReviewId(item?._id);
-    setIsDeleteModal(true);
+  function onPressDeleteReview (item) {
+    setReviewId(item?._id)
+    setIsDeleteModal(true)
   }
 
-  function closeModal() {
-    setReviewId('');
-    setIsDeleteModal(false);
+  function closeModal () {
+    setReviewId('')
+    setIsDeleteModal(false)
   }
 
-  function onDeleteConfirm() {
-    closeModal();
-    onDeleteReview({reviewId, restaurantId: details?._id});
+  function onDeleteConfirm () {
+    closeModal()
+    onDeleteReview({ reviewId, restaurantId: details?._id })
   }
 
   const onSwipeableOpen = ref => {
     if (openedSwipeableRef.current !== ref) {
-      openedSwipeableRef.current?.close();
+      openedSwipeableRef.current?.close()
     }
-    openedSwipeableRef.current = ref;
-  };
+    openedSwipeableRef.current = ref
+  }
 
-  function renderListItem({item}) {
-    const {comment, user = {}} = item || {};
-    const {fullName = ''} = user ?? {};
+  function renderListItem ({ item }) {
+    const { comment, user = {} } = item || {}
+    const { fullName = '' } = user ?? {}
     return (
       <SwipeableButton
         activeOpacity={0.6}
@@ -72,7 +72,7 @@ function CommentLists(props) {
           />
         </ListItem>
       </SwipeableButton>
-    );
+    )
   }
 
   return (
@@ -88,7 +88,7 @@ function CommentLists(props) {
         onRefresh={props.onRefresh}
         onEndReachedThreshold={0.1}
         ListFooterComponent={
-          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading}/>
         }
         ListEmptyComponent={
           <ListEmptyComponent
@@ -107,7 +107,7 @@ function CommentLists(props) {
         subHeader={Strings.deleteReviewMessage}
       />
     </View>
-  );
+  )
 }
 
-export default CommentLists;
+export default CommentLists

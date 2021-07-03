@@ -14,14 +14,14 @@ export default StyleSheet.create({
     paddingVertical: Metrics.base,
     alignItems: 'flex-start',
   },
-  actionButton: {width: Metrics.twoHundred, flexDirection: 'row'},
+  actionButton: { width: Metrics.twoHundred, flexDirection: 'row' },
   listItemDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
   },
-  userTitle: {flex:1},
+  userTitle: { flex: 1 },
   seeMore: {
     color: Colors.blue,
     fontSize: Fonts.size.mediumII,
@@ -53,4 +53,4 @@ export default StyleSheet.create({
     width: 200,
     flexDirection: 'row'
   }
-});
+})

@@ -1,51 +1,45 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {Avatar, FAB, Icon, ListItem} from 'react-native-elements';
-import {connect, shallowEqual, useSelector} from 'react-redux';
-import moment from 'moment';
-
-import {Strings} from '../../Themes/Strings';
-import AuthActions from '../../Redux/AuthRedux';
-import RestActions from '../../Redux/RestaurantRedux';
-import { Colors, Images, Metrics } from '../../Themes'
-import LoadingIndicator from '../../Components/LoadingIndicator';
-import ConfirmationModal from '../../Components/ConfirmationModal';
-import {
-  capitalize,
-  FILTER,
-  FILTER_VALUES,
-  PAGINATION_DEFAULTS,
-  ROLE,
-} from '../../Lib/constants';
-import SwipeableButton from '../../Components/SwipeableButton';
-import {printLogs} from '../../Lib/utils';
-import styles from './styles';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import BottomSheetModal from '../../Components/BottomSheetModal';
-import RadioForm from 'react-native-simple-radio-button';
-import {isEmpty} from 'ramda';
-import ListEmptyComponent from '../../Components/ListEmptyComponent';
-import ListFooterComponent from '../../Components/ListFooterComponent';
+import React, { useEffect, useRef, useState } from 'react'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Avatar, FAB, Icon, ListItem } from 'react-native-elements'
+import { connect, shallowEqual, useSelector } from 'react-redux'
+import moment from 'moment'
+import { isEmpty } from 'ramda'
 import StarRating from 'react-native-star-rating'
 
-function HomeScreen(props) {
+import { Strings } from '../../Themes/Strings'
+import AuthActions from '../../Redux/AuthRedux'
+import RestActions from '../../Redux/RestaurantRedux'
+import { Colors, Images, Metrics } from '../../Themes'
+import LoadingIndicator from '../../Components/LoadingIndicator'
+import ConfirmationModal from '../../Components/ConfirmationModal'
+import { capitalize, FILTER, FILTER_VALUES, PAGINATION_DEFAULTS, ROLE, } from '../../Lib/constants'
+import SwipeableButton from '../../Components/SwipeableButton'
+import { printLogs } from '../../Lib/utils'
+import styles from './styles'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import BottomSheetModal from '../../Components/BottomSheetModal'
+import RadioForm from 'react-native-simple-radio-button'
+import ListEmptyComponent from '../../Components/ListEmptyComponent'
+import ListFooterComponent from '../../Components/ListFooterComponent'
+
+function HomeScreen (props) {
   const {
     onFetchRestaurantsList,
     navigation,
     data,
     deletingRestaurant,
     onDeleteRestaurant,
-  } = props;
-  const [refreshing, setRefreshing] = useState(false);
-  const [restaurantId, setRestaurantId] = useState('');
-  const [filterKey, setFilterKey] = useState('');
-  const [isDeleteModal, setIsDeleteModal] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
+  } = props
+  const [refreshing, setRefreshing] = useState(false)
+  const [restaurantId, setRestaurantId] = useState('')
+  const [filterKey, setFilterKey] = useState('')
+  const [isDeleteModal, setIsDeleteModal] = useState(false)
+  const [isModalVisible, setModalVisible] = useState(false)
 
-  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE);
-  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE);
-  const flatListRefreshingRef = useRef();
-  const openedSwipeableRef = useRef();
+  const [pageNo, setPageNo] = useState(PAGINATION_DEFAULTS.PAGE)
+  const [pageSize] = useState(PAGINATION_DEFAULTS.PAGE_SIZE)
+  const flatListRefreshingRef = useRef()
+  const openedSwipeableRef = useRef()
 
   useEffect(() => {
     navigation?.setOptions({
@@ -54,139 +48,140 @@ function HomeScreen(props) {
           activeOpacity={0.6}
           onPress={toggleModal}
           style={styles.filterIconContainer}>
-          <FontAwesome name="filter" size={25} color={Colors.white} />
-          {!isEmpty(filterKey) && <View style={styles.filterIcon} />}
+          <FontAwesome name="filter" size={25} color={Colors.white}/>
+          {!isEmpty(filterKey) && <View style={styles.filterIcon}/>}
         </TouchableOpacity>
       ),
-    });
-  }, [filterKey]);
+    })
+  }, [filterKey])
 
-  useEffect(() => (flatListRefreshingRef.current = refreshing));
+  useEffect(() => (flatListRefreshingRef.current = refreshing))
 
   useEffect(() => {
-    onFetchRestaurantsList({pageNo, pageSize});
-  }, []);
+    onFetchRestaurantsList({ pageNo, pageSize })
+  }, [])
 
-  const {role = ''} = useSelector(
-    ({auth: {user: {role = ''}} = {}}) => ({role}),
+  const { role = '' } = useSelector(
+    ({ auth: { user: { role = '' } } = {} }) => ({ role }),
     shallowEqual,
-  );
+  )
 
   useEffect(() => {
     onFetchRestaurantsList({
       pageNo,
       pageSize,
       ...(FILTER_VALUES?.[filterKey] ?? {}),
-    });
-  }, [pageNo]);
+    })
+  }, [pageNo])
 
   useEffect(() => {
     if (!props?.loading && flatListRefreshingRef.current) {
-      setRefreshing(false);
+      setRefreshing(false)
     }
-  }, [props?.loading]);
+  }, [props?.loading])
 
-  function toggleModal() {
-    setModalVisible(prevState => !prevState);
+  function toggleModal () {
+    setModalVisible(prevState => !prevState)
   }
 
-  function onChangeFilters(filter) {
-    setModalVisible(false);
-    setFilterKey(filter);
-    onFetchRestaurantsList({pageNo: 0, pageSize, ...FILTER_VALUES?.[filter]});
+  function onChangeFilters (filter) {
+    setModalVisible(false)
+    setFilterKey(filter)
+    onFetchRestaurantsList({ pageNo: 0, pageSize, ...FILTER_VALUES?.[filter] })
   }
 
-  function onClearFilters() {
-    setModalVisible(false);
-    setFilterKey('');
-    onFetchRestaurantsList({pageNo: 0, pageSize});
+  function onClearFilters () {
+    setModalVisible(false)
+    setFilterKey('')
+    onFetchRestaurantsList({ pageNo: 0, pageSize })
   }
 
-  function onRefresh() {
-    setRefreshing(true);
+  function onRefresh () {
+    setRefreshing(true)
     if (PAGINATION_DEFAULTS.PAGE === pageNo) {
       onFetchRestaurantsList({
         pageNo,
         pageSize,
         ...(FILTER_VALUES?.[filterKey] ?? {}),
-      });
+      })
 
-      return;
+      return
     }
 
-    setPageNo(PAGINATION_DEFAULTS.PAGE);
+    setPageNo(PAGINATION_DEFAULTS.PAGE)
   }
 
-  function createRestaurant() {
-    props?.navigation?.navigate('CreateRestaurant');
+  function createRestaurant () {
+    props?.navigation?.navigate('CreateRestaurant')
   }
 
-  function onPressDeleteItem(item) {
-    setRestaurantId(item?._id);
-    setTimeout(() => setIsDeleteModal(true), 500);
+  function onPressDeleteItem (item) {
+    setRestaurantId(item?._id)
+    setTimeout(() => setIsDeleteModal(true), 500)
   }
 
-  function onPressEdit(item) {
+  function onPressEdit (item) {
     props?.navigation?.navigate({
       name: 'CreateRestaurant',
-      params: {restDetails: item, isEdit: true},
-    });
+      params: { restDetails: item, isEdit: true },
+    })
   }
 
-  function onDeleteConfirm() {
-    closeModal();
-    onDeleteRestaurant({_id: restaurantId});
+  function onDeleteConfirm () {
+    closeModal()
+    onDeleteRestaurant({ _id: restaurantId })
   }
 
-  function onCLickItem(item) {
+  function onClickItem (item) {
     return props?.navigation?.navigate({
       name: 'RestaurantDetails',
-      params: {restaurantId: item?._id},
-    });
+      params: { restaurantId: item?._id, restaurantName: item?.name },
+    })
   }
 
-  function closeModal() {
-    setRestaurantId('');
-    setIsDeleteModal(false);
-    printLogs('close');
+  function closeModal () {
+    setRestaurantId('')
+    setIsDeleteModal(false)
+    printLogs('close')
   }
 
-  function onEndReached() {
+  function onEndReached () {
     if (props?.isRemaining && !props.loading) {
-      setPageNo(prevState => prevState + 1);
+      setPageNo(prevState => prevState + 1)
     }
   }
 
   const onSwipeableOpen = ref => {
     if (openedSwipeableRef.current !== ref) {
-      openedSwipeableRef.current?.close();
+      openedSwipeableRef.current?.close()
     }
-    openedSwipeableRef.current = ref;
-  };
+    openedSwipeableRef.current = ref
+  }
 
-  function renderListItem({item, index}) {
+  function renderListItem ({ item, index }) {
     const {
       image,
       name,
       description,
       averageRating = 3,
       establishedAt,
-    } = item || {};
+    } = item || {}
 
     return (
       <SwipeableButton
         activeOpacity={0.8}
         onSwipeableOpen={onSwipeableOpen}
+        swipeContainerStyle={role === ROLE.REGULAR || role === ROLE.OWNER ? {} : null}
         onPressDelete={() => onPressDeleteItem(item)}
         onPressEdit={() => onPressEdit(item)}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => onCLickItem(item)}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => onClickItem(item)}>
           <ListItem
             key={String(item?._id ?? index)}
             bottomDivider
             containerStyle={styles.container}>
             <Avatar
               containerStyle={styles.image}
-              source={image ? {uri: image} : Images.restaurantPlaceholder}
+              source={image ? { uri: image } : Images.restaurantPlaceholder}
             />
 
             <ListItem.Content style={styles.itemContainer}>
@@ -216,14 +211,14 @@ function HomeScreen(props) {
               </View>
             </ListItem.Content>
 
-            <ListItem.Chevron iconStyle={styles.iconStyle} />
+            <ListItem.Chevron iconStyle={styles.iconStyle}/>
           </ListItem>
           <LoadingIndicator
             loading={item?._id === restaurantId && deletingRestaurant}
           />
         </TouchableOpacity>
       </SwipeableButton>
-    );
+    )
   }
 
   return (
@@ -244,12 +239,12 @@ function HomeScreen(props) {
           />
         }
         ListFooterComponent={
-          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading} />
+          <ListFooterComponent loading={props?.pageNo > 0 && props?.loading}/>
         }
       />
       {role === ROLE.OWNER && (
         <FAB
-          icon={() => <Icon name="add" color="white" />}
+          icon={() => <Icon name="add" color="white"/>}
           color={Colors.blue}
           style={styles.addButton}
           onPress={createRestaurant}
@@ -284,14 +279,14 @@ function HomeScreen(props) {
         </View>
       </BottomSheetModal>
     </>
-  );
+  )
 }
 
 const mapDispatchToProps = dispatch => ({
   onLogout: () => dispatch(AuthActions.logout()),
   onFetchRestaurantsList: data => dispatch(RestActions.restaurantsList(data)),
   onDeleteRestaurant: data => dispatch(RestActions.deleteRestaurant(data)),
-});
+})
 
 const mapStateToProps = ({
   restaurants: {
@@ -305,6 +300,6 @@ const mapStateToProps = ({
   deletingRestaurant,
   isRemaining,
   loading,
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)

@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import {Colors, Fonts, Metrics} from '../../Themes';
+import { Colors, Fonts, Metrics } from '../../Themes'
 
 export default StyleSheet.create({
   inputLabel: {
@@ -10,4 +10,4 @@ export default StyleSheet.create({
   datePicker: {
     width: Metrics.screenWidth - Metrics.section
   },
-});
+})

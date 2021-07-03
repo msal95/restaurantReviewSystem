@@ -1,9 +1,9 @@
-import {StyleSheet, Platform} from 'react-native';
-import {getBottomSpace} from 'react-native-iphone-x-helper';
+import { StyleSheet } from 'react-native'
+import { getBottomSpace } from 'react-native-iphone-x-helper'
 
-import {Colors, Metrics} from '../../Themes';
+import { Colors, Metrics } from '../../Themes'
 
-const bottomSpace = getBottomSpace();
+const bottomSpace = getBottomSpace()
 
 const styles = StyleSheet.create({
   modal: {
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: Metrics.eighteen,
   }
-});
+})
 
-export default styles;
+export default styles

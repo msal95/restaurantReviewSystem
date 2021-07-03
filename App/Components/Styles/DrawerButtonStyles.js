@@ -1,4 +1,4 @@
-import {Metrics, Colors, Fonts} from '../../Themes';
+import { Colors, Fonts, Metrics } from '../../Themes'
 
 export default {
   text: {
@@ -6,4 +6,4 @@ export default {
     color: Colors.snow,
     marginVertical: Metrics.base,
   },
-};
+}

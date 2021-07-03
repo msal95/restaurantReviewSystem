@@ -1,11 +1,11 @@
-import {createActions, createReducer} from 'reduxsauce';
-import Immutable from 'seamless-immutable';
-import {uniqBy} from 'lodash';
+import { createActions, createReducer } from 'reduxsauce'
+import Immutable from 'seamless-immutable'
+import { uniqBy } from 'lodash'
 
-import {PAGINATION_DEFAULTS} from '../Lib/constants';
+import { PAGINATION_DEFAULTS } from '../Lib/constants'
 
 /* ------------- Types and Action Creators ------------- */
-const {Types, Creators} = createActions({
+const { Types, Creators } = createActions({
   signup: ['data'],
   signupSuccess: ['data'],
   signupFailure: ['data'],
@@ -36,9 +36,9 @@ const {Types, Creators} = createActions({
   allUsers: ['data'],
   allUsersSuccess: ['response'],
   allUsersFailure: ['error'],
-});
-export const AuthTypes = Types;
-export default Creators;
+})
+export const AuthTypes = Types
+export default Creators
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
   loading: true,
@@ -46,7 +46,7 @@ export const INITIAL_STATE = Immutable({
   error: '',
   pageNo: PAGINATION_DEFAULTS.PAGE,
   pageSize: PAGINATION_DEFAULTS.PAGE_SIZE,
-});
+})
 
 /* ------------- Reducers ------------- */
 export const _logout = state => ({
@@ -54,56 +54,56 @@ export const _logout = state => ({
   loading: false,
   error: '',
   user: {},
-});
+})
 
 export const _signup = state => ({
   ...state,
   loading: true,
-});
+})
 export const _signupSuccess = state => ({
   ...state,
   loading: false,
-});
-export const _signupFailure = (state, {error = ''}) => ({
+})
+export const _signupFailure = (state, { error = '' }) => ({
   ...state,
   error,
   loading: false,
-});
+})
 
-export const _login = state => ({...state, loading: true});
+export const _login = state => ({ ...state, loading: true })
 export const _loginSuccess = state => ({
   ...state,
   loading: false,
-});
+})
 export const _loginFailure = state => ({
   ...state,
   loading: false,
   user: {},
-});
+})
 
-export const _authSuccess = (state, {user}) => ({
+export const _authSuccess = (state, { user }) => ({
   ...state,
   loading: false,
   user,
-});
+})
 
-export const _userProfile = state => ({...state});
-export const _userProfileSuccess = state => ({...state});
-export const _userProfileFailure = (state, {error = ''}) => ({...state, error});
+export const _userProfile = state => ({ ...state })
+export const _userProfileSuccess = state => ({ ...state })
+export const _userProfileFailure = (state, { error = '' }) => ({ ...state, error })
 
-export const _allUsers = (state, {data}) => ({
+export const _allUsers = (state, { data }) => ({
   ...state,
   pageNo: data?.pageNo ?? PAGINATION_DEFAULTS.PAGE,
   pageSize: data?.pageSize ?? PAGINATION_DEFAULTS.PAGE_SIZE,
   loading: true,
-});
+})
 
-export const _allUsersSuccess = (state, {response = []}) => {
-  let {allUsers} = state;
+export const _allUsersSuccess = (state, { response = [] }) => {
+  let { allUsers } = state
   if (state?.pageNo === PAGINATION_DEFAULTS.PAGE) {
-    allUsers = response ?? [];
+    allUsers = response ?? []
   } else {
-    allUsers = [...(allUsers ?? []), ...(response ?? [])];
+    allUsers = [...(allUsers ?? []), ...(response ?? [])]
   }
 
   return {
@@ -111,59 +111,59 @@ export const _allUsersSuccess = (state, {response = []}) => {
     allUsers: uniqBy(allUsers, '_id'),
     loading: false,
     isRemaining: Boolean(response?.length),
-  };
-};
+  }
+}
 
-export const _allUsersFailure = (state, {error = ''}) => ({
+export const _allUsersFailure = (state, { error = '' }) => ({
   ...state,
   error,
   loading: false,
   isRemaining: false,
-});
+})
 
-export const _editProfile = state => ({...state, loading: true});
+export const _editProfile = state => ({ ...state, loading: true })
 
-export const _editProfileSuccess = (state, {user = {}}) => ({
+export const _editProfileSuccess = (state, { user = {} }) => ({
   ...state,
-  user: {...(state?.user || {}), ...user},
+  user: { ...(state?.user || {}), ...user },
   loading: false,
-});
+})
 
-export const _editProfileFailure = (state, {error = ''}) => ({
+export const _editProfileFailure = (state, { error = '' }) => ({
   ...state,
   error,
   loading: false,
-});
+})
 
-export const _editOtherUser = state => ({...state, loading: true});
+export const _editOtherUser = state => ({ ...state, loading: true })
 
-export const _editOtherUserSuccess = (state, {user = {}, id}) => ({
+export const _editOtherUserSuccess = (state, { user = {}, id }) => ({
   ...state,
   allUsers: (state.allUsers || []).map(item =>
     item?._id === id ? user : item,
   ),
   loading: false,
-});
+})
 
-export const _editOtherUserFailure = (state, {error = ''}) => ({
+export const _editOtherUserFailure = (state, { error = '' }) => ({
   ...state,
   error,
   loading: false,
-});
+})
 
-export const _deleteUser = state => ({...state, deletingUser: true});
+export const _deleteUser = state => ({ ...state, deletingUser: true })
 
-export const _deleteUserSuccess = (state, {id}) => ({
+export const _deleteUserSuccess = (state, { id }) => ({
   ...state,
   allUsers: (state.allUsers || []).filter(item => item?._id !== id),
   deletingUser: false,
-});
+})
 
-export const _deleteUserFailure = (state, {error = ''}) => ({
+export const _deleteUserFailure = (state, { error = '' }) => ({
   ...state,
   error,
   deletingUser: false,
-});
+})
 
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
@@ -196,4 +196,4 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DELETE_USER]: _deleteUser,
   [Types.DELETE_USER_SUCCESS]: _deleteUserSuccess,
   [Types.DELETE_USER_FAILURE]: _deleteUserFailure,
-});
+})

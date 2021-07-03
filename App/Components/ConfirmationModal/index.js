@@ -1,12 +1,12 @@
-import {Image, Text, View} from 'react-native';
-import Modal from 'react-native-modal';
-import React, {forwardRef, useMemo} from 'react';
-import PropTypes from 'prop-types';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Button} from 'react-native-elements';
+import { Image, Text, View } from 'react-native'
+import Modal from 'react-native-modal'
+import React, { forwardRef, useMemo } from 'react'
+import PropTypes from 'prop-types'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Button } from 'react-native-elements'
 
-import styles from './styles';
-import {Images, Metrics as MetricsMod} from '../../Themes';
+import styles from './styles'
+import { Images, Metrics as MetricsMod } from '../../Themes'
 
 const ConfirmationModal = forwardRef((props, ref) => {
   const {
@@ -29,15 +29,15 @@ const ConfirmationModal = forwardRef((props, ref) => {
     imageStyle,
     headerStyle,
     subHeaderStyle,
-  } = props;
+  } = props
 
   const _renderImage = useMemo(
     () =>
       image ? (
-        <Image source={image} style={[styles.smallImage, imageStyle]} />
+        <Image source={image} style={[styles.smallImage, imageStyle]}/>
       ) : null,
     [image],
-  );
+  )
 
   const _renderHeader = useMemo(
     () =>
@@ -47,7 +47,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
         </Text>
       ) : null,
     [header, isTranslated],
-  );
+  )
 
   const _renderSubHeader = useMemo(
     () =>
@@ -57,7 +57,7 @@ const ConfirmationModal = forwardRef((props, ref) => {
         </Text>
       ) : null,
     [subHeader, isTranslated],
-  );
+  )
 
   const _renderCancelButton = useMemo(() => {
     if (isCancelButton) {
@@ -68,10 +68,10 @@ const ConfirmationModal = forwardRef((props, ref) => {
           type="outline"
           buttonStyle={styles.buttonStyle}
         />
-      );
+      )
     }
-    return null;
-  }, [isCancelButton, cancelText, onPressCancel]);
+    return null
+  }, [isCancelButton, cancelText, onPressCancel])
 
   const _renderDoneButton = useMemo(() => {
     if (isDoneButton) {
@@ -81,10 +81,10 @@ const ConfirmationModal = forwardRef((props, ref) => {
           onPress={onPressDone}
           buttonStyle={styles.buttonStyle}
         />
-      );
+      )
     }
-    return null;
-  }, [isDoneButton, doneText, onPressDone]);
+    return null
+  }, [isDoneButton, doneText, onPressDone])
 
   return (
     <Modal
@@ -115,8 +115,8 @@ const ConfirmationModal = forwardRef((props, ref) => {
         </KeyboardAwareScrollView>
       </View>
     </Modal>
-  );
-});
+  )
+})
 
 const arePropsEqual = (prevProps, nextProps) =>
   prevProps.isVisible === nextProps.isVisible &&
@@ -127,9 +127,9 @@ const arePropsEqual = (prevProps, nextProps) =>
   prevProps.doneText === nextProps.doneText &&
   prevProps.cancelText === nextProps.cancelText &&
   prevProps.isDoneButton === nextProps.isDoneButton &&
-  prevProps.isCancelButton === nextProps.isCancelButton;
+  prevProps.isCancelButton === nextProps.isCancelButton
 
-export default React.memo(ConfirmationModal, arePropsEqual);
+export default React.memo(ConfirmationModal, arePropsEqual)
 
 ConfirmationModal.propTypes = {
   isVisible: PropTypes.bool,
@@ -151,7 +151,7 @@ ConfirmationModal.propTypes = {
   cancelText: PropTypes.string,
   isDoneButton: PropTypes.bool,
   isCancelButton: PropTypes.bool,
-};
+}
 
 ConfirmationModal.defaultProps = {
   isVisible: false,
@@ -172,4 +172,4 @@ ConfirmationModal.defaultProps = {
   modalStyle: {},
   doneButtonStyle: {},
   imageStyle: {},
-};
+}

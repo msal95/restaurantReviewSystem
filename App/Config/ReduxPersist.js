@@ -1,5 +1,6 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import immutablePersistenceTransform from './ImmutablePersistenceTransform';
+import AsyncStorage from '@react-native-community/async-storage'
+import immutablePersistenceTransform from './ImmutablePersistenceTransform'
+
 const REDUX_PERSIST = {
   active: true,
   reducerVersion: '1.0',
@@ -13,5 +14,5 @@ const REDUX_PERSIST = {
     whitelist: ['auth'],
     transforms: [immutablePersistenceTransform],
   },
-};
-export default REDUX_PERSIST;
+}
+export default REDUX_PERSIST

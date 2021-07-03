@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import {Colors, Fonts, Metrics} from '../../Themes';
+import { Colors, Fonts, Metrics } from '../../Themes'
 
 export default StyleSheet.create({
   container: {
@@ -18,6 +18,10 @@ export default StyleSheet.create({
   headingText: {
     textAlign: 'center',
     marginVertical: Metrics.doubleSection,
+  },
+  commentHeadingText: {
+    alignSelf: 'center',
+    paddingTop: Metrics.base
   },
   descriptionTitle: {
     marginTop: Metrics.doubleBase,
@@ -83,4 +87,4 @@ export default StyleSheet.create({
     marginHorizontal: 10,
     top: -10
   }
-});
+})

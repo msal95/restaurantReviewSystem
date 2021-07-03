@@ -5,8 +5,8 @@ import { ViewPropTypes } from 'react-native'
 
 import styles from './styles'
 
-export default function FormButton(props) {
-  const {onPress, title, loading, disabled, buttonContainer} = props;
+export default function FormButton (props) {
+  const { onPress, title, loading, disabled, buttonContainer } = props
   return (
     <Button
       loading={loading}
@@ -15,8 +15,8 @@ export default function FormButton(props) {
       title={title}
       disabledStyle={styles.disabledButtonStyle}
       buttonStyle={[styles.buttonStyle, buttonContainer]}
-     />
-  );
+    />
+  )
 }
 
 FormButton.propTypes = {
@@ -25,11 +25,11 @@ FormButton.propTypes = {
   iconName: propTypes.string,
   loading: propTypes.bool,
   buttonContainer: ViewPropTypes.style,
-};
+}
 FormButton.defaultProps = {
   onPress: () => {},
   title: '',
   iconName: '',
   loading: false,
   buttonContainer: {},
-};
+}

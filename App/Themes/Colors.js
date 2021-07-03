@@ -29,6 +29,6 @@ const colors = {
   banner: '#5F3E63',
   text: '#E0D7E5',
   golden: '#f1c40f',
-};
+}
 
-export default colors;
+export default colors

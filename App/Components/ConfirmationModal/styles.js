@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import {Metrics as MetricsMod, Colors, Fonts} from '../../Themes';
+import { Colors, Fonts, Metrics as MetricsMod } from '../../Themes'
 
 export default StyleSheet.create({
   modal: {
@@ -133,4 +133,4 @@ export default StyleSheet.create({
     width: MetricsMod.fifteen,
     resizeMode: 'contain',
   },
-});
+})

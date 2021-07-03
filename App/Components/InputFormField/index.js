@@ -1,12 +1,12 @@
-import React from 'react';
-import {Input} from 'react-native-elements';
-import DatePicker from 'react-native-datepicker';
-import propTypes from 'prop-types';
+import React from 'react'
+import { Input } from 'react-native-elements'
+import DatePicker from 'react-native-datepicker'
+import propTypes from 'prop-types'
 
-import styles from './styles';
-import {ViewPropTypes} from 'react-native';
+import styles from './styles'
+import { ViewPropTypes } from 'react-native'
 
-export default function InputFormField(props) {
+export default function InputFormField (props) {
   const {
     onSelect,
     selectedOption,
@@ -21,7 +21,7 @@ export default function InputFormField(props) {
     inputContainerStyle,
     multiline,
     onBlur = () => {},
-  } = props;
+  } = props
 
   if (dateTime) {
     return (
@@ -37,7 +37,7 @@ export default function InputFormField(props) {
         onDateChange={onSelect}
         onBlur={onBlur}
       />
-    );
+    )
   }
 
   return (
@@ -56,7 +56,7 @@ export default function InputFormField(props) {
       inputContainerStyle={inputContainerStyle}
       multiline={multiline}
     />
-  );
+  )
 }
 
 InputFormField.propTypes = {
@@ -71,7 +71,7 @@ InputFormField.propTypes = {
   dateTime: propTypes.bool,
   multiline: propTypes.bool,
   inputContainerStyle: ViewPropTypes.style,
-};
+}
 InputFormField.defaultProps = {
   onSelect: () => {},
   selectedOption: '',
@@ -84,4 +84,4 @@ InputFormField.defaultProps = {
   dateTime: false,
   multiline: false,
   inputContainerStyle: {},
-};
+}
